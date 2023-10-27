@@ -9,11 +9,11 @@ const { connectToDatabase } = require('./util/db')
 const loginRouter = require('./controllers/login')
 const userRouter = require('./controllers/user')
 
-const DIST_PATH = path.resolve(__dirname, './dist')
-const INDEX_PATH = path.resolve(DIST_PATH, 'index.html')
+const DIST_PATH = path.resolve(__dirname, './')
+// const INDEX_PATH = path.resolve(DIST_PATH, 'index.html')
 
 app.use(express.static(DIST_PATH))
-app.get('*', (req, res) => res.sendFile(INDEX_PATH))
+// app.get('*', (req, res) => res.sendFile(INDEX_PATH))
 
 app.use(cors())
 app.use(express.json())
