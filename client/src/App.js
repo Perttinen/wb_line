@@ -1,23 +1,35 @@
-import React from 'react'
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+
+import { UserList, Home, AddUser } from './components'
 
 const App = () => {
-	const [data, setData] = React.useState(null)
-
-	React.useEffect(() => {
-		fetch('/api/user')
-			.then((res) => res.json())
-			.then((data) => {
-				setData(data)
-			})
-	}, [])
-
-	console.log(data)
+	const padding = {
+		padding: 5,
+	}
 
 	return (
-		<div>
-			<p>users</p>
-			<p>{!data ? 'Loading...' : data[0].name}</p>
-		</div>
+		<Router>
+			<div>
+				<h3>Wb-Line</h3>
+			</div>
+			<div>
+				<Link style={padding} to='/'>
+					home
+				</Link>
+				<Link style={padding} to='/users'>
+					userlist
+				</Link>
+				<Link style={padding} to='/adduser'>
+					add user
+				</Link>
+			</div>
+
+			<Routes>
+				<Route path='/adduser' element={<AddUser />} />
+				<Route path='/users' element={<UserList />} />
+				<Route path='/' element={<Home />} />
+			</Routes>
+		</Router>
 	)
 }
 

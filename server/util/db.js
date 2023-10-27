@@ -1,24 +1,26 @@
+require('dotenv').config()
 const Sequelize = require('sequelize')
 const { Umzug, SequelizeStorage } = require('umzug')
 
-// const sequelize = new Sequelize(
-// 	process.env.DATABASE,
-// 	process.env.DATABASEUSER,
-// 	process.env.DATABASEPASSWORD,
-// 	{
-// 		host: process.env.HOST,
-// 		dialect: 'postgres',
-// 		protocol: 'postgres',
-// 		dialectOptions: {
-// 			ssl: {
-// 				require: true,
-// 				rejectUnauthorized: false,
-// 			},
-// 		},
-// 	}
-// )
-
-const sequelize = new Sequelize(process.env.LOCAL_DB)
+const sequelize =
+	process.env.NODE_ENV === 'dev'
+		? new Sequelize(
+				process.env.DATABASE,
+				process.env.DATABASEUSER,
+				process.env.DATABASEPASSWORD,
+				{
+					host: process.env.HOST,
+					dialect: 'postgres',
+					protocol: 'postgres',
+					dialectOptions: {
+						ssl: {
+							require: true,
+							rejectUnauthorized: false,
+						},
+					},
+				}
+		  )
+		: new Sequelize(process.env.LOCAL_DB)
 
 const runMigrations = async () => {
 	const migrator = new Umzug({
