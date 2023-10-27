@@ -8,7 +8,7 @@ const App = () => {
 	}
 
 	return (
-		<Router>
+		<div>
 			<div>
 				<h3>Wb-Line</h3>
 			</div>
@@ -29,7 +29,7 @@ const App = () => {
 				<Route path='/users' element={<UserList />} />
 				<Route path='/' element={<Home />} />
 			</Routes>
-		</Router>
+		</div>
 	)
 }
 
