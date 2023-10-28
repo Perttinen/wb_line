@@ -10,8 +10,9 @@ const loginRouter = require('./controllers/login')
 const userRouter = require('./controllers/user')
 
 const DIST_PATH = path.resolve(__dirname, '../client/build')
+const htmlPath = path.resolve(__dirname, '../client/build/index.html')
 
-app.use(express.static(DIST_PATH))
+app.use(express.static(DIST_PATH, htmlPath))
 
 app.use(cors())
 app.use(express.json())
