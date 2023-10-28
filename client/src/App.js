@@ -1,6 +1,4 @@
-import { BrowserRouter as Routes, Route, Link } from 'react-router-dom'
-
-import { UserList, Home, AddUser } from './components'
+import { Link, Outlet } from 'react-router-dom'
 
 const App = () => {
 	const padding = {
@@ -10,10 +8,10 @@ const App = () => {
 	return (
 		<div>
 			<div>
-				<h3>Wb-Line</h3>
+				<h1>Wb-Line</h1>
 			</div>
 			<div>
-				<Link style={padding} to='/'>
+				<Link style={padding} to='/home'>
 					home
 				</Link>
 				<Link style={padding} to='/users'>
@@ -23,12 +21,9 @@ const App = () => {
 					add user
 				</Link>
 			</div>
-
-			<Routes>
-				<Route path='/adduser' element={<AddUser />} />
-				<Route path='/users' element={<UserList />} />
-				<Route path='/' element={<Home />} />
-			</Routes>
+			<div id='detail'>
+				<Outlet />
+			</div>
 		</div>
 	)
 }

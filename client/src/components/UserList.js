@@ -12,8 +12,8 @@ export const UserList = () => {
 
 	return (
 		<div>
-			<p>users</p>
-			<p>{!users ? 'Loading...' : users[0].name}</p>
+			<h3>Current users from db:</h3>
+			<h4>{!users ? 'Loading...' : users[0].name}</h4>
 		</div>
 	)
 }
