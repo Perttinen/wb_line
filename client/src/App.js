@@ -11,7 +11,7 @@ const App = () => {
 				<h1>Wb-Line</h1>
 			</div>
 			<div>
-				<Link style={padding} to='/home'>
+				<Link style={padding} to='/'>
 					home
 				</Link>
 				<Link style={padding} to='/users'>

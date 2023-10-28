@@ -2,19 +2,8 @@ const router = require('express').Router()
 
 const { User } = require('../models')
 
-// router.get('/', async (req, res) => {
-// 	res.json({ message: 'Hello from user!' })
-// })
-
 router.get('/', async (req, res) => {
-	const users = await User
-		.findAll
-		//   {
-		//   include: {
-		//     attributes: {exclude: ['userId']}
-		//   }
-		// }
-		()
+	const users = await User.findAll()
 	res.json(users)
 })
 
