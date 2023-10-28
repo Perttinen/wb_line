@@ -1,11 +1,29 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import { HashRouter as Router } from 'react-router-dom'
-import App from './App'
+import * as React from 'react'
+import * as ReactDOM from 'react-dom/client'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
-const root = ReactDOM.createRoot(document.getElementById('root'))
-root.render(
-	<Router>
-		<App />
-	</Router>
+// import Root from './routes/root'
+import { AddUser, UserList, Home } from './components'
+
+const router = createBrowserRouter([
+	{
+		path: '/',
+		element: <Home />,
+		children: [
+			{
+				path: '/adduser',
+				element: <AddUser />,
+			},
+			{
+				path: '/users',
+				element: <UserList />,
+			},
+		],
+	},
+])
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+	<React.StrictMode>
+		<RouterProvider router={router} />
+	</React.StrictMode>
 )
