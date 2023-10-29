@@ -18,8 +18,8 @@ router.post('/', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
 	try {
-		console.log(req.params[id])
-		const user = await User.findByPk(req.params)
+		console.log(req.params.id)
+		const user = await User.findByPk(req.params.id)
 		await user.destroy()
 		res.json(user)
 	} catch (e) {
