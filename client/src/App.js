@@ -17,8 +17,8 @@ const App = () => {
 				<Link style={padding} to='/users'>
 					userlist
 				</Link>
-				<Link style={padding} to='/adduser'>
-					add user
+				<Link style={padding} to='/usermanagement'>
+					user management
 				</Link>
 			</div>
 			<div id='detail'>

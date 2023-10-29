@@ -1,5 +1,5 @@
 import { Home } from './Home'
 import { UserList } from './UserList'
-import { AddUser } from './AddUser'
+import { UserManagement } from './UserManagement'
 
-export { Home, UserList, AddUser }
+export { Home, UserList, UserManagement }

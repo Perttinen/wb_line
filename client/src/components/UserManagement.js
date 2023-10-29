@@ -2,8 +2,9 @@ import React from 'react'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 
 import userService from '../services/users'
+import { UserList } from './UserList'
 
-export const AddUser = () => {
+export const UserManagement = () => {
 	const createUser = async (values) => {
 		const newUser = {
 			name: values.name,
@@ -21,7 +22,6 @@ export const AddUser = () => {
 				onSubmit={(values, { setSubmitting }) => {
 					setTimeout(() => {
 						createUser(values)
-						// alert(JSON.stringify(values, null, 2))
 						setSubmitting(false)
 					}, 400)
 				}}
@@ -38,6 +38,7 @@ export const AddUser = () => {
 					</Form>
 				)}
 			</Formik>
+			<UserList delbutton={true} />
 		</div>
 	)
 }

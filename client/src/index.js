@@ -2,7 +2,7 @@ import * as React from 'react'
 import * as ReactDOM from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
-import { AddUser, UserList, Home } from './components'
+import { UserManagement, UserList, Home } from './components'
 import App from './App'
 
 const router = createBrowserRouter([
@@ -11,12 +11,12 @@ const router = createBrowserRouter([
 		element: <App />,
 		children: [
 			{
-				path: '/adduser',
-				element: <AddUser />,
+				path: '/usermanagement',
+				element: <UserManagement />,
 			},
 			{
 				path: '/users',
-				element: <UserList />,
+				element: <UserList delbutton={false} />,
 			},
 			{
 				path: '/',
