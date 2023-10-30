@@ -1,17 +1,15 @@
 import React from 'react'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
+import { useDispatch } from 'react-redux'
 
-import userService from '../services/users'
+import { createUser } from '../reducers/userReducer'
 import { UserList } from './UserList'
 
 export const UserManagement = () => {
-	const createUser = async (values) => {
-		const newUser = {
-			name: values.name,
-			username: values.username,
-		}
-		const user = await userService.create(newUser)
-		console.log(user)
+	const dispatch = useDispatch()
+
+	const createNewUser = async (values) => {
+		dispatch(createUser(values))
 	}
 
 	return (
@@ -21,7 +19,7 @@ export const UserManagement = () => {
 				initialValues={{ username: '', name: '' }}
 				onSubmit={(values, { setSubmitting }) => {
 					setTimeout(() => {
-						createUser(values)
+						createNewUser(values)
 						setSubmitting(false)
 					}, 400)
 				}}

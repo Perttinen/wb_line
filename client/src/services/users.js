@@ -16,7 +16,6 @@ const create = (newObject) => {
 }
 
 const remove = (id) => {
-	console.log(`${baseUrl}/${id}`)
 	axios.delete(`${baseUrl}/${id}`)
 }
 

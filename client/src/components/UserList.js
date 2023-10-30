@@ -1,20 +1,9 @@
-import { useState, useEffect } from 'react'
-
-import userService from '../services/users'
+import { useSelector, useDispatch } from 'react-redux'
+import { removeUser } from '../reducers/userReducer'
 
 export const UserList = ({ delbutton }) => {
-	const [users, setUsers] = useState(null)
-
-	useEffect(() => {
-		userService.getAll().then((initialUsers) => {
-			setUsers(initialUsers)
-		})
-	}, [])
-
-	const removeUser = (id) => {
-		userService.remove(id)
-		setUsers(users.filter((u) => u.id !== id))
-	}
+	const users = useSelector((state) => state.users)
+	const dispatch = useDispatch()
 
 	return (
 		<div>
@@ -29,7 +18,9 @@ export const UserList = ({ delbutton }) => {
 							<li key={u.id}>
 								{u.name}{' '}
 								{delbutton === true ? (
-									<button onClick={() => removeUser(u.id)}>delete</button>
+									<button onClick={() => dispatch(removeUser(u.id))}>
+										delete
+									</button>
 								) : null}
 							</li>
 						))}
