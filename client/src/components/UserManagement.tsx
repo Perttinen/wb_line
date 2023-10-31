@@ -4,11 +4,14 @@ import { useDispatch } from 'react-redux'
 
 import { createUser } from '../reducers/userReducer'
 import { UserList } from './UserList'
+import { UserNoId, User } from '../types'
+import { AppDispatch } from '../store'
 
 export const UserManagement = () => {
-	const dispatch = useDispatch()
+	const dispatch: (...args: unknown[]) => Promise<User> =
+		useDispatch<AppDispatch>()
 
-	const createNewUser = async (values) => {
+	const createNewUser = async (values: UserNoId) => {
 		dispatch(createUser(values))
 	}
 

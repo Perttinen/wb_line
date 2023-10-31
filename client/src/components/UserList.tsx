@@ -1,9 +1,18 @@
+import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { removeUser } from '../reducers/userReducer'
 
-export const UserList = ({ delbutton }) => {
-	const users = useSelector((state) => state.users)
-	const dispatch = useDispatch()
+import { removeUser } from '../reducers/userReducer'
+import { User } from '../types'
+import { AppDispatch } from '../store'
+
+type Props = {
+	delbutton: boolean
+}
+
+export const UserList: React.FC<Props> = ({ delbutton }) => {
+	const users = useSelector((state: { users: User[] }) => state.users)
+	const dispatch: (...args: unknown[]) => Promise<User> =
+		useDispatch<AppDispatch>()
 
 	return (
 		<div>
