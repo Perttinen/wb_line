@@ -1,12 +1,14 @@
-require('dotenv').config()
-const Sequelize = require('sequelize')
-const { Umzug, SequelizeStorage } = require('umzug')
+import dotenv from 'dotenv'
+import { Sequelize } from 'sequelize-typescript'
+import { Umzug, SequelizeStorage } from 'umzug'
 
-const sequelize =
+dotenv.config()
+
+const sequelize: Sequelize =
 	process.env.NODE_ENV === 'dev'
 		? new Sequelize(
-				process.env.DATABASE,
-				process.env.DATABASEUSER,
+				process.env.DATABASE!,
+				process.env.DATABASEUSER!,
 				process.env.DATABASEPASSWORD,
 				{
 					host: process.env.HOST,
@@ -20,7 +22,7 @@ const sequelize =
 					},
 				}
 		  )
-		: new Sequelize(process.env.LOCAL_DB)
+		: new Sequelize(process.env.LOCAL_DB!)
 
 const runMigrations = async () => {
 	const migrator = new Umzug({
@@ -51,4 +53,4 @@ const connectToDatabase = async () => {
 	return null
 }
 
-module.exports = { connectToDatabase, sequelize }
+export default { connectToDatabase, sequelize }
