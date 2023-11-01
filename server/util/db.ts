@@ -22,7 +22,7 @@ const sequelize: Sequelize =
 					},
 				}
 		  )
-		: new Sequelize(process.env.LOCAL_DB as string, { dialect: 'postgres' })
+		: new Sequelize(process.env.LOCAL_DB!)
 
 const runMigrations = async () => {
 	const migrator = new Umzug({
