@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux'
 
 import { removeUser } from '../reducers/userReducer'
-import { User } from '../types'
+import { User } from '../../../types'
 import { AppDispatch } from '../store'
 
 export const UserList = ({ delbutton }: { delbutton: boolean }) => {

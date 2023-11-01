@@ -1,13 +1,14 @@
 import express, { RequestHandler, Request } from 'express'
 
 import { User } from '../models'
+import { UserNoId } from '../../types'
 
 const router = express.Router()
 
-interface UserNoId {
-	name: string
-	userName: string
-}
+// interface UserNoId {
+// 	name: string
+// 	userName: string
+// }
 
 // const isUserNoId = (obj: UserNoId): obj is UserNoId => {
 // 	return (

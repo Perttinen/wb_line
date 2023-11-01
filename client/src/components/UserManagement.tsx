@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 
 import { createUser } from '../reducers/userReducer'
 import { UserList } from './UserList'
-import { UserNoId, User } from '../types'
+import { UserNoId, User } from '../../../types'
 import { AppDispatch } from '../store'
 
 export const UserManagement = () => {
