@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { UserNoId } from '../types'
+import { UserNoId } from '../../../types'
 
 const baseUrl =
 	process.env.NODE_ENV === 'development'

@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 
 import { initializeUsers } from './reducers/userReducer'
 import { AppDispatch } from './store'
-import { User } from './types'
+import { User } from '../../types'
 
 const App = () => {
 	const padding = {

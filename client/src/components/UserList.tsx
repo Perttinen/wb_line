@@ -1,14 +1,13 @@
 import { useSelector, useDispatch } from 'react-redux'
 
 import { removeUser } from '../reducers/userReducer'
-import { User } from '../types'
+import { User } from '../../../types'
 import { AppDispatch } from '../store'
 
 export const UserList = ({ delbutton }: { delbutton: boolean }) => {
 	const users = useSelector((state: { users: User[] }) => state.users)
 	const dispatch: (...args: unknown[]) => Promise<User> =
 		useDispatch<AppDispatch>()
-
 	return (
 		<div>
 			<h3>Current users from db:</h3>

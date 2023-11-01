@@ -27,7 +27,7 @@ const sequelize: Sequelize =
 const runMigrations = async () => {
 	const migrator = new Umzug({
 		migrations: {
-			glob: 'server/migrations/*.js',
+			glob: 'server/migrations/*.ts',
 		},
 		storage: new SequelizeStorage({ sequelize, tableName: 'migrations' }),
 		context: sequelize.getQueryInterface(),
