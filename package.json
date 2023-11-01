@@ -2,7 +2,7 @@
 	"name": "wb-line",
 	"version": "1.0.0",
 	"description": "",
-	"main": "index.js",
+	"main": "server/index.ts",
 	"scripts": {
 		"tsc": "tsc",
 		"build": "cd client && npm install && npm run build",
@@ -23,6 +23,7 @@
 		"express": "^4.18.2",
 		"path": "^0.12.7",
 		"pg": "^8.11.3",
+		"reflect-metadata": "^0.1.13",
 		"sequelize": "^6.33.0",
 		"sequelize-typescript": "^2.1.5",
 		"umzug": "^3.3.1"
