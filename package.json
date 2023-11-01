@@ -6,11 +6,9 @@
 	"scripts": {
 		"tsc": "tsc",
 		"build": "cd client && npm install && npm run build",
-		"dev": "cross-env NODE_ENV=dev nodemon server/index.js",
-		"devTs": "cross-env NODE_ENV=dev ts-node-dev server/index.ts",
-		"devClient": "cross-env NODE_ENV=dev node server/index.js",
+		"dev": "cross-env NODE_ENV=dev ts-node-dev server/index.ts",
+		"devClient": "cross-env NODE_ENV=dev ts-node server/index.ts",
 		"start": "ts-node server/index.ts",
-		"startJs": "node server/index.js",
 		"lint": "eslint --ext .ts .",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},

@@ -12,7 +12,7 @@ const userSlice = createSlice({
 		appendUser(state, action: PayloadAction<User>) {
 			state.push(action.payload)
 		},
-		setUsers(state, action: PayloadAction<User[]>) {
+		setUsers(_state, action: PayloadAction<User[]>) {
 			return action.payload
 		},
 		dropUser(state, action: PayloadAction<string>) {
