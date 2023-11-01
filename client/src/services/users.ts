@@ -6,23 +6,24 @@ const baseUrl =
 		? 'http://localhost:3001/api/user'
 		: '/api/user'
 
-const getAll = () => {
-	const request = axios.get(baseUrl)
-	return request.then((res) => res.data)
+const getAll = async () => {
+	const res = await axios.get(baseUrl)
+	return res.data
 }
 
-const create = (newUser: UserNoId) => {
-	const res = axios.post(baseUrl, newUser)
+const create = async (newUser: UserNoId) => {
+	const res = await axios.post(baseUrl, newUser)
 	return res
 }
 
-const remove = (id: string) => {
-	axios.delete(`${baseUrl}/${id}`)
+const remove = async (id: string) => {
+	await axios.delete(`${baseUrl}/${id}`)
 }
 
 // const update = (id, newObject) => {
 //   return axios.put(`${baseUrl}/${id}`, newObject)
 // }
 
-// eslint-disable-next-line import/no-anonymous-default-export
-export default { getAll, create, remove }
+const api = { getAll, create, remove }
+
+export default api
