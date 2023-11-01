@@ -18,10 +18,11 @@ export const UserManagement = () => {
 		<div>
 			<h3>Add user</h3>
 			<Formik
-				initialValues={{ username: '', name: '' }}
-				onSubmit={(values, { setSubmitting }) => {
+				initialValues={{ username: '', name: '', password: '' }}
+				onSubmit={(values, { setSubmitting, resetForm }) => {
 					setTimeout(() => {
 						createNewUser(values)
+						resetForm()
 						setSubmitting(false)
 					}, 400)
 				}}
@@ -29,8 +30,13 @@ export const UserManagement = () => {
 				{({ isSubmitting }) => (
 					<Form>
 						<Field type='text' name='name' placeholder='name' />
+						<br />
 						<ErrorMessage name='name' component='div' />
 						<Field type='text' name='username' placeholder='username' />
+						<br />
+						<ErrorMessage name='username' component='div' />
+						<Field type='password' name='password' placeholder='password' />
+						<br />
 						<ErrorMessage name='username' component='div' />
 						<button type='submit' disabled={isSubmitting}>
 							Submit
