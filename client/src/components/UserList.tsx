@@ -8,7 +8,6 @@ export const UserList = ({ delbutton }: { delbutton: boolean }) => {
 	const users = useSelector((state: { users: User[] }) => state.users)
 	const dispatch: (...args: unknown[]) => Promise<User> =
 		useDispatch<AppDispatch>()
-
 	return (
 		<div>
 			<h3>Current users from db:</h3>
