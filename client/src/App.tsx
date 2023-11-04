@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux'
 import { initializeUsers } from './reducers/userReducer'
 import { AppDispatch } from './store'
 import { User } from '../../types'
+// import WebSocketProvider, { WebSocketContext } from './WebSocket';
 
 const App = () => {
 	const padding = {
