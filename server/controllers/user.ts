@@ -22,7 +22,6 @@ router.post('/', (async (req: Request<object, object, UserNoId>, res) => {
 
 router.delete('/:id', (async (req, res) => {
 	try {
-		console.log(req.params.id)
 		const user = await User.findByPk(req.params.id)
 		if (user) await user.destroy()
 		res.json(user)
