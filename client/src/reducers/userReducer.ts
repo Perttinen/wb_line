@@ -16,7 +16,6 @@ const userSlice = createSlice({
 			return action.payload
 		},
 		dropUser(state, action: PayloadAction<string>) {
-			console.log(action.payload)
 			return state.filter((u) => u.id !== action.payload)
 		},
 	},
