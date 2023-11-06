@@ -2,9 +2,10 @@ import React, { createContext, useState, useEffect } from 'react'
 import io, { Socket } from 'socket.io-client'
 import { useDispatch } from 'react-redux'
 
-import { initializeUsers } from './reducers/userReducer'
+import { initializeUsers, appendUser, dropUser } from './reducers/userReducer'
 import { AppDispatch } from './store'
-import { User } from '../../types'
+import { User, UserNoId } from '../../types'
+import userService from './services/users'
 
 const WS_BASE =
 	process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : '/'
@@ -12,6 +13,8 @@ const WS_BASE =
 interface IContext {
 	socket: Socket
 	sendMessage: (message: string) => void
+	sendAddUser: (user: UserNoId) => void
+	sendRemoveUser: (id: string) => void
 }
 
 const WebSocketContext = createContext<IContext | null>(null)
@@ -34,17 +37,41 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 		socket?.emit('event://send-message', payload)
 	}
 
-	socket?.on('event://get-message', (payload) => {
-		console.log(`user ${payload.id} says: ${payload.msg}`)
-	})
+	const sendAddUser = async (user: UserNoId) => {
+		const newUser = await userService.create(user)
+		console.log('sendAddUser: ', newUser.data)
+		dispatch(appendUser(newUser.data))
+		socket?.emit('event://send-add-user', newUser)
+	}
+
+	const sendRemoveUser = async (id: string) => {
+		await userService.remove(id)
+		console.log('sendRemoveUser: ', id)
+		dispatch(dropUser(id))
+		socket?.emit('event://send-remove-user', id)
+	}
+
+	// socket?.on('event://get-message', (payload) => {
+	// 	console.log(`user ${payload.id} says: ${payload.msg}`)
+	// })
 
 	useEffect(() => {
 		dispatch(initializeUsers())
 		const newSocket = io(WS_BASE)
 		setSocket(newSocket)
 
-		newSocket.on('event://add-user', (msg: any) => {
-			console.log(msg)
+		newSocket.on('event://get-message', (msg: any) => {
+			console.log('get-message: ', msg)
+		})
+
+		newSocket.on('event://get-add-user', (user: any) => {
+			console.log('get-add-user: ', user)
+			dispatch(appendUser(user))
+		})
+
+		newSocket.on('event://get-remove-user', (id: string) => {
+			console.log('get-remove-user: ', id)
+			dispatch(dropUser(id))
 		})
 
 		return () => {
@@ -53,7 +80,11 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 	}, [dispatch])
 
 	return (
-		<WebSocketContext.Provider value={socket ? { socket, sendMessage } : null}>
+		<WebSocketContext.Provider
+			value={
+				socket ? { socket, sendMessage, sendAddUser, sendRemoveUser } : null
+			}
+		>
 			{children}
 		</WebSocketContext.Provider>
 	)

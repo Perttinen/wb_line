@@ -1,17 +1,14 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik'
-import { useDispatch } from 'react-redux'
-
-import { createUser } from '../reducers/userReducer'
 import { UserList } from './UserList'
-import { UserNoId, User } from '../../../types'
-import { AppDispatch } from '../store'
+import { UserNoId } from '../../../types'
+import { WebSocketContext } from '../WebSocket'
+import { useContext } from 'react'
 
 export const UserManagement = () => {
-	const dispatch: (...args: unknown[]) => Promise<User> =
-		useDispatch<AppDispatch>()
+	const ws = useContext(WebSocketContext)
 
 	const createNewUser = async (values: UserNoId) => {
-		dispatch(createUser(values))
+		ws?.sendAddUser(values)
 	}
 
 	return (
@@ -44,6 +41,7 @@ export const UserManagement = () => {
 					</Form>
 				)}
 			</Formik>
+
 			<UserList delbutton={true} />
 		</div>
 	)

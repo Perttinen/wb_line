@@ -22,6 +22,12 @@ const ioConnection = (server: http.Server) => {
 			}
 			socket.broadcast.emit('event://get-message', mes)
 		})
+		socket.on('event://send-add-user', (payload) => {
+			socket.broadcast.emit('event://get-add-user', payload.data as object)
+		})
+		socket.on('event://send-remove-user', (payload) => {
+			socket.broadcast.emit('event://get-remove-user', payload)
+		})
 	})
 }
 
