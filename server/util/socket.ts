@@ -14,7 +14,6 @@ const ioConnection = (server: http.Server) => {
 	io.on('connection', (socket) => {
 		console.log(`User ${socket.id} connected`)
 		socket.on('event://send-message', (payload) => {
-			console.log(`${socket.id} says: ${payload.data}`)
 			const user = socket.id
 			const mes = {
 				id: user,

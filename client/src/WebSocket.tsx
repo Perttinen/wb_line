@@ -39,14 +39,12 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 
 	const sendAddUser = async (user: UserNoId) => {
 		const newUser = await userService.create(user)
-		console.log('sendAddUser: ', newUser.data)
 		dispatch(appendUser(newUser.data))
 		socket?.emit('event://send-add-user', newUser)
 	}
 
 	const sendRemoveUser = async (id: string) => {
 		await userService.remove(id)
-		console.log('sendRemoveUser: ', id)
 		dispatch(dropUser(id))
 		socket?.emit('event://send-remove-user', id)
 	}
@@ -65,7 +63,6 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 		})
 
 		newSocket.on('event://get-add-user', (user: any) => {
-			console.log('get-add-user: ', user)
 			dispatch(appendUser(user))
 		})
 
