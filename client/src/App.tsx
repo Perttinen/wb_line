@@ -2,7 +2,7 @@ import { Link, Outlet } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { Login } from './components'
 import { AppDispatch } from './store'
-import { setloggedUser } from './reducers/loggedUserReducer'
+import { setLoggedUser } from './reducers/loggedUserReducer'
 
 const App = () => {
 	const padding = {
@@ -28,7 +28,7 @@ const App = () => {
 			<div>
 				<h1>Wb-Line</h1>
 				<h3>{timeString}</h3>
-				<button onClick={() => dispatch(setloggedUser(''))}>logout</button>
+				<button onClick={() => dispatch(setLoggedUser(''))}>logout</button>
 			</div>
 			<div>
 				<Link style={padding} to='/'>

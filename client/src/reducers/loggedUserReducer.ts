@@ -6,16 +6,16 @@ const loggedUserSlice = createSlice({
 	name: 'loggedUser',
 	initialState: initialState,
 	reducers: {
-		setloggedUser(state, action: PayloadAction<string>): string {
+		setLoggedUser(state, action: PayloadAction<string>): string {
 			state = action.payload
 			return state
 		},
-		getloggedUser(state): string {
+		getLoggedUser(state): string {
 			return state
 		},
 	},
 })
 
-export const { setloggedUser, getloggedUser } = loggedUserSlice.actions
+export const { setLoggedUser, getLoggedUser } = loggedUserSlice.actions
 
 export default loggedUserSlice.reducer
