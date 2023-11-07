@@ -7,7 +7,9 @@ const App = () => {
 	}
 
 	const time = useSelector((state: { time: number }) => state.time)
-	const timeString = new Date(time).toLocaleTimeString('fi-FI')
+	const timeString = new Date(time).toLocaleTimeString('fi-FI', {
+		timeStyle: 'short',
+	})
 
 	return (
 		<div>

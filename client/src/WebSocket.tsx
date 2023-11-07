@@ -50,18 +50,12 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 		socket?.emit('event://send-remove-user', id)
 	}
 
-	// socket?.on('event://get-message', (payload) => {
-	// 	console.log(`user ${payload.id} says: ${payload.msg}`)
-	// })
-
 	useEffect(() => {
 		dispatch(initializeUsers())
 		const newSocket = io(WS_BASE)
 		setSocket(newSocket)
 
 		newSocket.on('time', (time) => {
-			console.log(time)
-
 			dispatch(setTime(time))
 		})
 
@@ -74,7 +68,6 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 		})
 
 		newSocket.on('event://get-remove-user', (id: string) => {
-			console.log('get-remove-user: ', id)
 			dispatch(dropUser(id))
 		})
 
