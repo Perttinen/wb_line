@@ -13,6 +13,9 @@ const ioConnection = (server: http.Server) => {
 
 	io.on('connection', (socket) => {
 		console.log(`User ${socket.id} connected`)
+		setInterval(() => {
+			socket.emit('time', new Date().valueOf())
+		}, 10000)
 		socket.on('event://send-message', (payload) => {
 			const user = socket.id
 			const mes = {
