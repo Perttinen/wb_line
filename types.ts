@@ -10,3 +10,8 @@ export type UserNoId = {
 	username: string
 	password: string
 }
+
+export type LoginUser = {
+	username: string
+	password: string
+}
