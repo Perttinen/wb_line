@@ -5,6 +5,7 @@ import { useContext } from 'react'
 
 export const UserList = ({ delbutton }: { delbutton: boolean }) => {
 	const users = useSelector((state: { users: User[] }) => state.users)
+
 	const ws = useContext(WebSocketContext)
 
 	return (
