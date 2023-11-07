@@ -3,6 +3,7 @@ import io, { Socket } from 'socket.io-client'
 import { useDispatch } from 'react-redux'
 
 import { initializeUsers, appendUser, dropUser } from './reducers/userReducer'
+import { setTime } from './reducers/timeReducer'
 import { AppDispatch } from './store'
 import { User, UserNoId } from '../../types'
 import userService from './services/users'
@@ -27,7 +28,7 @@ interface WebSocketProviderProps {
 
 const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 	const [socket, setSocket] = useState<Socket | null>(null)
-	const dispatch: (...args: unknown[]) => Promise<User> =
+	const dispatch: (...args: unknown[]) => Promise<User> | number =
 		useDispatch<AppDispatch>()
 
 	const sendMessage = (message: string) => {
@@ -57,6 +58,12 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 		dispatch(initializeUsers())
 		const newSocket = io(WS_BASE)
 		setSocket(newSocket)
+
+		newSocket.on('time', (time) => {
+			console.log(time)
+
+			dispatch(setTime(time))
+		})
 
 		newSocket.on('event://get-message', (msg: any) => {
 			console.log('get-message: ', msg)

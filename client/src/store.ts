@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 
 import userReducer from './reducers/userReducer'
+import timeReducer from './reducers/timeReducer'
 
 export const store = configureStore({
 	reducer: {
 		users: userReducer,
+		time: timeReducer,
 	},
 })
 
