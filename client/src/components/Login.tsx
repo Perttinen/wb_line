@@ -5,15 +5,19 @@ import { setLoggedUser } from '../reducers/loggedUserReducer'
 import { LoginUser } from '../../../types'
 import loginService from '../services/login'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 export const Login = () => {
 	const dispatch: (...args: unknown[]) => Promise<string> =
 		useDispatch<AppDispatch>()
 
+	const navigate = useNavigate()
+
 	const login = async (values: LoginUser) => {
 		try {
 			const loggedUser = await loginService.login(values)
 			loggedUser.username && dispatch(setLoggedUser(loggedUser.username))
+			navigate('/')
 		} catch (e) {
 			if (axios.isAxiosError(e) && e.response) {
 				alert(e.response.data.error)
