@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Login } from './components'
 import { AppDispatch } from './store'
 import { setLoggedUser } from './reducers/loggedUserReducer'
-import { AppBar, Box, Button, Container, Toolbar } from '@mui/material'
+import { AppBar, Button, Toolbar } from '@mui/material'
 
 const App = () => {
 	const navigate = useNavigate()
@@ -26,30 +26,26 @@ const App = () => {
 		<div>
 			<div>
 				<AppBar position='static'>
-					<Container maxWidth='xl'>
-						<Toolbar disableGutters>
-							<Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-								<Button
-									onClick={() => navigate('/')}
-									sx={{ my: 2, color: 'white', display: 'block' }}
-								>
-									home
-								</Button>
-								<Button
-									onClick={() => navigate('/users')}
-									sx={{ my: 2, color: 'white', display: 'block' }}
-								>
-									users
-								</Button>
-								<Button
-									onClick={() => navigate('/usermanagement')}
-									sx={{ my: 2, color: 'white', display: 'block' }}
-								>
-									user management
-								</Button>
-							</Box>
-						</Toolbar>
-					</Container>
+					<Toolbar disableGutters>
+						<Button
+							onClick={() => navigate('/')}
+							sx={{ my: 2, color: 'white', display: 'block' }}
+						>
+							home
+						</Button>
+						<Button
+							onClick={() => navigate('/users')}
+							sx={{ my: 2, color: 'white', display: 'block' }}
+						>
+							users
+						</Button>
+						<Button
+							onClick={() => navigate('/usermanagement')}
+							sx={{ my: 2, color: 'white', display: 'block' }}
+						>
+							user management
+						</Button>
+					</Toolbar>
 				</AppBar>
 			</div>
 

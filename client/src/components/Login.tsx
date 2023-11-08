@@ -45,8 +45,6 @@ export const Login = () => {
 			username: data.get('username') as string,
 			password: data.get('password') as string,
 		}
-		console.log(values)
-
 		try {
 			const loggedUser = await loginService.login(values)
 			loggedUser.username && dispatch(setLoggedUser(loggedUser.username))
