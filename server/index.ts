@@ -15,7 +15,7 @@ app.use(express.json())
 const DIST_PATH = path.resolve(__dirname, '../client/build')
 app.use(express.static(DIST_PATH))
 
-app.use('/login', loginRouter)
+app.use('/api/login', loginRouter)
 app.use('/api/user', userRouter)
 app.get('/*', function (_req, res) {
 	res.sendFile(

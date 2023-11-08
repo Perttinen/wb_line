@@ -1,32 +1,36 @@
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { AppDispatch } from '../store'
 import { setLoggedUser } from '../reducers/loggedUserReducer'
-import { User, LoginUser } from '../../../types'
+import { LoginUser } from '../../../types'
+import loginService from '../services/login'
+import axios from 'axios'
 
 export const Login = () => {
 	const dispatch: (...args: unknown[]) => Promise<string> =
 		useDispatch<AppDispatch>()
-	const users = useSelector((state: { users: User[] }) => state.users)
 
-	const loginUser = (values: LoginUser) => {
-		;(users.find(
-			(u) => u.username === values.username && u.password === values.password
-		) ||
-			(values.username === 'su' && values.password === 'su')) &&
-			dispatch(setLoggedUser(values.username))
+	const login = async (values: LoginUser) => {
+		try {
+			const loggedUser = await loginService.login(values)
+			loggedUser.username && dispatch(setLoggedUser(loggedUser.username))
+		} catch (e) {
+			if (axios.isAxiosError(e) && e.response) {
+				alert(e.response.data.error)
+			} else {
+				console.log(e)
+			}
+		}
 	}
 
 	return (
 		<div>
 			<Formik
 				initialValues={{ username: '', password: '' }}
-				onSubmit={(values, { setSubmitting, resetForm }) => {
-					setTimeout(() => {
-						loginUser(values)
-						resetForm()
-						setSubmitting(false)
-					}, 400)
+				onSubmit={async (values, { setSubmitting, resetForm }) => {
+					await login(values)
+					resetForm()
+					setSubmitting(false)
 				}}
 			>
 				{({ isSubmitting }) => (

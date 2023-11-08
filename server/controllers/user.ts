@@ -1,12 +1,18 @@
 import express, { RequestHandler, Request } from 'express'
+import dotenv from 'dotenv'
+import { Op } from 'sequelize'
 
 import { User } from '../models'
 import { UserNoId } from '../../types'
 
+dotenv.config()
+
 const router = express.Router()
 
 router.get('/', (async (_req, res) => {
-	const users: User[] = await User.findAll()
+	const users: User[] = await User.findAll({
+		where: { username: { [Op.not]: [process.env.SU_USERNAME] } },
+	})
 	res.json(users)
 }) as RequestHandler)
 
