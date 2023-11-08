@@ -15,3 +15,10 @@ export type LoginUser = {
 	username: string
 	password: string
 }
+
+export type UserType = {
+	id: string
+	name: string
+	username: string
+	password: string
+}
