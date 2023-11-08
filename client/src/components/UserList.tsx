@@ -9,6 +9,8 @@ import {
 	TableContainer,
 	TableRow,
 	Paper,
+	CssBaseline,
+	Typography,
 } from '@mui/material'
 
 export const UserList = ({ delbutton }: { delbutton: boolean }) => {
@@ -18,35 +20,34 @@ export const UserList = ({ delbutton }: { delbutton: boolean }) => {
 
 	return (
 		<div>
-			<h3>Users:</h3>
-
-			{/* <h4> */}
 			{!users ? (
 				'Loading...'
 			) : (
-				// <div>
-				<TableContainer component={Paper}>
-					<Table>
-						<TableBody>
-							{/* <ul> */}
-							{users.map((u) => (
-								<TableRow key={u.id}>
-									<TableCell>{u.name}</TableCell>
-									<TableCell>{u.id}</TableCell>
-									{delbutton === true ? (
-										<TableCell>
-											<button onClick={() => ws?.sendRemoveUser(u.id)}>
-												delete
-											</button>
-										</TableCell>
-									) : null}
-								</TableRow>
-							))}
-							{/* </ul> */}
-						</TableBody>
-					</Table>
-				</TableContainer>
-				// </div>
+				<div>
+					<CssBaseline />
+					<Typography>Users:</Typography>
+					<TableContainer component={Paper}>
+						<Table>
+							<TableBody>
+								{/* <ul> */}
+								{users.map((u) => (
+									<TableRow key={u.id}>
+										<TableCell>{u.name}</TableCell>
+										<TableCell>{u.id}</TableCell>
+										{delbutton === true ? (
+											<TableCell>
+												<button onClick={() => ws?.sendRemoveUser(u.id)}>
+													delete
+												</button>
+											</TableCell>
+										) : null}
+									</TableRow>
+								))}
+								{/* </ul> */}
+							</TableBody>
+						</Table>
+					</TableContainer>
+				</div>
 			)}
 			{/* </h4> */}
 		</div>
