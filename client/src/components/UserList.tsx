@@ -2,6 +2,14 @@ import { useSelector } from 'react-redux'
 import { User } from '../../../types'
 import { WebSocketContext } from '../WebSocket'
 import { useContext } from 'react'
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableContainer,
+	TableRow,
+	Paper,
+} from '@mui/material'
 
 export const UserList = ({ delbutton }: { delbutton: boolean }) => {
 	const users = useSelector((state: { users: User[] }) => state.users)
@@ -10,28 +18,37 @@ export const UserList = ({ delbutton }: { delbutton: boolean }) => {
 
 	return (
 		<div>
-			<h3>Current users from db:</h3>
+			<h3>Users:</h3>
 
-			<h4>
-				{!users ? (
-					'Loading...'
-				) : (
-					<div>
-						<ul>
+			{/* <h4> */}
+			{!users ? (
+				'Loading...'
+			) : (
+				// <div>
+				<TableContainer component={Paper}>
+					<Table>
+						<TableBody>
+							{/* <ul> */}
 							{users.map((u) => (
-								<li key={u.id}>
-									{u.name} {u.id}{' '}
+								<TableRow key={u.id}>
+									<TableCell>{u.name}</TableCell>
+									<TableCell>{u.id}</TableCell>
 									{delbutton === true ? (
-										<button onClick={() => ws?.sendRemoveUser(u.id)}>
-											delete
-										</button>
+										<TableCell>
+											<button onClick={() => ws?.sendRemoveUser(u.id)}>
+												delete
+											</button>
+										</TableCell>
 									) : null}
-								</li>
+								</TableRow>
 							))}
-						</ul>
-					</div>
-				)}
-			</h4>
+							{/* </ul> */}
+						</TableBody>
+					</Table>
+				</TableContainer>
+				// </div>
+			)}
+			{/* </h4> */}
 		</div>
 	)
 }
