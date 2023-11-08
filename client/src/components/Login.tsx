@@ -41,7 +41,7 @@ export const Login = () => {
 			>
 				{'Copyright © '}
 				<Link color='inherit' href='https://mui.com/'>
-					Your Website
+					Samuli Viitala
 				</Link>{' '}
 				{new Date().getFullYear()}
 				{'.'}
