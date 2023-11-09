@@ -1,6 +1,6 @@
-import { Outlet, useNavigate } from 'react-router-dom'
+import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { Login } from './components'
+import { Login, Timetable } from './components'
 import { AppDispatch } from './store'
 import { removeLoggedUser, setLoggedUser } from './reducers/loggedUserReducer'
 import { AppBar, Button, Toolbar } from '@mui/material'
@@ -8,6 +8,7 @@ import { UserWithTokenType } from '../../types'
 import { useEffect } from 'react'
 
 const App = () => {
+	const location = useLocation()
 	const dispatch: (...args: unknown[]) => Promise<string> =
 		useDispatch<AppDispatch>()
 
@@ -37,7 +38,9 @@ const App = () => {
 		dispatch(removeLoggedUser())
 	}
 
-	return !loggedUser.username ? (
+	return location.pathname === '/timetable' && !loggedUser.username ? (
+		<Timetable />
+	) : !loggedUser.username ? (
 		<Login />
 	) : (
 		<div>
@@ -50,17 +53,23 @@ const App = () => {
 						>
 							home
 						</Button>
-						<Button
+						{/* <Button
 							onClick={() => navigate('/users')}
 							sx={{ my: 2, color: 'white', display: 'block' }}
 						>
 							users
-						</Button>
+						</Button> */}
 						<Button
 							onClick={() => navigate('/usermanagement')}
 							sx={{ my: 2, color: 'white', display: 'block' }}
 						>
 							user management
+						</Button>
+						<Button
+							onClick={() => navigate('/timetable')}
+							sx={{ my: 2, color: 'white', display: 'block' }}
+						>
+							timetable
 						</Button>
 					</Toolbar>
 				</AppBar>
