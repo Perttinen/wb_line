@@ -12,14 +12,21 @@ import {
 	Box,
 	CssBaseline,
 	Avatar,
+	Alert,
+	Snackbar,
 } from '@mui/material'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
+import { useState } from 'react'
 
 export const Login = () => {
 	const dispatch: (...args: unknown[]) => Promise<string> =
 		useDispatch<AppDispatch>()
 
 	const navigate = useNavigate()
+
+	const [errorMsg, setErrorMsg] = useState('')
+	const [username, setUsername] = useState('')
+	const [password, setPassword] = useState('')
 
 	function Copyright(props: any) {
 		return (
@@ -50,13 +57,16 @@ export const Login = () => {
 			loggedUser.username && dispatch(setLoggedUser(loggedUser.username))
 			navigate('/')
 		} catch (e) {
+			setUsername('')
+			setPassword('')
 			if (axios.isAxiosError(e) && e.response) {
-				alert(e.response.data.error)
+				setErrorMsg(e.response.data.error)
 			} else {
 				console.log(e)
 			}
 		}
 	}
+
 	return (
 		<div>
 			<CssBaseline />
@@ -84,6 +94,8 @@ export const Login = () => {
 						name='username'
 						autoComplete='text'
 						autoFocus
+						value={username}
+						onChange={(e) => setUsername(e.target.value)}
 					/>
 					<TextField
 						margin='normal'
@@ -94,6 +106,8 @@ export const Login = () => {
 						type='password'
 						id='password'
 						autoComplete='current-password'
+						value={password}
+						onChange={(e) => setPassword(e.target.value)}
 					/>
 					<Button
 						type='submit'
@@ -104,7 +118,15 @@ export const Login = () => {
 						log in
 					</Button>
 				</Box>
+				<Snackbar
+					open={errorMsg !== ''}
+					autoHideDuration={4000}
+					onClose={() => setErrorMsg('')}
+				>
+					<Alert severity='error'>{errorMsg}</Alert>
+				</Snackbar>
 			</Box>
+
 			<Copyright sx={{ mt: 8, mb: 4 }} />
 		</div>
 	)

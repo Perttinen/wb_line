@@ -1,7 +1,11 @@
 import express, { RequestHandler, Request } from 'express'
-import { LoginUser, UserType } from '../../types'
+import { LoginUser, UserType, UserForTokenType } from '../../types'
 import { User } from '../models'
 import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 const router = express.Router()
 
@@ -19,7 +23,15 @@ router.post('/', (async (req: Request<object, object, LoginUser>, res) => {
 	if (!passwordOk) {
 		return res.status(401).json({ error: 'invalid username or password' })
 	}
-	return res.json(user)
+
+	const userForToken: UserForTokenType = {
+		username: jsonUser.username,
+		id: jsonUser.id,
+	}
+
+	const token = jwt.sign(userForToken, process.env.JWT_SECRET!)
+
+	return res.json({ ...jsonUser, token })
 }) as RequestHandler)
 
 export default router
