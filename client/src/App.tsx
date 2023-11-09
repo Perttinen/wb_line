@@ -2,14 +2,26 @@ import { Outlet, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { Login } from './components'
 import { AppDispatch } from './store'
-import { setLoggedUser } from './reducers/loggedUserReducer'
+import { removeLoggedUser, setLoggedUser } from './reducers/loggedUserReducer'
 import { AppBar, Button, Toolbar } from '@mui/material'
+import { UserWithTokenType } from '../../types'
+import { useEffect } from 'react'
 
 const App = () => {
-	const navigate = useNavigate()
-
 	const dispatch: (...args: unknown[]) => Promise<string> =
 		useDispatch<AppDispatch>()
+
+	useEffect(() => {
+		console.log('effect')
+
+		const loggedUserJSON = window.localStorage.getItem('loggedWbUser')
+		if (loggedUserJSON) {
+			const user = JSON.parse(loggedUserJSON)
+			dispatch(setLoggedUser(user))
+		}
+	}, [dispatch])
+
+	const navigate = useNavigate()
 
 	const time = useSelector((state: { time: number }) => state.time)
 	const timeString = new Date(time).toLocaleTimeString('fi-FI', {
@@ -17,10 +29,15 @@ const App = () => {
 	})
 
 	const loggedUser = useSelector(
-		(state: { loggedUser: string }) => state.loggedUser
+		(state: { loggedUser: UserWithTokenType }) => state.loggedUser
 	)
 
-	return !loggedUser ? (
+	const handleLogout = () => {
+		window.localStorage.clear()
+		dispatch(removeLoggedUser())
+	}
+
+	return !loggedUser.username ? (
 		<Login />
 	) : (
 		<div>
@@ -50,8 +67,7 @@ const App = () => {
 			</div>
 
 			<p>
-				{timeString}{' '}
-				<Button onClick={() => dispatch(setLoggedUser(''))}>log out</Button>
+				{timeString} <Button onClick={handleLogout}>log out</Button>
 			</p>
 
 			<div id='detail'>
