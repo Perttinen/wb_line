@@ -17,6 +17,7 @@ import {
 } from '@mui/material'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import { useState } from 'react'
+import { useFormik } from 'formik'
 
 export const Login = () => {
 	const dispatch: (...args: unknown[]) => Promise<string> =
@@ -25,8 +26,6 @@ export const Login = () => {
 	const navigate = useNavigate()
 
 	const [errorMsg, setErrorMsg] = useState('')
-	const [username, setUsername] = useState('')
-	const [password, setPassword] = useState('')
 
 	function Copyright(props: any) {
 		return (
@@ -45,20 +44,14 @@ export const Login = () => {
 		)
 	}
 
-	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-		event.preventDefault()
-		const data = new FormData(event.currentTarget)
-		const values: LoginUser = {
-			username: data.get('username') as string,
-			password: data.get('password') as string,
-		}
+	const handleSubmit = async (values: LoginUser) => {
 		try {
 			const loggedUser = await loginService.login(values)
-			loggedUser.username && dispatch(setLoggedUser(loggedUser.username))
+			dispatch(setLoggedUser(loggedUser))
+			window.localStorage.setItem('loggedWbUser', JSON.stringify(loggedUser))
 			navigate('/')
 		} catch (e) {
-			setUsername('')
-			setPassword('')
+			formik.resetForm()
 			if (axios.isAxiosError(e) && e.response) {
 				setErrorMsg(e.response.data.error)
 			} else {
@@ -66,6 +59,16 @@ export const Login = () => {
 			}
 		}
 	}
+
+	const formik = useFormik({
+		initialValues: {
+			username: '',
+			password: '',
+		},
+		// validationSchema: userSchema, // Our Yup schema
+		onSubmit: handleSubmit,
+		enableReinitialize: true,
+	})
 
 	return (
 		<div>
@@ -84,7 +87,12 @@ export const Login = () => {
 				<Typography component='h1' variant='h5'>
 					Sign in
 				</Typography>
-				<Box component='form' onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+				<Box
+					component='form'
+					onSubmit={formik.handleSubmit}
+					noValidate
+					sx={{ mt: 1 }}
+				>
 					<TextField
 						margin='normal'
 						required
@@ -94,8 +102,8 @@ export const Login = () => {
 						name='username'
 						autoComplete='text'
 						autoFocus
-						value={username}
-						onChange={(e) => setUsername(e.target.value)}
+						value={formik.values.username}
+						onChange={formik.handleChange}
 					/>
 					<TextField
 						margin='normal'
@@ -106,8 +114,8 @@ export const Login = () => {
 						type='password'
 						id='password'
 						autoComplete='current-password'
-						value={password}
-						onChange={(e) => setPassword(e.target.value)}
+						value={formik.values.password}
+						onChange={formik.handleChange}
 					/>
 					<Button
 						type='submit'
