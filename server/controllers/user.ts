@@ -1,6 +1,7 @@
 import express, { RequestHandler, Request } from 'express'
 import dotenv from 'dotenv'
 import { Op } from 'sequelize'
+import bcrypt from 'bcrypt'
 
 import { User } from '../models'
 import { UserNoId } from '../../types'
@@ -17,9 +18,14 @@ router.get('/', (async (_req, res) => {
 }) as RequestHandler)
 
 router.post('/', (async (req: Request<object, object, UserNoId>, res) => {
-	const body = { ...req.body }
+	const body: UserNoId = { ...req.body }
+	const saltRounds: number = 10
+	const newUser = {
+		...body,
+		password: await bcrypt.hash(body.password, saltRounds),
+	}
 	try {
-		const user = await User.create(body)
+		const user = await User.create(newUser)
 		return res.json(user)
 	} catch (e) {
 		return res.status(400).json({ e })
