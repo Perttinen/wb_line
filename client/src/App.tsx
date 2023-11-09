@@ -53,12 +53,12 @@ const App = () => {
 						>
 							home
 						</Button>
-						<Button
+						{/* <Button
 							onClick={() => navigate('/users')}
 							sx={{ my: 2, color: 'white', display: 'block' }}
 						>
 							users
-						</Button>
+						</Button> */}
 						<Button
 							onClick={() => navigate('/usermanagement')}
 							sx={{ my: 2, color: 'white', display: 'block' }}
