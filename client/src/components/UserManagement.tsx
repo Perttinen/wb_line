@@ -12,6 +12,7 @@ export const UserManagement = () => {
 	const handleSubmit = async (values: UserNoId) => {
 		setShowAddUser(false)
 		ws?.sendAddUser(values)
+		formik.resetForm()
 	}
 
 	const formik = useFormik({
@@ -39,8 +40,8 @@ export const UserManagement = () => {
 					<Button
 						onClick={() => setShowAddUser(true)}
 						fullWidth
-						variant='contained'
-						sx={{ mt: 3, mb: 2 }}
+						// variant='contained'
+						sx={{ mt: 3, mb: 2, fontSize: '1.2rem' }}
 					>
 						Create new user
 					</Button>
@@ -89,17 +90,18 @@ export const UserManagement = () => {
 							<Button
 								type='submit'
 								fullWidth
-								variant='contained'
-								sx={{ mt: 3, mb: 2, backgroundColor: '#1E8449' }}
+								sx={{ mt: 3, mb: 2, color: '#1E8449', fontSize: '1.2rem' }}
 							>
 								Add User
 							</Button>
 							<Button
-								onClick={() => setShowAddUser(false)}
+								onClick={() => {
+									setShowAddUser(false)
+									formik.resetForm()
+								}}
 								type='button'
 								fullWidth
-								variant='contained'
-								sx={{ mt: 3, mb: 2, backgroundColor: '#B03A2E' }}
+								sx={{ mt: 3, mb: 2, color: '#B03A2E', fontSize: '1.2rem' }}
 							>
 								Cancel
 							</Button>

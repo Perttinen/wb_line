@@ -101,7 +101,6 @@ export const Login = () => {
 						label='username'
 						name='username'
 						autoComplete='text'
-						autoFocus
 						value={formik.values.username}
 						onChange={formik.handleChange}
 					/>
