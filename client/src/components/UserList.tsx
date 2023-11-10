@@ -1,65 +1,30 @@
-import { useSelector } from 'react-redux'
+import Table from '@mui/material/Table'
+import TableBody from '@mui/material/TableBody'
+
+import TableContainer from '@mui/material/TableContainer'
+
+import Typography from '@mui/material/Typography'
+import Paper from '@mui/material/Paper'
+
+import { UserLine } from '.'
 import { User } from '../../../types'
-import { useNavigate } from 'react-router-dom'
-// import { WebSocketContext } from '../WebSocket'
-// import { useContext } from 'react'
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableContainer,
-	TableRow,
-	Paper,
-	CssBaseline,
-	Typography,
-} from '@mui/material'
+import { useSelector } from 'react-redux'
 
-export const UserList = ({ delbutton }: { delbutton: boolean }) => {
+export const UserList = () => {
 	const users = useSelector((state: { users: User[] }) => state.users)
-
-	// const ws = useContext(WebSocketContext)
-
-	const navigate = useNavigate()
-	const handleViewUser = (id: string) => {
-		console.log(`/userdata/${id}`)
-
-		navigate(`/userdata/${id}`)
-		console.log(id)
-	}
 
 	return (
 		<div>
-			{!users ? (
-				'Loading...'
-			) : (
-				<div>
-					<CssBaseline />
-					<Typography>Users:</Typography>
-					<TableContainer component={Paper}>
-						<Table>
-							<TableBody>
-								{/* <ul> */}
-								{users.map((u) => (
-									<TableRow key={u.id}>
-										<TableCell>{u.name}</TableCell>
-
-										{delbutton === true ? (
-											<TableCell>
-												<button onClick={() => handleViewUser(u.id)}>
-													{/* <button onClick={() => ws?.sendRemoveUser(u.id)}> */}
-													Show
-												</button>
-											</TableCell>
-										) : null}
-									</TableRow>
-								))}
-								{/* </ul> */}
-							</TableBody>
-						</Table>
-					</TableContainer>
-				</div>
-			)}
-			{/* </h4> */}
+			<Typography variant='h5'>Users:</Typography>
+			<TableContainer component={Paper}>
+				<Table aria-label='collapsible table'>
+					<TableBody>
+						{users.map((user) => (
+							<UserLine key={user.id} user={user} />
+						))}
+					</TableBody>
+				</Table>
+			</TableContainer>
 		</div>
 	)
 }
