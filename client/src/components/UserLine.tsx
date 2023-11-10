@@ -27,6 +27,8 @@ export const UserLine = (props: { user: User }) => {
 		ws?.sendRemoveUser(id)
 	}
 
+	const detailRows = ['name', 'username']
+
 	return (
 		<Fragment>
 			<TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
@@ -52,25 +54,22 @@ export const UserLine = (props: { user: User }) => {
 							</Typography>
 							<Table size='small' aria-label='purchases'>
 								<TableBody>
-									{Object.keys(user).map(
-										(userkey) =>
-											userkey !== 'password' &&
-											userkey !== 'id' && (
-												<TableRow key={userkey}>
-													<TableCell>{userkey}</TableCell>
-													<TableCell>
-														{user[userkey as keyof typeof user]}
-													</TableCell>
-												</TableRow>
-											)
-									)}
+									{detailRows.map((row) => (
+										<TableRow key={row}>
+											<TableCell>
+												<Typography variant='subtitle1'>{row}</Typography>
+											</TableCell>
+											<TableCell>{user[row as keyof typeof user]}</TableCell>
+										</TableRow>
+									))}
 									<TableRow>
-										<TableCell>
+										<TableCell colSpan={2}>
 											<Button
-												sx={{ color: '#B03A2E' }}
+												fullWidth
+												sx={{ color: '#B03A2E', fontSize: '1.2rem' }}
 												onClick={() => handleDeleteUser(user.id)}
 											>
-												delete user
+												delete {user.username}
 											</Button>
 										</TableCell>
 									</TableRow>
