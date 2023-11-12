@@ -26,13 +26,19 @@ const App = () => {
 	const dispatch: (...args: unknown[]) => Promise<string> =
 		useDispatch<AppDispatch>()
 
-	useEffect(() => {
-		const loggedUserJSON = window.localStorage.getItem('loggedWbUser')
-		if (loggedUserJSON) {
-			const user = JSON.parse(loggedUserJSON)
-			dispatch(setLoggedUser(user))
-		}
-	}, [dispatch])
+	useEffect(
+		() => {
+			const loggedUserJSON = window.localStorage.getItem('loggedWbUser')
+			if (loggedUserJSON) {
+				const user = JSON.parse(loggedUserJSON)
+				dispatch(setLoggedUser(user))
+			}
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+		},
+		[
+			// dispatch
+		]
+	)
 
 	const navigate = useNavigate()
 

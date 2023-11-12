@@ -18,6 +18,8 @@ const loggedUserSlice = createSlice({
 			action: PayloadAction<UserWithTokenType>
 		): UserWithTokenType {
 			state = action.payload
+			console.log('reducer: ', state)
+
 			return state
 		},
 		getLoggedUser(state): UserWithTokenType {

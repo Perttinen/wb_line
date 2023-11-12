@@ -1,4 +1,3 @@
-import * as React from 'react'
 import * as ReactDOM from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { Container } from '@mui/material'
@@ -31,12 +30,10 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<Container>
-		<React.StrictMode>
-			<Provider store={store}>
-				<WebSocketProvider>
-					<RouterProvider router={router} />
-				</WebSocketProvider>
-			</Provider>
-		</React.StrictMode>
+		<Provider store={store}>
+			<WebSocketProvider>
+				<RouterProvider router={router} />
+			</WebSocketProvider>
+		</Provider>
 	</Container>
 )

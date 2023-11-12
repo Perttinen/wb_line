@@ -80,6 +80,8 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 	}, [dispatch])
 
 	useEffect(() => {
+		console.log('initializeUserLevels()')
+
 		dispatch(initializeUserLevels())
 	}, [dispatch])
 
