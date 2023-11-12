@@ -6,8 +6,8 @@ import TableContainer from '@mui/material/TableContainer'
 import Typography from '@mui/material/Typography'
 import Paper from '@mui/material/Paper'
 
-import { UserLine } from '.'
-import { UserType } from '../../../types'
+import { UserLine } from './UserLine'
+import { UserType } from '../../../../types'
 import { useSelector } from 'react-redux'
 
 export const UserList = () => {

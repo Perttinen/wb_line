@@ -7,6 +7,7 @@ import { setTime } from './reducers/timeReducer'
 import { AppDispatch } from './store'
 import { User, UserNoIdType } from '../../types'
 import userService from './services/users'
+import { initializeUserLevels } from './reducers/userLevelReducer'
 
 const WS_BASE =
 	process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : '/'
@@ -76,6 +77,10 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 		return () => {
 			newSocket.close()
 		}
+	}, [dispatch])
+
+	useEffect(() => {
+		dispatch(initializeUserLevels())
 	}, [dispatch])
 
 	return (

@@ -6,6 +6,8 @@ const baseUrl =
 		: '/api/userlevel'
 
 const getAll = async () => {
+	console.log('Levels: getAll')
+
 	const res = await axios.get(baseUrl)
 	return res.data
 }

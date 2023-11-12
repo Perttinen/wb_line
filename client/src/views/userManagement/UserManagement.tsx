@@ -1,16 +1,9 @@
 import { UserList } from './UserList'
-import { UserLevelType, UserNoIdType } from '../../../types'
-import { WebSocketContext } from '../WebSocket'
+import { UserLevelType, UserNoIdType } from '../../../../types'
+import { WebSocketContext } from '../../WebSocket'
 import { useContext, useState } from 'react'
-import {
-	TextField,
-	Button,
-	Box,
-	CssBaseline,
-	Select,
-	MenuItem,
-} from '@mui/material'
-import { Field, FormikProvider, useFormik } from 'formik'
+import { TextField, Button, Box, CssBaseline, MenuItem } from '@mui/material'
+import { useFormik } from 'formik'
 import { useSelector } from 'react-redux'
 
 export const UserManagement = () => {
