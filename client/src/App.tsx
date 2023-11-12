@@ -1,6 +1,7 @@
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { Login, Timetable } from './components'
+
+import { Login, Timetable } from './views'
 import { AppDispatch } from './store'
 import { removeLoggedUser, setLoggedUser } from './reducers/loggedUserReducer'
 import {

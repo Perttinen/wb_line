@@ -1,21 +1,21 @@
 import { createSlice, PayloadAction, Dispatch } from '@reduxjs/toolkit'
 
 import userService from '../services/users'
-import { User, UserNoId } from '../../../types'
+import { UserType, UserNoIdType } from '../../../types'
 
-type State = User[]
+type State = UserType[]
 
 const userSlice = createSlice({
 	name: 'users',
 	initialState: [] as State,
 	reducers: {
-		appendUser(state, action: PayloadAction<User>) {
+		appendUser(state, action: PayloadAction<UserType>) {
 			state.push(action.payload)
 		},
-		setUsers(_state, action: PayloadAction<User[]>) {
+		setUsers(_state, action: PayloadAction<UserType[]>) {
 			return action.payload
 		},
-		dropUser(state, action: PayloadAction<string>) {
+		dropUser(state, action: PayloadAction<number>) {
 			return state.filter((u) => u.id !== action.payload)
 		},
 	},
@@ -28,14 +28,14 @@ export const initializeUsers = () => {
 	}
 }
 
-export const createUser = (content: UserNoId) => {
+export const createUser = (content: UserNoIdType) => {
 	return async (dispatch: Dispatch) => {
 		const newUser = await userService.create(content)
 		dispatch(appendUser(newUser.data))
 	}
 }
 
-export const removeUser = (id: string) => {
+export const removeUser = (id: number) => {
 	return async (dispatch: Dispatch) => {
 		userService.remove(id)
 		dispatch(dropUser(id))

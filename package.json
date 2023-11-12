@@ -10,6 +10,8 @@
 		"devClient": "cross-env NODE_ENV=dev ts-node server/index.ts",
 		"start": "ts-node server/index.ts",
 		"lint": "eslint --ext .ts .",
+		"migration:down": "cross-env NODE_ENV=dev ts-node server/util/rollback.ts",
+		"migration:up": "cross-env NODE_ENV=dev ts-node server/util/runMigrations.ts",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"keywords": [],

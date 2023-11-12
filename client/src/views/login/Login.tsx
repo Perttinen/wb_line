@@ -1,8 +1,8 @@
 import { useDispatch } from 'react-redux'
-import { AppDispatch } from '../store'
-import { setLoggedUser } from '../reducers/loggedUserReducer'
-import { LoginUser } from '../../../types'
-import loginService from '../services/login'
+import { AppDispatch } from '../../store'
+import { setLoggedUser } from '../../reducers/loggedUserReducer'
+import { LoginUser } from '../../../../types'
+import loginService from '../../services/login'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import {

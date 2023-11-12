@@ -4,43 +4,33 @@ import db from '../util/db'
 
 const { sequelize } = db
 
-class User extends Model {}
+class UserLevel extends Model {}
 
-User.init(
+UserLevel.init(
 	{
 		id: {
 			type: DataTypes.INTEGER,
 			primaryKey: true,
 			autoIncrement: true,
 		},
-		username: {
+		levelName: {
 			type: DataTypes.STRING,
 			unique: true,
 			allowNull: false,
+			defaultValue: 'user',
 		},
-		name: {
-			type: DataTypes.STRING,
-			allowNull: false,
-		},
-		password: {
-			type: DataTypes.STRING,
-			allowNull: false,
-		},
-		user_level_id: {
+		levelNumber: {
 			type: DataTypes.INTEGER,
-			allowNull: true,
-			references: {
-				model: 'user_levels',
-				key: 'id',
-			},
+			allowNull: false,
+			defaultValue: 10,
 		},
 	},
 	{
 		sequelize,
 		underscored: true,
 		timestamps: false,
-		modelName: 'user',
+		modelName: 'userLevel',
 	}
 )
 
-export default User
+export default UserLevel

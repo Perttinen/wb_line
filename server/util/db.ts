@@ -24,21 +24,6 @@ const sequelize: Sequelize =
 		  )
 		: new Sequelize(process.env.LOCAL_DB!)
 
-const runMigrations = async () => {
-	const migrator = new Umzug({
-		migrations: {
-			glob: 'server/migrations/*.ts',
-		},
-		storage: new SequelizeStorage({ sequelize, tableName: 'migrations' }),
-		context: sequelize.getQueryInterface(),
-		logger: console,
-	})
-	const migrations = await migrator.up()
-	console.log('Migrations up to date', {
-		files: migrations.map((mig) => mig.name),
-	})
-}
-
 const connectToDatabase = async () => {
 	try {
 		await sequelize.authenticate()
@@ -53,4 +38,31 @@ const connectToDatabase = async () => {
 	return null
 }
 
-export default { connectToDatabase, sequelize }
+const migrationConf = {
+	migrations: {
+		glob: 'server/migrations/*.ts',
+	},
+	storage: new SequelizeStorage({ sequelize, tableName: 'migrations' }),
+	context: sequelize.getQueryInterface(),
+	logger: console,
+}
+
+const runMigrations = async () => {
+	const migrator = new Umzug(migrationConf)
+	const migrations = await migrator.up()
+	console.log('Migrations up to date', {
+		files: migrations.map((mig) => mig.name),
+	})
+}
+const rollbackMigration = async () => {
+	await sequelize.authenticate()
+	const migrator = new Umzug(migrationConf)
+	await migrator.down()
+}
+
+export default {
+	connectToDatabase,
+	sequelize,
+	rollbackMigration,
+	runMigrations,
+}

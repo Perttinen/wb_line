@@ -5,8 +5,9 @@ import { useDispatch } from 'react-redux'
 import { initializeUsers, appendUser, dropUser } from './reducers/userReducer'
 import { setTime } from './reducers/timeReducer'
 import { AppDispatch } from './store'
-import { User, UserNoId } from '../../types'
+import { User, UserNoIdType } from '../../types'
 import userService from './services/users'
+import { initializeUserLevels } from './reducers/userLevelReducer'
 
 const WS_BASE =
 	process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : '/'
@@ -14,8 +15,8 @@ const WS_BASE =
 interface IContext {
 	socket: Socket
 	sendMessage: (message: string) => void
-	sendAddUser: (user: UserNoId) => void
-	sendRemoveUser: (id: string) => void
+	sendAddUser: (user: UserNoIdType) => void
+	sendRemoveUser: (id: number) => void
 }
 
 const WebSocketContext = createContext<IContext | null>(null)
@@ -38,13 +39,15 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 		socket?.emit('event://send-message', payload)
 	}
 
-	const sendAddUser = async (user: UserNoId) => {
+	const sendAddUser = async (user: UserNoIdType) => {
 		const newUser = await userService.create(user)
+		console.log(newUser)
+
 		dispatch(appendUser(newUser.data))
 		socket?.emit('event://send-add-user', newUser)
 	}
 
-	const sendRemoveUser = async (id: string) => {
+	const sendRemoveUser = async (id: number) => {
 		await userService.remove(id)
 		dispatch(dropUser(id))
 		socket?.emit('event://send-remove-user', id)
@@ -67,13 +70,17 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 			dispatch(appendUser(user))
 		})
 
-		newSocket.on('event://get-remove-user', (id: string) => {
+		newSocket.on('event://get-remove-user', (id: number) => {
 			dispatch(dropUser(id))
 		})
 
 		return () => {
 			newSocket.close()
 		}
+	}, [dispatch])
+
+	useEffect(() => {
+		dispatch(initializeUserLevels())
 	}, [dispatch])
 
 	return (
