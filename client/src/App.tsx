@@ -184,13 +184,6 @@ const App = () => {
 								>
 									timetables
 								</Button>
-
-								{/* <Button
-									sx={{ my: 2, color: 'white', display: 'block' }}
-									onClick={handleLogout}
-								>
-									logout &#40;{loggedUser.username}&#41;
-								</Button> */}
 							</Box>
 							<Box sx={{ flexGrow: 0 }}>
 								<Tooltip title='Open user settings'>

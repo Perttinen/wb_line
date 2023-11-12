@@ -41,8 +41,6 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 
 	const sendAddUser = async (user: UserNoIdType) => {
 		const newUser = await userService.create(user)
-		console.log(newUser)
-
 		dispatch(appendUser(newUser.data))
 		socket?.emit('event://send-add-user', newUser)
 	}

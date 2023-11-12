@@ -7,8 +7,6 @@ const baseUrl =
 		: '/api/login'
 
 const login = async (credentials: LoginUser) => {
-	console.log('login')
-
 	const res = await axios.post(baseUrl, credentials)
 	return res.data
 }
