@@ -7,11 +7,11 @@ import Typography from '@mui/material/Typography'
 import Paper from '@mui/material/Paper'
 
 import { UserLine } from '.'
-import { User } from '../../../types'
+import { UserType } from '../../../types'
 import { useSelector } from 'react-redux'
 
 export const UserList = () => {
-	const users = useSelector((state: { users: User[] }) => state.users)
+	const users = useSelector((state: { users: UserType[] }) => state.users)
 
 	return (
 		<div>

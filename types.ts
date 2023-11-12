@@ -5,10 +5,11 @@ export type User = {
 	password: string
 }
 
-export type UserNoId = {
+export type UserNoIdType = {
 	name: string
 	username: string
 	password: string
+	user_level_id: number
 }
 
 export type LoginUser = {
@@ -17,15 +18,17 @@ export type LoginUser = {
 }
 
 export type UserType = {
-	id: string
+	id: number
 	name: string
 	username: string
 	password: string
+	user_level_id: number
+	userLevel: UserLevelType
 }
 
 export type UserForTokenType = {
 	username: string
-	id: string
+	id: number
 }
 
 export type UserWithTokenType = {
@@ -34,4 +37,10 @@ export type UserWithTokenType = {
 	username: string
 	password: string
 	token: string
+}
+
+export type UserLevelType = {
+	id: number
+	levelName: string
+	levelNumber: number
 }

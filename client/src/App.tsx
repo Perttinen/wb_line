@@ -19,6 +19,7 @@ import {
 import MenuIcon from '@mui/icons-material/Menu'
 import { UserWithTokenType } from '../../types'
 import { useEffect, useState } from 'react'
+import { initializeUserLevels } from './reducers/userLevelReducer'
 
 const App = () => {
 	const location = useLocation()
@@ -31,6 +32,10 @@ const App = () => {
 			const user = JSON.parse(loggedUserJSON)
 			dispatch(setLoggedUser(user))
 		}
+	}, [dispatch])
+
+	useEffect(() => {
+		dispatch(initializeUserLevels())
 	}, [dispatch])
 
 	const navigate = useNavigate()

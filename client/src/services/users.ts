@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { UserNoId } from '../../../types'
+import { UserNoIdType } from '../../../types'
 
 const baseUrl =
 	process.env.NODE_ENV === 'development'
@@ -11,12 +11,12 @@ const getAll = async () => {
 	return res.data
 }
 
-const create = async (newUser: UserNoId) => {
+const create = async (newUser: UserNoIdType) => {
 	const res = await axios.post(baseUrl, newUser)
 	return res
 }
 
-const remove = async (id: string) => {
+const remove = async (id: number) => {
 	await axios.delete(`${baseUrl}/${id}`)
 }
 

@@ -9,25 +9,21 @@ import {
 	TableRow,
 	Typography,
 } from '@mui/material'
-import { User } from '../../../types'
+import { UserType } from '../../../types'
 import { useState, Fragment, useContext } from 'react'
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 import { WebSocketContext } from '../WebSocket'
 
-export const UserLine = (props: { user: User }) => {
+export const UserLine = (props: { user: UserType }) => {
 	const { user } = props
 	const ws = useContext(WebSocketContext)
 	const [open, setOpen] = useState(false)
 
-	const handleDeleteUser = (id: string) => {
-		console.log(id)
-
+	const handleDeleteUser = (id: number) => {
 		ws?.sendRemoveUser(id)
 	}
-
-	const detailRows = ['name', 'username']
 
 	return (
 		<Fragment>
@@ -54,14 +50,24 @@ export const UserLine = (props: { user: User }) => {
 							</Typography>
 							<Table size='small' aria-label='purchases'>
 								<TableBody>
-									{detailRows.map((row) => (
-										<TableRow key={row}>
-											<TableCell>
-												<Typography variant='subtitle1'>{row}</Typography>
-											</TableCell>
-											<TableCell>{user[row as keyof typeof user]}</TableCell>
-										</TableRow>
-									))}
+									<TableRow>
+										<TableCell>
+											<Typography>name</Typography>
+										</TableCell>
+										<TableCell>{user.name}</TableCell>
+									</TableRow>
+									<TableRow>
+										<TableCell>
+											<Typography>username</Typography>
+										</TableCell>
+										<TableCell>{user.username}</TableCell>
+									</TableRow>
+									<TableRow>
+										<TableCell>
+											<Typography>user level</Typography>
+										</TableCell>
+										<TableCell>{user.userLevel.levelName}</TableCell>
+									</TableRow>
 									<TableRow>
 										<TableCell colSpan={2}>
 											<Button
@@ -69,7 +75,7 @@ export const UserLine = (props: { user: User }) => {
 												sx={{ color: '#B03A2E', fontSize: '1.2rem' }}
 												onClick={() => handleDeleteUser(user.id)}
 											>
-												delete {user.username}
+												delete user
 											</Button>
 										</TableCell>
 									</TableRow>
