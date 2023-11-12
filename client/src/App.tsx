@@ -26,19 +26,13 @@ const App = () => {
 	const dispatch: (...args: unknown[]) => Promise<string> =
 		useDispatch<AppDispatch>()
 
-	useEffect(
-		() => {
-			const loggedUserJSON = window.localStorage.getItem('loggedWbUser')
-			if (loggedUserJSON) {
-				const user = JSON.parse(loggedUserJSON)
-				dispatch(setLoggedUser(user))
-			}
-			// eslint-disable-next-line react-hooks/exhaustive-deps
-		},
-		[
-			// dispatch
-		]
-	)
+	useEffect(() => {
+		const loggedUserJSON = window.localStorage.getItem('loggedWbUser')
+		if (loggedUserJSON) {
+			const user = JSON.parse(loggedUserJSON)
+			dispatch(setLoggedUser(user))
+		}
+	}, [dispatch])
 
 	const navigate = useNavigate()
 
@@ -190,13 +184,6 @@ const App = () => {
 								>
 									timetables
 								</Button>
-
-								{/* <Button
-									sx={{ my: 2, color: 'white', display: 'block' }}
-									onClick={handleLogout}
-								>
-									logout &#40;{loggedUser.username}&#41;
-								</Button> */}
 							</Box>
 							<Box sx={{ flexGrow: 0 }}>
 								<Tooltip title='Open user settings'>
