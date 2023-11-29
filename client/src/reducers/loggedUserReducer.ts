@@ -1,13 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { UserWithTokenType } from '../../../types'
 
-const initialState: UserWithTokenType = {
-	username: '',
-	password: '',
-	id: '',
-	name: '',
-	token: '',
-}
+const initialState: UserWithTokenType = {} as UserWithTokenType
 
 const loggedUserSlice = createSlice({
 	name: 'loggedUser',
@@ -19,10 +13,9 @@ const loggedUserSlice = createSlice({
 		): UserWithTokenType {
 			state = action.payload
 			console.log('reducer: ', state)
-
 			return state
 		},
-		getLoggedUser(state): UserWithTokenType {
+		getLoggedUser(state) {
 			return state
 		},
 		removeLoggedUser() {

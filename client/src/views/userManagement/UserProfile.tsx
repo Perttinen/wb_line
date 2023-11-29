@@ -3,7 +3,7 @@ import { Box, Button, Collapse, TableCell, TableRow } from '@mui/material'
 import { UserType } from '../../../../types'
 import { useContext } from 'react'
 import { WebSocketContext } from '../../WebSocket'
-import { UserDataTable } from '../../components'
+import { UserDataTable } from '../components'
 
 export const UserProfile = ({
 	open,

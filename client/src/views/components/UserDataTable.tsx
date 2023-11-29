@@ -6,7 +6,7 @@ import {
 	TableRow,
 	Typography,
 } from '@mui/material'
-import { UserType } from '../../../types'
+import { UserType } from '../../../../types'
 
 export const UserDataTable = ({ user }: { user: UserType }) => {
 	return (

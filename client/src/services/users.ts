@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { UserNoIdType } from '../../../types'
+import { ChangePasswordType, UserNoIdType } from '../../../types'
 
 const baseUrl =
 	process.env.NODE_ENV === 'development'
@@ -20,10 +20,11 @@ const remove = async (id: number) => {
 	await axios.delete(`${baseUrl}/${id}`)
 }
 
-// const update = (id, newObject) => {
-//   return axios.put(`${baseUrl}/${id}`, newObject)
-// }
+const update = (id: number, pwdata: ChangePasswordType) => {
+	// const idstr = id.toString()
+	return axios.put(`${baseUrl}/pw/${id}`, pwdata)
+}
 
-const api = { getAll, create, remove }
+const api = { getAll, create, remove, update }
 
 export default api
