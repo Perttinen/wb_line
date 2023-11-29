@@ -26,6 +26,7 @@ router.post('/', (async (req: Request<object, object, UserNoIdType>, res) => {
 	const newUser = {
 		...body,
 		password: await bcrypt.hash(body.password, saltRounds),
+		firstTime: true,
 	}
 
 	try {

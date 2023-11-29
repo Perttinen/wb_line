@@ -30,23 +30,6 @@ export const Login = () => {
 	const [firstTime, setFirstTime] = useState(false)
 	const [user, setUser] = useState({} as UserType)
 
-	function Copyright(props: any) {
-		return (
-			<Typography
-				variant='body2'
-				color='text.secondary'
-				align='center'
-				{...props}
-			>
-				{'Copyright © '}
-				Ilumas Alatiiv
-				{'  '}
-				{new Date().getFullYear()}
-				{'.'}
-			</Typography>
-		)
-	}
-
 	const handleSubmit = async (values: LoginUser) => {
 		try {
 			const loggedUser = await loginService.login(values)
@@ -151,7 +134,18 @@ export const Login = () => {
 				</Snackbar>
 			</Box>
 
-			<Copyright sx={{ mt: 8, mb: 4 }} />
+			<Typography
+				variant='body2'
+				color='text.secondary'
+				align='center'
+				sx={{ mt: 8, mb: 4 }}
+			>
+				{'Copyright © '}
+				Samuli Viitala
+				{'  '}
+				{new Date().getFullYear()}
+				{'.'}
+			</Typography>
 		</div>
 	)
 }

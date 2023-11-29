@@ -30,7 +30,7 @@ export const ChangePassword = ({
 
 	const passwordSchema = Yup.object().shape({
 		currentPassword: Yup.string()
-			.min(3, 'Password must be 6-12 charecters!')
+			.min(2, 'Password must be 6-12 charecters!')
 			.max(12, 'Password must be 6-12 charecters!')
 			.required('Password is required!'),
 		newPassword: Yup.string()
