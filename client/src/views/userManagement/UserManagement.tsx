@@ -3,11 +3,17 @@ import { useState } from 'react'
 import { Button, Box, CssBaseline } from '@mui/material'
 
 import { AddUser } from './AddUser'
+import { useSelector } from 'react-redux'
+import { UserWithTokenType } from '../../../../types'
 
 export const UserManagement = () => {
 	const [showAddUser, setShowAddUser] = useState(false)
 
-	return (
+	const loggedUser = useSelector(
+		(state: { loggedUser: UserWithTokenType }) => state.loggedUser
+	)
+
+	return loggedUser.userLevel.levelNumber > 20 ? (
 		<div>
 			<CssBaseline />
 			<Box
@@ -30,5 +36,7 @@ export const UserManagement = () => {
 			</Box>
 			<UserList />
 		</div>
+	) : (
+		<h2>You shouldn't be here...!</h2>
 	)
 }

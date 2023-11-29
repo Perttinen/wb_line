@@ -44,6 +44,7 @@ export const AddUser = ({
 			username: '',
 			password: '',
 			user_level_id: 2,
+			firstTime: true,
 		},
 		validationSchema: userSchema,
 		onSubmit: handleSubmit,
