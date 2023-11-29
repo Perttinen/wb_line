@@ -32,6 +32,8 @@ export const AppBar = ({ loggedUser }: { loggedUser: UserWithTokenType }) => {
 		navigate('/')
 	}
 
+	console.log(loggedUser)
+
 	const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
 	const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null)
 
@@ -114,14 +116,16 @@ export const AppBar = ({ loggedUser }: { loggedUser: UserWithTokenType }) => {
 								>
 									<Typography textAlign='center'>HOME</Typography>
 								</MenuItem>
-								<MenuItem
-									onClick={() => {
-										navigate('/usermanagement')
-										handleCloseNavMenu()
-									}}
-								>
-									<Typography textAlign='center'>USER MANAGEMENT</Typography>
-								</MenuItem>
+								{loggedUser.userLevel.levelName === 'admin' && (
+									<MenuItem
+										onClick={() => {
+											navigate('/usermanagement')
+											handleCloseNavMenu()
+										}}
+									>
+										<Typography textAlign='center'>USER MANAGEMENT</Typography>
+									</MenuItem>
+								)}
 								<MenuItem
 									onClick={() => {
 										navigate('/timetable')
@@ -157,12 +161,14 @@ export const AppBar = ({ loggedUser }: { loggedUser: UserWithTokenType }) => {
 							>
 								home
 							</Button>
-							<Button
-								onClick={() => navigate('/usermanagement')}
-								sx={{ my: 2, color: 'white', display: 'block' }}
-							>
-								user management
-							</Button>
+							{loggedUser.userLevel.levelName === 'admin' && (
+								<Button
+									onClick={() => navigate('/usermanagement')}
+									sx={{ my: 2, color: 'white', display: 'block' }}
+								>
+									user management
+								</Button>
+							)}
 							<Button
 								onClick={() => navigate('/timetable')}
 								sx={{ my: 2, color: 'white', display: 'block' }}
