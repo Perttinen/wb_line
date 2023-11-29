@@ -2,12 +2,11 @@ import React, { createContext, useState, useEffect } from 'react'
 import io, { Socket } from 'socket.io-client'
 import { useDispatch } from 'react-redux'
 
-import { initializeUsers, appendUser, dropUser } from './reducers/userReducer'
+import { appendUser, dropUser } from './reducers/userReducer'
 import { setTime } from './reducers/timeReducer'
 import { AppDispatch } from './store'
 import { User, UserNoIdType } from '../../types'
 import userService from './services/users'
-import { initializeUserLevels } from './reducers/userLevelReducer'
 
 const WS_BASE =
 	process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : '/'

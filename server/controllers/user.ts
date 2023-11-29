@@ -110,9 +110,9 @@ router.put(
 					return res.json(user)
 				}
 			}
-			throw new Error('User not found')
+			throw new Error()
 		} catch (e) {
-			return res.status(400).json({ e })
+			return res.status(401).json({ error: 'Wrong password!' })
 		}
 	}
 )
