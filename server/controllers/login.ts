@@ -20,6 +20,7 @@ router.post('/', (async (req: Request<object, object, LoginUser>, res) => {
 		return res.status(401).json({ error: 'invalid username or password' })
 	}
 	const jsonUser: UserType = user.toJSON()
+
 	const passwordOk = await bcrypt.compare(body.password, jsonUser.password)
 	if (!passwordOk) {
 		return res.status(401).json({ error: 'invalid username or password' })

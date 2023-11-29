@@ -105,6 +105,7 @@ router.put(
 				if (await bcrypt.compare(body.currentPassword, passw)) {
 					user.set({
 						password: await bcrypt.hash(body.newPassword, saltRounds),
+						firstTime: false,
 					})
 					await user.save()
 					return res.json(user)
