@@ -10,6 +10,7 @@ export type UserNoIdType = {
 	username: string
 	password: string
 	user_level_id: number
+	firstTime: boolean
 }
 
 export type LoginUser = {
@@ -40,6 +41,7 @@ export type UserWithTokenType = {
 	user_level_id: number
 	userLevel: UserLevelType
 	token: string
+	firstTime: boolean
 }
 
 export type UserLevelType = {

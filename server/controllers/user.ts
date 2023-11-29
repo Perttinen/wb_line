@@ -26,8 +26,8 @@ router.post('/', (async (req: Request<object, object, UserNoIdType>, res) => {
 	const newUser = {
 		...body,
 		password: await bcrypt.hash(body.password, saltRounds),
+		firstTime: true,
 	}
-
 	try {
 		const user = await User.create(newUser)
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
@@ -54,7 +54,6 @@ const toNewPasswordType = (object: unknown): ChangePasswordType => {
 	const isString = (text: unknown): text is string => {
 		return typeof text === 'string' || text instanceof String
 	}
-
 	const parseString = (text: unknown): string => {
 		if (!isString(text)) {
 			throw new Error('incorrect or missing value in object')
@@ -64,7 +63,6 @@ const toNewPasswordType = (object: unknown): ChangePasswordType => {
 	if (!object || typeof object !== 'object') {
 		throw new Error('Incorrect or missing data')
 	}
-
 	if (
 		'currentPassword' in object &&
 		'newPassword' in object &&
@@ -75,10 +73,8 @@ const toNewPasswordType = (object: unknown): ChangePasswordType => {
 			newPassword: parseString(object.newPassword),
 			confirmPassword: parseString(object.confirmPassword),
 		}
-
 		return newPWT
 	}
-
 	throw new Error('Incorrect data: a field missing')
 }
 
