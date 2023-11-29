@@ -1,25 +1,22 @@
-import { Box, Button, MenuItem, TextField } from '@mui/material'
+import { Box, Button, TextField } from '@mui/material'
 import { useFormik } from 'formik'
-import { UserLevelType, UserNoIdType } from '../../../../types'
-import { useContext } from 'react'
-import { WebSocketContext } from '../../WebSocket'
-import { useSelector } from 'react-redux'
+import { shipNoIdType } from '../../../../types'
+// import { useContext } from 'react'
+// import { WebSocketContext } from '../../WebSocket'
+
 import * as Yup from 'yup'
 
-export const AddUser = ({
-	setShowAddUser,
+export const AddShip = ({
+	setShowAddShip,
 }: {
-	setShowAddUser: (val: boolean) => void
+	setShowAddShip: (val: boolean) => void
 }) => {
-	const ws = useContext(WebSocketContext)
-	const levels = useSelector(
-		(state: { userlevels: UserLevelType[] }) => state.userlevels
-	)
+	// const ws = useContext(WebSocketContext)
 
-	const handleSubmit = async (values: UserNoIdType) => {
+	const handleSubmit = async (values: shipNoIdType) => {
 		console.log(values)
-		setShowAddUser(false)
-		ws?.sendAddUser(values)
+		setShowAddShip(false)
+		// ws?.sendAddUser(values)
 		formik.resetForm()
 	}
 
@@ -28,23 +25,11 @@ export const AddUser = ({
 			.min(2, 'Name must be 2-32 charecters!')
 			.max(32, 'Name must be 2-32 charecters!')
 			.required('Name is required!'),
-		username: Yup.string()
-			.min(2, 'Username must be 2-16 charecters!')
-			.max(16, 'Username must be 2-16 charecters!')
-			.required('Username is required!'),
-		password: Yup.string()
-			.min(6, 'Password must be 6-12 charecters!')
-			.max(12, 'Password must be 6-12 charecters!')
-			.required('Password is required!'),
 	})
 
 	const formik = useFormik({
 		initialValues: {
 			name: '',
-			username: '',
-			password: '',
-			user_level_id: 2,
-			firstTime: true,
 		},
 		validationSchema: userSchema,
 		onSubmit: handleSubmit,
@@ -72,7 +57,7 @@ export const AddUser = ({
 					error={formik.touched.name && Boolean(formik.errors.name)}
 					helperText={formik.touched.name && formik.errors.name}
 				/>
-				<TextField
+				{/* <TextField
 					margin='normal'
 					required
 					fullWidth
@@ -114,18 +99,18 @@ export const AddUser = ({
 							{level.levelName}
 						</MenuItem>
 					))}
-				</TextField>
+				</TextField> */}
 				<Box display={'flex'} flexDirection={'row'}>
 					<Button
 						type='submit'
 						fullWidth
 						sx={{ mt: 3, mb: 2, color: '#1E8449', fontSize: '1.2rem' }}
 					>
-						Add User
+						Add Ship
 					</Button>
 					<Button
 						onClick={() => {
-							setShowAddUser(false)
+							setShowAddShip(false)
 							formik.resetForm()
 						}}
 						type='button'
