@@ -8,6 +8,8 @@ const baseUrl =
 
 const login = async (credentials: LoginUser) => {
 	const res = await axios.post(baseUrl, credentials)
+	console.log('service: ', res)
+
 	return res.data
 }
 

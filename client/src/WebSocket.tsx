@@ -52,7 +52,6 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 	}
 
 	useEffect(() => {
-		dispatch(initializeUsers())
 		const newSocket = io(WS_BASE)
 		setSocket(newSocket)
 
@@ -75,10 +74,6 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 		return () => {
 			newSocket.close()
 		}
-	}, [dispatch])
-
-	useEffect(() => {
-		dispatch(initializeUserLevels())
 	}, [dispatch])
 
 	return (

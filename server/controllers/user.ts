@@ -4,7 +4,7 @@ import { Op } from 'sequelize'
 import bcrypt from 'bcrypt'
 
 import { User, UserLevel } from '../models'
-import { UserNoIdType } from '../../types'
+import { ChangePasswordType, UserNoIdType } from '../../types'
 
 dotenv.config()
 
@@ -49,5 +49,72 @@ router.delete('/:id', (async (req, res) => {
 		res.status(204).end()
 	}
 }) as RequestHandler)
+
+const toNewPasswordType = (object: unknown): ChangePasswordType => {
+	const isString = (text: unknown): text is string => {
+		return typeof text === 'string' || text instanceof String
+	}
+
+	const parseString = (text: unknown): string => {
+		if (!isString(text)) {
+			throw new Error('incorrect or missing value in object')
+		}
+		return text
+	}
+	if (!object || typeof object !== 'object') {
+		throw new Error('Incorrect or missing data')
+	}
+
+	if (
+		'currentPassword' in object &&
+		'newPassword' in object &&
+		'confirmPassword' in object
+	) {
+		const newPWT: ChangePasswordType = {
+			currentPassword: parseString(object.currentPassword),
+			newPassword: parseString(object.newPassword),
+			confirmPassword: parseString(object.confirmPassword),
+		}
+
+		return newPWT
+	}
+
+	throw new Error('Incorrect data: a field missing')
+}
+
+const isString = (text: unknown): text is string => {
+	return typeof text === 'string' || text instanceof String
+}
+
+const parseString = (text: unknown): string => {
+	if (!isString(text)) {
+		throw new Error('incorrect or missing value in object')
+	}
+	return text
+}
+
+router.put(
+	'/pw/:id',
+	async (req: Request<{ id: number }, object, object>, res) => {
+		try {
+			const body: ChangePasswordType = toNewPasswordType(req.body)
+			const user = await User.findByPk(req.params.id)
+			const saltRounds = 10
+			if (user) {
+				const passw = parseString(user.get('password'))
+				if (await bcrypt.compare(body.currentPassword, passw)) {
+					user.set({
+						password: await bcrypt.hash(body.newPassword, saltRounds),
+					})
+					await user.save()
+					return res.json(user)
+				}
+			}
+			throw new Error('User not found')
+		} catch (e) {
+			return res.status(400).json({ e })
+		}
+	}
+)
 
 export default router

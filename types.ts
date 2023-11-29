@@ -32,10 +32,12 @@ export type UserForTokenType = {
 }
 
 export type UserWithTokenType = {
-	id: string
+	id: number
 	name: string
 	username: string
 	password: string
+	user_level_id: number
+	userLevel: UserLevelType
 	token: string
 }
 
@@ -43,4 +45,18 @@ export type UserLevelType = {
 	id: number
 	levelName: string
 	levelNumber: number
+}
+
+export type ChangePasswordType = {
+	currentPassword: string
+	newPassword: string
+	confirmPassword: string
+}
+
+export type userNoLevelsType = {
+	id: number
+	name: string
+	username: string
+	password: string
+	user_level_id: number
 }
