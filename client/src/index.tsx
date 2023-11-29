@@ -5,7 +5,7 @@ import App from './App'
 import { Provider } from 'react-redux'
 import { store } from './store'
 import WebSocketProvider from './WebSocket'
-import { Home, Timetable, UserManagement } from './views'
+import { Home, ResourceManagement, Timetable, UserManagement } from './views'
 
 const router = createBrowserRouter([
 	{
@@ -23,6 +23,10 @@ const router = createBrowserRouter([
 			{
 				path: '/timetable',
 				element: <Timetable />,
+			},
+			{
+				path: '/resources',
+				element: <ResourceManagement />,
 			},
 		],
 	},
