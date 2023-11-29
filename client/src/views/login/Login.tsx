@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from '../../store'
 import { setLoggedUser } from '../../reducers/loggedUserReducer'
-import { LoginUser } from '../../../../types'
+import { LoginUser, UserType } from '../../../../types'
 import loginService from '../../services/login'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
@@ -18,6 +18,7 @@ import {
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import { useState } from 'react'
 import { useFormik } from 'formik'
+import { ChangePassword } from '../components'
 
 export const Login = () => {
 	const dispatch: (...args: unknown[]) => Promise<string> =
@@ -26,6 +27,8 @@ export const Login = () => {
 	const navigate = useNavigate()
 
 	const [errorMsg, setErrorMsg] = useState('')
+	const [firstTime, setFirstTime] = useState(false)
+	const [user, setUser] = useState({} as UserType)
 
 	function Copyright(props: any) {
 		return (
@@ -47,9 +50,17 @@ export const Login = () => {
 	const handleSubmit = async (values: LoginUser) => {
 		try {
 			const loggedUser = await loginService.login(values)
-			dispatch(setLoggedUser(loggedUser))
-			window.localStorage.setItem('loggedWbUser', JSON.stringify(loggedUser))
-			navigate('/')
+
+			if (loggedUser.firstTime === true) {
+				setUser(loggedUser)
+				setFirstTime(true)
+				formik.resetForm()
+				console.log('first time')
+			} else {
+				dispatch(setLoggedUser(loggedUser))
+				window.localStorage.setItem('loggedWbUser', JSON.stringify(loggedUser))
+				navigate('/')
+			}
 		} catch (e) {
 			formik.resetForm()
 			if (axios.isAxiosError(e) && e.response) {
@@ -65,7 +76,6 @@ export const Login = () => {
 			username: '',
 			password: '',
 		},
-		// validationSchema: userSchema, // Our Yup schema
 		onSubmit: handleSubmit,
 		enableReinitialize: true,
 	})
@@ -125,6 +135,13 @@ export const Login = () => {
 						log in
 					</Button>
 				</Box>
+				{firstTime && (
+					<ChangePassword
+						user={user}
+						pwChangeDialog={firstTime}
+						setPwChangeDialog={setFirstTime}
+					/>
+				)}
 				<Snackbar
 					open={errorMsg !== ''}
 					autoHideDuration={4000}

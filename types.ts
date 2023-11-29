@@ -24,6 +24,7 @@ export type UserType = {
 	password: string
 	user_level_id: number
 	userLevel: UserLevelType
+	firstTime: boolean
 }
 
 export type UserForTokenType = {

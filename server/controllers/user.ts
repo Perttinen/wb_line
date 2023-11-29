@@ -105,14 +105,15 @@ router.put(
 				if (await bcrypt.compare(body.currentPassword, passw)) {
 					user.set({
 						password: await bcrypt.hash(body.newPassword, saltRounds),
+						firstTime: false,
 					})
 					await user.save()
 					return res.json(user)
 				}
 			}
-			throw new Error('User not found')
+			throw new Error()
 		} catch (e) {
-			return res.status(400).json({ e })
+			return res.status(401).json({ error: 'Wrong password!' })
 		}
 	}
 )

@@ -34,6 +34,10 @@ User.init(
 				key: 'id',
 			},
 		},
+		firstTime: {
+			type: DataTypes.BOOLEAN,
+			allowNull: false,
+		},
 	},
 	{
 		sequelize,
