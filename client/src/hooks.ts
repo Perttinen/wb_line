@@ -4,6 +4,8 @@ import { useEffect } from 'react'
 import { setLoggedUser } from './reducers/loggedUserReducer'
 import { initializeUserLevels } from './reducers/userLevelReducer'
 import { initializeUsers } from './reducers/userReducer'
+import { initializeDocks } from './reducers/dockReducer'
+import { initializeShips } from './reducers/shipReducer'
 
 type DispatchFunc = () => AppDispatch
 export const useAppDispatch: DispatchFunc = useDispatch
@@ -25,5 +27,15 @@ export const useInitializers = () => {
 		dispatch(initializeUserLevels())
 	}, [dispatch])
 
-	dispatch(initializeUsers())
+	useEffect(() => {
+		dispatch(initializeDocks())
+	}, [dispatch])
+
+	useEffect(() => {
+		dispatch(initializeShips())
+	}, [dispatch])
+
+	useEffect(() => {
+		dispatch(initializeUsers())
+	}, [dispatch])
 }

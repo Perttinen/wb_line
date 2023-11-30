@@ -27,8 +27,20 @@ const ioConnection = (server: http.Server) => {
 		socket.on('event://send-add-user', (payload) => {
 			socket.broadcast.emit('event://get-add-user', payload.data as object)
 		})
+		socket.on('event://send-add-dock', (payload) => {
+			socket.broadcast.emit('event://get-add-dock', payload as object)
+		})
 		socket.on('event://send-remove-user', (payload) => {
 			socket.broadcast.emit('event://get-remove-user', payload)
+		})
+		socket.on('event://send-remove-dock', (payload) => {
+			socket.broadcast.emit('event://get-remove-dock', payload)
+		})
+		socket.on('event://send-add-ship', (payload) => {
+			socket.broadcast.emit('event://get-add-ship', payload as object)
+		})
+		socket.on('event://send-remove-ship', (payload) => {
+			socket.broadcast.emit('event://get-remove-ship', payload)
 		})
 	})
 }
