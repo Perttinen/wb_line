@@ -25,54 +25,51 @@ export const ResourceManagement = () => {
 	)
 
 	return loggedUser.userLevel.levelNumber > 20 ? (
-		<div>
-			<TableContainer component={Paper}>
-				<Table aria-label='collapsible table'>
-					<TableBody>
-						<TableRow>
-							<TableCell>
-								<IconButton
-									aria-label='expand row'
-									size='small'
-									onClick={() => setShipsOpen(!shipsOpen)}
-								>
-									{shipsOpen ? (
-										<KeyboardArrowUpIcon />
-									) : (
-										<KeyboardArrowDownIcon />
-									)}
-								</IconButton>
-							</TableCell>
-							<TableCell>
-								<Typography variant='h6'>Ships</Typography>
-							</TableCell>
-						</TableRow>
-						<Ships open={shipsOpen} />
-					</TableBody>
-					<TableBody>
-						<TableRow>
-							<TableCell>
-								<IconButton
-									aria-label='expand row'
-									size='small'
-									onClick={() => setDocksOpen(!docksOpen)}
-								>
-									{docksOpen ? (
-										<KeyboardArrowUpIcon />
-									) : (
-										<KeyboardArrowDownIcon />
-									)}
-								</IconButton>
-							</TableCell>
-							<TableCell>
-								<Typography variant='h6'>Docks</Typography>
-							</TableCell>
-						</TableRow>
-						<Docks open={docksOpen} />
-					</TableBody>
-				</Table>
-			</TableContainer>
-		</div>
+		<TableContainer component={Paper}>
+			<Table aria-label='collapsible table'>
+				<TableBody>
+					<TableRow>
+						<TableCell>
+							<IconButton
+								aria-label='expand row'
+								size='small'
+								onClick={() => setShipsOpen(!shipsOpen)}
+							>
+								{shipsOpen ? (
+									<KeyboardArrowUpIcon />
+								) : (
+									<KeyboardArrowDownIcon />
+								)}
+							</IconButton>
+						</TableCell>
+						<TableCell>
+							<Typography variant='h6'>Ships</Typography>
+						</TableCell>
+					</TableRow>
+					<Ships open={shipsOpen} />
+
+					<TableRow>
+						<TableCell>
+							<IconButton
+								aria-label='expand row'
+								size='small'
+								onClick={() => setDocksOpen(!docksOpen)}
+							>
+								{docksOpen ? (
+									<KeyboardArrowUpIcon />
+								) : (
+									<KeyboardArrowDownIcon />
+								)}
+							</IconButton>
+						</TableCell>
+						<TableCell>
+							<Typography variant='h6'>Docks</Typography>
+						</TableCell>
+					</TableRow>
+					<Docks open={docksOpen} />
+				</TableBody>
+			</Table>
+		</TableContainer>
 	) : (
 		<h2>You shouldn't be here...!</h2>
 	)

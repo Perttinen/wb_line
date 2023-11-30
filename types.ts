@@ -64,20 +64,20 @@ export type userNoLevelsType = {
 	user_level_id: number
 }
 
-export type shipType = {
+export type ShipType = {
 	id: number
 	name: string
 }
 
-export type shipNoIdType = {
+export type ShipNoIdType = {
 	name: string
 }
 
-export type dockType = {
+export type DockType = {
 	id: number
 	name: string
 }
 
-export type dockNoIdType = {
+export type DockNoIdType = {
 	name: string
 }
