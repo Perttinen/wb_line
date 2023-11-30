@@ -38,8 +38,4 @@ export const useInitializers = () => {
 	useEffect(() => {
 		dispatch(initializeUsers())
 	}, [dispatch])
-
-	// dispatch(initializeUsers())
-
-	// dispatch(initializeDocks())
 }

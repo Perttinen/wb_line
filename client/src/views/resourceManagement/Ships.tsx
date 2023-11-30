@@ -20,7 +20,7 @@ export const Ships = ({ open }: { open: boolean }) => {
 	const ws = useContext(WebSocketContext)
 
 	const handleRemoveShip = (id: number) => {
-		ws?.sendRemoveDock(id)
+		ws?.sendRemoveShip(id)
 	}
 	return (
 		<TableRow>
