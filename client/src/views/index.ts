@@ -4,5 +4,14 @@ import { Timetable } from './timetable/Timetable'
 import { UserManagement } from './userManagement/UserManagement'
 import { UserCard } from './components/UserCard'
 import { ResourceManagement } from './resourceManagement/ResourceManagement'
+import { Lines } from './Lines/Lines'
 
-export { Login, Home, Timetable, UserManagement, UserCard, ResourceManagement }
+export {
+	Login,
+	Home,
+	Timetable,
+	UserManagement,
+	UserCard,
+	ResourceManagement,
+	Lines,
+}

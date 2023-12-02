@@ -138,6 +138,16 @@ export const AppBar = ({ loggedUser }: { loggedUser: UserWithTokenType }) => {
 										</Typography>
 									</MenuItem>
 								)}
+								{loggedUser.userLevel.levelName === 'admin' && (
+									<MenuItem
+										onClick={() => {
+											navigate('/routes')
+											handleCloseNavMenu()
+										}}
+									>
+										<Typography textAlign='center'>ROUTES</Typography>
+									</MenuItem>
+								)}
 								<MenuItem
 									onClick={() => {
 										navigate('/timetable')
@@ -187,6 +197,14 @@ export const AppBar = ({ loggedUser }: { loggedUser: UserWithTokenType }) => {
 									sx={{ my: 2, color: 'white', display: 'block' }}
 								>
 									resource management
+								</Button>
+							)}
+							{loggedUser.userLevel.levelName === 'admin' && (
+								<Button
+									onClick={() => navigate('/routes')}
+									sx={{ my: 2, color: 'white', display: 'block' }}
+								>
+									routes
 								</Button>
 							)}
 							<Button
