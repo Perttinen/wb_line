@@ -1,6 +1,7 @@
 import { Button, CssBaseline } from '@mui/material'
 import { useState } from 'react'
 import { RoutePlanner } from './RoutePlanner'
+import { RouteList } from './RouteList'
 
 export const Lines = () => {
 	const [showRoutePlanner, setShowRoutePlanner] = useState(false)
@@ -15,8 +16,11 @@ export const Lines = () => {
 				Create new route
 			</Button>
 			{showRoutePlanner && (
-				<RoutePlanner setShowRoutePlanner={setShowRoutePlanner} />
+				<RoutePlanner
+				// setShowRoutePlanner={setShowRoutePlanner}
+				/>
 			)}
+			<RouteList />
 		</div>
 	)
 }

@@ -6,13 +6,19 @@ import {
 	Box,
 	Typography,
 } from '@mui/material'
-import { FieldArray, Form, Formik, getIn } from 'formik'
+import { FieldArray, Form, Formik } from 'formik'
 import * as Yup from 'yup'
-import { DockType } from '../../../../types'
-import { useSelector } from 'react-redux'
+import { DockType, RouteType } from '../../../../types'
+import { useDispatch, useSelector } from 'react-redux'
+import routeService from '../../services/route'
+import { appendRoute } from '../../reducers/routeReducer'
+import { AppDispatch } from '../../store'
 
 export const RoutePlanner = () => {
 	const docks = useSelector((state: { docks: DockType[] }) => state.docks)
+
+	const dispatch: (...args: unknown[]) => Promise<RouteType> | number =
+		useDispatch<AppDispatch>()
 
 	const validationSchema = Yup.object().shape({
 		start: Yup.object().shape({
@@ -30,42 +36,44 @@ export const RoutePlanner = () => {
 	})
 
 	interface FormValues {
+		name: string
 		start: {
-			dock: string
+			dock: number | ''
 		}
 		middle: {
 			dock: string
 			time: number
 		}[]
 		end: {
-			dock: string
+			dock: number | ''
 		}
 	}
 
-	const handleSubmit = (values: FormValues) => {
-		let arr = [[values.start.dock, 0]]
-		for (const i of values.middle) {
-			arr.push([i.dock, i.time])
+	const handleSubmit = async (values: FormValues) => {
+		if (
+			typeof values.start.dock === 'number' &&
+			typeof values.end.dock === 'number'
+		) {
+			const newRoute = await routeService.create({
+				name: values.name,
+				startDockId: values.start.dock,
+				endDockId: values.end.dock,
+			})
+			dispatch(appendRoute(newRoute))
+			console.log(values)
+			console.log(newRoute)
 		}
-		arr.push([values.end.dock, 0])
-		console.log(arr)
-
-		console.log(values)
 	}
 
 	return (
 		<div>
 			<Formik<FormValues>
 				initialValues={{
+					name: '',
 					start: {
 						dock: '',
 					},
-					middle: [
-						// {
-						// 	dock: '',
-						// 	time: '',
-						// },
-					],
+					middle: [],
 					end: {
 						dock: '',
 					},
@@ -75,6 +83,17 @@ export const RoutePlanner = () => {
 			>
 				{({ values, touched, errors, handleChange, handleBlur, isValid }) => (
 					<Form noValidate autoComplete='off'>
+						<TextField
+							fullWidth
+							margin='normal'
+							variant='outlined'
+							required
+							name='name'
+							value={values.name}
+							onChange={handleChange}
+							onBlur={handleBlur}
+							label='name'
+						></TextField>
 						<TextField
 							fullWidth
 							select

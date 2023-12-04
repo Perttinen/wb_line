@@ -81,3 +81,30 @@ export type DockType = {
 export type DockNoIdType = {
 	name: string
 }
+
+export type RouteType = {
+	id: number
+	startDock: DockType
+	endDock: DockType
+	name: string
+	startDockId: number
+	endDockId: number
+}
+
+export type RouteNoIdType = {
+	name: string
+	startDockId: number
+	endDockId: number
+}
+
+export type Stoptype = {
+	id: number
+	delayTimeMinutes: number
+	dockId: number
+	routeId: number
+}
+export type StopNoIdType = {
+	delayTimeMinutes: number
+	dockId: number
+	routeId: number
+}
