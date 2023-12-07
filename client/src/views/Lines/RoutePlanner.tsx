@@ -11,13 +11,20 @@ import * as Yup from 'yup'
 import { DockType, RouteType } from '../../../../types'
 import { useDispatch, useSelector } from 'react-redux'
 import routeService from '../../services/route'
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
+
 import { appendRoute } from '../../reducers/routeReducer'
 import { AppDispatch } from '../../store'
 
-export const RoutePlanner = () => {
+export const RoutePlanner = ({
+	setShowRoutePlanner,
+}: {
+	setShowRoutePlanner: (val: boolean) => void
+}) => {
 	const docks = useSelector((state: { docks: DockType[] }) => state.docks)
 
-	const dispatch: (...args: unknown[]) => Promise<RouteType> | number =
+	const routeDispatch: (...args: unknown[]) => Promise<RouteType> | number =
 		useDispatch<AppDispatch>()
 
 	const validationSchema = Yup.object().shape({
@@ -26,7 +33,7 @@ export const RoutePlanner = () => {
 		}),
 		middle: Yup.array().of(
 			Yup.object().shape({
-				dock: Yup.string(),
+				dock: Yup.number(),
 				time: Yup.string(),
 			})
 		),
@@ -41,7 +48,7 @@ export const RoutePlanner = () => {
 			dock: number | ''
 		}
 		middle: {
-			dock: string
+			dock: number | ''
 			time: number
 		}[]
 		end: {
@@ -58,11 +65,11 @@ export const RoutePlanner = () => {
 				name: values.name,
 				startDockId: values.start.dock,
 				endDockId: values.end.dock,
+				stops: values.middle,
 			})
-			dispatch(appendRoute(newRoute))
-			console.log(values)
-			console.log(newRoute)
+			routeDispatch(appendRoute(newRoute))
 		}
+		setShowRoutePlanner(false)
 	}
 
 	return (
@@ -150,7 +157,7 @@ export const RoutePlanner = () => {
 													</TextField>
 													<Box display={'flex'} flexDirection={'row'}>
 														<TextField
-															sx={{ width: '60%' }}
+															fullWidth
 															margin='normal'
 															variant='outlined'
 															label='Time from start point (min)'
@@ -162,11 +169,11 @@ export const RoutePlanner = () => {
 															onBlur={handleBlur}
 														/>
 														<Button
-															sx={{ color: 'red' }}
+															fullWidth
+															// sx={{ color: 'red' }}
 															onClick={() => remove(index)}
 														>
-															Remove
-															<br /> stop {index + 1}
+															<DeleteOutlinedIcon />
 														</Button>
 													</Box>
 												</Box>
@@ -174,16 +181,16 @@ export const RoutePlanner = () => {
 										})}
 									<Button
 										fullWidth
+										sx={{ fontSize: '1.2rem' }}
 										type='button'
 										onClick={() => push({ dock: '', time: '' })}
 									>
-										Add Stop Point
+										<AddCircleOutlineIcon />
 									</Button>
 								</div>
 							)}
 						</FieldArray>
 						<TextField
-							// sx={{ width: '70%' }}
 							fullWidth
 							select
 							margin='normal'
@@ -201,16 +208,24 @@ export const RoutePlanner = () => {
 								</MenuItem>
 							))}
 						</TextField>
-						<Divider style={{ marginTop: 20, marginBottom: 20 }} />
-						<Button
-							type='submit'
-
-							// disabled={!isValid || values.people.length === 0}
-						>
-							<Typography color='green' fontWeight='bold'>
-								save route
-							</Typography>
-						</Button>
+						{/* <Divider style={{ marginTop: 20, marginBottom: 20 }} /> */}
+						<Box display={'flex'} flexDirection={'row'}>
+							<Button
+								type='submit'
+								fullWidth
+								sx={{ mt: 3, mb: 2, color: '#1E8449', fontSize: '1.2rem' }}
+							>
+								save
+							</Button>
+							<Button
+								type='reset'
+								onClick={() => setShowRoutePlanner(false)}
+								fullWidth
+								sx={{ mt: 3, mb: 2, color: '#B03A2E', fontSize: '1.2rem' }}
+							>
+								cancel
+							</Button>
+						</Box>
 					</Form>
 				)}
 			</Formik>

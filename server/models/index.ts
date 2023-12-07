@@ -18,4 +18,10 @@ Route.belongsTo(Dock, { as: 'endDock', foreignKey: 'endDockId' })
 Route.belongsToMany(Dock, { through: Stop })
 Dock.belongsToMany(Route, { through: Stop })
 
+Stop.belongsTo(Route)
+Route.hasMany(Stop)
+
+Dock.hasMany(Stop)
+Stop.belongsTo(Dock, { as: 'dock' })
+
 export { User, UserLevel, Dock, Ship, Stop, Route }

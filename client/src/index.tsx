@@ -11,6 +11,7 @@ import {
 	Timetable,
 	UserManagement,
 	Lines,
+	Schedule,
 } from './views'
 
 const router = createBrowserRouter([
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
 			{
 				path: '/routes',
 				element: <Lines />,
+			},
+			{
+				path: '/schedule',
+				element: <Schedule />,
 			},
 		],
 	},

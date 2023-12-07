@@ -8,17 +8,17 @@ export const Lines = () => {
 	return (
 		<div>
 			<CssBaseline />
-			<Button
-				onClick={() => setShowRoutePlanner(!showRoutePlanner)}
-				fullWidth
-				sx={{ mt: 3, mb: 2, fontSize: '1.2rem' }}
-			>
-				Create new route
-			</Button>
+			{!showRoutePlanner && (
+				<Button
+					onClick={() => setShowRoutePlanner(!showRoutePlanner)}
+					fullWidth
+					sx={{ mt: 3, mb: 2, fontSize: '1.2rem' }}
+				>
+					Create new route
+				</Button>
+			)}
 			{showRoutePlanner && (
-				<RoutePlanner
-				// setShowRoutePlanner={setShowRoutePlanner}
-				/>
+				<RoutePlanner setShowRoutePlanner={setShowRoutePlanner} />
 			)}
 			<RouteList />
 		</div>

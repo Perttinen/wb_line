@@ -123,7 +123,7 @@ export const AppBar = ({ loggedUser }: { loggedUser: UserWithTokenType }) => {
 											handleCloseNavMenu()
 										}}
 									>
-										<Typography textAlign='center'>USER MANAGEMENT</Typography>
+										<Typography textAlign='center'>USERS</Typography>
 									</MenuItem>
 								)}
 								{loggedUser.userLevel.levelName === 'admin' && (
@@ -133,9 +133,7 @@ export const AppBar = ({ loggedUser }: { loggedUser: UserWithTokenType }) => {
 											handleCloseNavMenu()
 										}}
 									>
-										<Typography textAlign='center'>
-											RESOURCE MANAGEMENT
-										</Typography>
+										<Typography textAlign='center'>RESOURCES</Typography>
 									</MenuItem>
 								)}
 								{loggedUser.userLevel.levelName === 'admin' && (
@@ -146,6 +144,16 @@ export const AppBar = ({ loggedUser }: { loggedUser: UserWithTokenType }) => {
 										}}
 									>
 										<Typography textAlign='center'>ROUTES</Typography>
+									</MenuItem>
+								)}
+								{loggedUser.userLevel.levelName === 'admin' && (
+									<MenuItem
+										onClick={() => {
+											navigate('/schedule')
+											handleCloseNavMenu()
+										}}
+									>
+										<Typography textAlign='center'>SCHEDULE</Typography>
 									</MenuItem>
 								)}
 								<MenuItem
@@ -188,7 +196,7 @@ export const AppBar = ({ loggedUser }: { loggedUser: UserWithTokenType }) => {
 									onClick={() => navigate('/usermanagement')}
 									sx={{ my: 2, color: 'white', display: 'block' }}
 								>
-									user management
+									users
 								</Button>
 							)}
 							{loggedUser.userLevel.levelName === 'admin' && (
@@ -196,7 +204,7 @@ export const AppBar = ({ loggedUser }: { loggedUser: UserWithTokenType }) => {
 									onClick={() => navigate('/resources')}
 									sx={{ my: 2, color: 'white', display: 'block' }}
 								>
-									resource management
+									resources
 								</Button>
 							)}
 							{loggedUser.userLevel.levelName === 'admin' && (
@@ -205,6 +213,14 @@ export const AppBar = ({ loggedUser }: { loggedUser: UserWithTokenType }) => {
 									sx={{ my: 2, color: 'white', display: 'block' }}
 								>
 									routes
+								</Button>
+							)}
+							{loggedUser.userLevel.levelName === 'admin' && (
+								<Button
+									onClick={() => navigate('/schedule')}
+									sx={{ my: 2, color: 'white', display: 'block' }}
+								>
+									schedule
 								</Button>
 							)}
 							<Button

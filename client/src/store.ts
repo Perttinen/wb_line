@@ -7,6 +7,7 @@ import userLevelReducer from './reducers/userLevelReducer'
 import dockReducer from './reducers/dockReducer'
 import shipReducer from './reducers/shipReducer'
 import routeReducer from './reducers/routeReducer'
+import stopReducer from './reducers/stopReducer'
 
 export const store = configureStore({
 	reducer: {
@@ -17,6 +18,7 @@ export const store = configureStore({
 		docks: dockReducer,
 		ships: shipReducer,
 		routes: routeReducer,
+		stops: stopReducer,
 	},
 })
 

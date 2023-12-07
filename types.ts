@@ -89,6 +89,7 @@ export type RouteType = {
 	name: string
 	startDockId: number
 	endDockId: number
+	stops: StopType[]
 }
 
 export type RouteNoIdType = {
@@ -97,11 +98,19 @@ export type RouteNoIdType = {
 	endDockId: number
 }
 
-export type Stoptype = {
+export type InitRouteType = {
+	name: string
+	startDockId: number
+	endDockId: number
+	stops: { dock: number | ''; time: number }[]
+}
+
+export type StopType = {
 	id: number
 	delayTimeMinutes: number
 	dockId: number
 	routeId: number
+	dock: DockType
 }
 export type StopNoIdType = {
 	delayTimeMinutes: number
