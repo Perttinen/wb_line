@@ -11,6 +11,7 @@ import dockRouter from './controllers/dock'
 import shipRouter from './controllers/ship'
 import routeRouter from './controllers/route'
 import stopRouter from './controllers/stop'
+import departureRouter from './controllers/departure'
 import ioConnection from './util/socket'
 
 const app = express()
@@ -27,6 +28,7 @@ app.use('/api/dock', dockRouter)
 app.use('/api/ship', shipRouter)
 app.use('/api/route', routeRouter)
 app.use('/api/stop', stopRouter)
+app.use('/api/departure', departureRouter)
 app.get('/*', function (_req, res) {
 	res.sendFile(
 		path.join(__dirname, '../client/build/index.html'),

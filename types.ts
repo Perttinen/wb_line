@@ -1,3 +1,5 @@
+import { Dayjs } from 'dayjs'
+
 export type User = {
 	id: string
 	name: string
@@ -116,4 +118,9 @@ export type StopNoIdType = {
 	delayTimeMinutes: number
 	dockId: number
 	routeId: number
+}
+
+export type initDepartureType = {
+	departureTime: Dayjs
+	routeId: number | ''
 }
