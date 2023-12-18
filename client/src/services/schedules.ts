@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { Dayjs } from 'dayjs'
-import { initDepartureType } from '../../../types'
+import { initDepartureType, DockNameType } from '../../../types'
 
 const baseUrl =
 	process.env.NODE_ENV === 'development'
@@ -12,19 +12,26 @@ const getAll = async () => {
 	return res.data
 }
 
+const getByStartpoint = async (dockname: string) => {
+	const res = await axios.get(baseUrl, { params: { dock: dockname } })
+	return res.data
+}
+
 const create = async (values: initDepartureType) => {
 	const valuesToSave = values
 	console.log(valuesToSave)
 
-	try {
-		const response = await axios.post(baseUrl, valuesToSave)
-		console.log(response.data)
-	} catch (error) {
-		console.error(error)
-	}
+	// try {
+	const response = await axios.post(baseUrl, valuesToSave)
+	return response.data
+	// } catch (error) {
+	// 	return
+	// }
 }
 
 const remove = async (id: number) => {
+	console.log('serv', id)
+
 	await axios.delete(`${baseUrl}/${id}`)
 }
 

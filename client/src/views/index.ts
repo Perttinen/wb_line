@@ -5,7 +5,7 @@ import { UserManagement } from './userManagement/UserManagement'
 import { UserCard } from './components/UserCard'
 import { ResourceManagement } from './resourceManagement/ResourceManagement'
 import { Lines } from './Lines/Lines'
-import { Schedule } from './schedule/schedule'
+import { Schedule } from './schedule/Schedule'
 
 export {
 	Login,

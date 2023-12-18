@@ -8,6 +8,7 @@ import dockReducer from './reducers/dockReducer'
 import shipReducer from './reducers/shipReducer'
 import routeReducer from './reducers/routeReducer'
 import stopReducer from './reducers/stopReducer'
+import departureReducer from './reducers/departureReducer'
 
 export const store = configureStore({
 	reducer: {
@@ -19,6 +20,7 @@ export const store = configureStore({
 		ships: shipReducer,
 		routes: routeReducer,
 		stops: stopReducer,
+		departures: departureReducer,
 	},
 })
 

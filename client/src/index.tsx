@@ -35,6 +35,10 @@ const router = createBrowserRouter([
 				element: <Timetable />,
 			},
 			{
+				path: '/timetable/:dock',
+				element: <Timetable />,
+			},
+			{
 				path: '/resources',
 				element: <ResourceManagement />,
 			},

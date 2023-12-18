@@ -1,21 +1,47 @@
-import { Box, Button, CssBaseline, MenuItem, TextField } from '@mui/material'
+import {
+	Box,
+	Button,
+	CssBaseline,
+	MenuItem,
+	Table,
+	TableBody,
+	TableCell,
+	TableRow,
+	TextField,
+	Typography,
+} from '@mui/material'
 import { DateTimePicker } from '@mui/x-date-pickers'
 import { Field, Form, Formik } from 'formik'
 import dayjs, { Dayjs } from 'dayjs'
-import { useSelector } from 'react-redux'
-import { RouteType } from '../../../../types'
+import { useDispatch, useSelector } from 'react-redux'
+import { DepartureType, RouteType } from '../../../../types'
 import scheduleService from '../../services/schedules'
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
+import { AppDispatch } from '../../store'
+import {
+	appendDeparture,
+	removeDeparture,
+} from '../../reducers/departureReducer'
 
 export const Schedule = () => {
 	const routes = useSelector((state: { routes: RouteType[] }) => state.routes)
+	const departures = useSelector(
+		(state: { departures: DepartureType[] }) => state.departures
+	)
+
+	console.log(departures)
+
+	const scheduleDispatch: (
+		...args: unknown[]
+	) => Promise<DepartureType> | number = useDispatch<AppDispatch>()
 
 	interface FormValues {
-		departureTime: Dayjs
+		startTime: Dayjs | null
 		routeId: number | ''
 	}
 
 	const initialValues: FormValues = {
-		departureTime: dayjs(),
+		startTime: null,
 		routeId: '',
 	}
 
@@ -25,9 +51,10 @@ export const Schedule = () => {
 			<Box sx={{ marginTop: '1rem' }}>
 				<Formik
 					initialValues={initialValues}
-					onSubmit={(values, { setSubmitting }) => {
-						scheduleService.create(values)
-						console.log(values)
+					onSubmit={async (values, { setSubmitting }) => {
+						const valuesToDisp = await scheduleService.create(values)
+						console.log('vtd', valuesToDisp)
+						scheduleDispatch(appendDeparture(valuesToDisp))
 						setSubmitting(false)
 					}}
 				>
@@ -40,17 +67,6 @@ export const Schedule = () => {
 						handleChange,
 					}) => (
 						<Form>
-							<Field name='departureTime'>
-								{() => (
-									<DateTimePicker
-										label='Departure Time'
-										value={values.departureTime}
-										onChange={(newValue) => {
-											setFieldValue('departureTime', newValue)
-										}}
-									/>
-								)}
-							</Field>
 							<TextField
 								fullWidth
 								select
@@ -69,6 +85,18 @@ export const Schedule = () => {
 									</MenuItem>
 								))}
 							</TextField>
+							<Field name='startTime'>
+								{() => (
+									<DateTimePicker
+										label='Departure Time'
+										value={values.startTime}
+										onChange={(newValue) => {
+											setFieldValue('startTime', newValue)
+										}}
+									/>
+								)}
+							</Field>
+
 							<Button
 								variant='contained'
 								color='primary'
@@ -77,6 +105,32 @@ export const Schedule = () => {
 							>
 								Submit
 							</Button>
+							<Table>
+								<TableBody>
+									{departures.map(
+										(d) => (
+											<TableRow key={d.id}>
+												<TableCell>
+													<Typography>{`${d.startTime.substring(0, 16)} ${
+														d.route.name
+													}`}</Typography>
+												</TableCell>
+												<TableCell>
+													<Button
+														onClick={() => {
+															scheduleDispatch(removeDeparture(d.id))
+															scheduleService.remove(d.id)
+														}}
+													>
+														<DeleteOutlinedIcon />
+													</Button>
+												</TableCell>
+											</TableRow>
+										)
+										// )
+									)}
+								</TableBody>
+							</Table>
 						</Form>
 					)}
 				</Formik>

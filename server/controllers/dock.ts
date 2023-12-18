@@ -1,7 +1,7 @@
 import express, { RequestHandler, Request } from 'express'
 import dotenv from 'dotenv'
 
-import { Dock } from '../models'
+import { Dock, Route, Stop } from '../models'
 import { DockNoIdType } from '../../types'
 
 dotenv.config()
@@ -28,8 +28,23 @@ router.post('/', (async (req: Request<object, object, DockNoIdType>, res) => {
 router.delete('/:id', (async (req, res) => {
 	try {
 		const dock = await Dock.findByPk(req.params.id)
-		if (dock) await dock.destroy()
-		res.json(dock)
+
+		if (dock) {
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+			await Stop.destroy({ where: { dockId: dock.dataValues.id } })
+
+			await Route.destroy({
+				where: {
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+					startDockId: dock.dataValues.id,
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+					endDockId: dock.dataValues.id,
+				},
+			})
+			await dock.destroy()
+
+			res.json(dock)
+		}
 	} catch (e) {
 		res.status(204).end()
 	}

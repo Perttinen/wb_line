@@ -59,7 +59,9 @@ router.delete('/:id', (async (req, res) => {
 		const route = await Route.findByPk(req.params.id)
 		if (route) {
 			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-			await Stop.destroy({ where: { routeId: route.dataValues.id } })
+			// await Stop.destroy({ where: { routeId: route.dataValues.id } })
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+			// await Departure.destroy({ where: { routeId: route.dataValues.id } })
 			await route.destroy()
 		}
 		res.json(route)

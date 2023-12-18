@@ -121,6 +121,35 @@ export type StopNoIdType = {
 }
 
 export type initDepartureType = {
-	departureTime: Dayjs
+	startTime: Dayjs | null
 	routeId: number | ''
+}
+
+export interface DepartureType {
+	id: number
+	startTime: string
+	route: {
+		id: number
+		name: string
+		startDock: {
+			id: number
+			name: string
+		}
+		endDock: {
+			id: number
+			name: string
+		}
+		stops: {
+			id: number
+			delayTimeMinutes: number
+			dock: {
+				id: number
+				name: string
+			}
+		}
+	}
+}
+
+export type DockNameType = {
+	dock: string
 }

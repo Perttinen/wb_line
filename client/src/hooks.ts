@@ -7,6 +7,7 @@ import { initializeUsers } from './reducers/userReducer'
 import { initializeDocks } from './reducers/dockReducer'
 import { initializeShips } from './reducers/shipReducer'
 import { initializeRoutes } from './reducers/routeReducer'
+import { initializeDepartures } from './reducers/departureReducer'
 
 type DispatchFunc = () => AppDispatch
 export const useAppDispatch: DispatchFunc = useDispatch
@@ -30,6 +31,10 @@ export const useInitializers = () => {
 
 	useEffect(() => {
 		dispatch(initializeRoutes())
+	}, [dispatch])
+
+	useEffect(() => {
+		dispatch(initializeDepartures())
 	}, [dispatch])
 
 	useEffect(() => {
