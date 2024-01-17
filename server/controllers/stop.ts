@@ -1,6 +1,6 @@
 import express, { RequestHandler, Request } from 'express'
 import dotenv from 'dotenv'
-
+import { tokenExtractor } from '../util/middleware'
 import { Stop } from '../models'
 import { StopNoIdType } from '../../types'
 
@@ -8,12 +8,12 @@ dotenv.config()
 
 const router = express.Router()
 
-router.get('/', (async (_req, res) => {
+router.get('/',tokenExtractor, (async (_req, res) => {
 	const stops: Stop[] = await Stop.findAll()
 	res.json(stops)
 }) as RequestHandler)
 
-router.post('/', (async (req: Request<object, object, StopNoIdType>, res) => {
+router.post('/',tokenExtractor, (async (req: Request<object, object, StopNoIdType>, res) => {
 	// const body: string = req.body
 	console.log(req.body)
 
@@ -25,7 +25,7 @@ router.post('/', (async (req: Request<object, object, StopNoIdType>, res) => {
 	}
 }) as RequestHandler)
 
-router.delete('/:id', (async (req, res) => {
+router.delete('/:id',tokenExtractor, (async (req, res) => {
 	try {
 		const stop = await Stop.findByPk(req.params.id)
 		if (stop) await stop.destroy()

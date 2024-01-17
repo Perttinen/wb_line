@@ -11,6 +11,8 @@ const departureSlice = createSlice({
 	reducers: {
 		appendDeparture(state, action: PayloadAction<DepartureType>) {
 			state.push(action.payload)
+			console.log('depstate: ',state);
+			
 		},
 		setDepartures(_state, action: PayloadAction<DepartureType[]>) {
 			return action.payload
@@ -22,10 +24,10 @@ const departureSlice = createSlice({
 })
 
 export const initializeDepartures = () => {
-	console.log('init')
-
 	return async (dispatch: Dispatch) => {
 		const departures = await scheduleService.getAll()
+
+		
 		dispatch(departureSlice.actions.setDepartures(departures))
 	}
 }

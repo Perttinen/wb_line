@@ -1,26 +1,45 @@
-import express, { RequestHandler, Request } from 'express'
+import express from 'express'
 import dotenv from 'dotenv'
 import { Op } from 'sequelize'
 import bcrypt from 'bcrypt'
 
 import { User, UserLevel } from '../models'
-import { ChangePasswordType, UserNoIdType } from '../../types'
+import { 
+	ChangePasswordType,
+	 UserNoIdType } from '../../types'
+import { tokenExtractor } from '../util/middleware'
+import { parseString, toChangePasswordType } from '../util/typeguards'
+
 
 dotenv.config()
 
 const router = express.Router()
 
-router.get('/', (async (_req, res) => {
+router.get('/', tokenExtractor, async (req, res) => {
+
+	try{
+	const user = await User.findByPk(req.decodedToken.id, {include:[{model: UserLevel, as: 'userLevel'} ]})
+	console.log('user: ',user?.toJSON())
+	
+	if(user?.dataValues.userLevel.levelNumber >= 50){
 	const users: User[] = await User.findAll({
 		include: {
 			model: UserLevel,
 		},
 		where: { username: { [Op.not]: [process.env.SU_USERNAME] } },
 	})
-	res.json(users)
-}) as RequestHandler)
+	res.json(users)}}
+	catch (e){
+		res.status(400).json({e})
+	}
+}) 
 
-router.post('/', (async (req: Request<object, object, UserNoIdType>, res) => {
+router.get('/currentUser', tokenExtractor, async (req,res) => {
+	const user = await User.findByPk(req.decodedToken.id, {include:[{model: UserLevel, as: 'userLevel'} ]})
+	res.json(user)
+})
+
+router.post('/',tokenExtractor, async (req, res) => {
 	const body: UserNoIdType = { ...req.body }
 	const saltRounds: number = 10
 	const newUser = {
@@ -30,7 +49,6 @@ router.post('/', (async (req: Request<object, object, UserNoIdType>, res) => {
 	}
 	try {
 		const user = await User.create(newUser)
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 		const userWithLevel = await User.findByPk(user.dataValues.id, {
 			include: { model: UserLevel },
 		})
@@ -38,9 +56,9 @@ router.post('/', (async (req: Request<object, object, UserNoIdType>, res) => {
 	} catch (e) {
 		return res.status(400).json({ e })
 	}
-}) as RequestHandler)
+})
 
-router.delete('/:id', (async (req, res) => {
+router.delete('/:id',tokenExtractor, async (req, res) => {
 	try {
 		const user = await User.findByPk(req.params.id)
 		if (user) await user.destroy()
@@ -48,52 +66,13 @@ router.delete('/:id', (async (req, res) => {
 	} catch (e) {
 		res.status(204).end()
 	}
-}) as RequestHandler)
-
-const toNewPasswordType = (object: unknown): ChangePasswordType => {
-	const isString = (text: unknown): text is string => {
-		return typeof text === 'string' || text instanceof String
-	}
-	const parseString = (text: unknown): string => {
-		if (!isString(text)) {
-			throw new Error('incorrect or missing value in object')
-		}
-		return text
-	}
-	if (!object || typeof object !== 'object') {
-		throw new Error('Incorrect or missing data')
-	}
-	if (
-		'currentPassword' in object &&
-		'newPassword' in object &&
-		'confirmPassword' in object
-	) {
-		const newPWT: ChangePasswordType = {
-			currentPassword: parseString(object.currentPassword),
-			newPassword: parseString(object.newPassword),
-			confirmPassword: parseString(object.confirmPassword),
-		}
-		return newPWT
-	}
-	throw new Error('Incorrect data: a field missing')
-}
-
-const isString = (text: unknown): text is string => {
-	return typeof text === 'string' || text instanceof String
-}
-
-const parseString = (text: unknown): string => {
-	if (!isString(text)) {
-		throw new Error('incorrect or missing value in object')
-	}
-	return text
-}
+})
 
 router.put(
-	'/pw/:id',
-	async (req: Request<{ id: number }, object, object>, res) => {
+	'/pw/:id', tokenExtractor, async (req, res) => {
+	// '/pw/:id', tokenExtractor, async (req: Request<{ id: number }, object, object>, res) => {
 		try {
-			const body: ChangePasswordType = toNewPasswordType(req.body)
+			const body: ChangePasswordType = toChangePasswordType({ ...req.body })		
 			const user = await User.findByPk(req.params.id)
 			const saltRounds = 10
 			if (user) {
@@ -113,5 +92,6 @@ router.put(
 		}
 	}
 )
+
 
 export default router

@@ -29,21 +29,43 @@ export const Schedule = () => {
 		(state: { departures: DepartureType[] }) => state.departures
 	)
 
-	console.log(departures)
+	console.log(departures);
+	
 
 	const scheduleDispatch: (
 		...args: unknown[]
 	) => Promise<DepartureType> | number = useDispatch<AppDispatch>()
 
 	interface FormValues {
-		startTime: Dayjs | null
+		startTime: Dayjs
 		routeId: number | ''
 	}
 
 	const initialValues: FormValues = {
-		startTime: null,
+		startTime: dayjs(),
 		routeId: '',
 	}
+
+	const datesAreSame = (d1:Date,d2:Date) => {
+		if(d1.getFullYear() === d2.getFullYear() && d1.getMonth() === d2.getMonth() && d1.getDate() === d2.getDate()){
+			return true
+		} 
+		return false
+	}
+
+	const departuresToShow = (values: FormValues) => {
+		console.log(new Date (values.startTime.toDate()));
+		console.log(new Date (departures[0].startTime));
+		console.log(datesAreSame(new Date (values.startTime.toDate()), new Date (departures[0].startTime)));
+		let toShow = 
+		departures.filter(d => datesAreSame(new Date (values.startTime.toDate()), new Date (d.startTime)))
+		if(values.routeId !== ''){
+			const filtered = toShow.filter(d => d.route.id === values.routeId)
+			return filtered
+		}
+		return toShow
+	}
+	
 
 	return (
 		<div>
@@ -90,8 +112,11 @@ export const Schedule = () => {
 									<DateTimePicker
 										label='Departure Time'
 										value={values.startTime}
-										onChange={(newValue) => {
+										onChange=
+										{(newValue):void => {
 											setFieldValue('startTime', newValue)
+									
+											
 										}}
 									/>
 								)}
@@ -105,16 +130,28 @@ export const Schedule = () => {
 							>
 								Submit
 							</Button>
+							<Button
+								variant='contained'
+								color='primary'
+								disabled={isSubmitting}
+								onClick={() => departuresToShow(values)}
+							>
+								Show
+							</Button>
+							{departures.length > 0 ?
 							<Table>
 								<TableBody>
-									{departures.map(
+									{ departuresToShow(values).map(
 										(d) => (
 											<TableRow key={d.id}>
 												<TableCell>
-													<Typography>{`${d.startTime.substring(0, 16)} ${
-														d.route.name
-													}`}</Typography>
+													<Typography>{`${new Date(d.startTime).toLocaleDateString()}`}</Typography>
 												</TableCell>
+												<TableCell>
+												<Typography>{`${new Date(d.startTime).toLocaleTimeString([],{timeStyle:'short'})}`}</Typography>
+												</TableCell>
+												<TableCell><Typography>{d.route.name}</Typography></TableCell>
+												
 												<TableCell>
 													<Button
 														onClick={() => {
@@ -131,6 +168,7 @@ export const Schedule = () => {
 									)}
 								</TableBody>
 							</Table>
+						:<Typography>Loading...</Typography>}
 						</Form>
 					)}
 				</Formik>

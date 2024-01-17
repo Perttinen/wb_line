@@ -17,7 +17,6 @@ import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutl
 export const Timetable = () => {
 	const navigate = useNavigate()
 	const dock = useParams().dock
-	console.log(dock)
 
 	// const time = useSelector((state: { time: number }) => state.time)
 	const routes = useSelector((state: { routes: RouteType[] }) => state.routes)
@@ -30,7 +29,10 @@ export const Timetable = () => {
 
 	const starts = [...new Set(routes.map((r) => r.startDock.name))]
 
-	console.log('deps:', departures)
+	console.log(departures);
+	console.log(routes);
+	
+	
 
 	return (
 		<div>

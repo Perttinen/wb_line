@@ -238,7 +238,7 @@ export const AppBar = ({ loggedUser }: { loggedUser: UserWithTokenType }) => {
 							</Tooltip>
 							<Menu
 								sx={{ mt: '45px' }}
-								id='menu-appbar'
+								id='menu-applist'
 								anchorEl={anchorElUser}
 								anchorOrigin={{
 									vertical: 'top',

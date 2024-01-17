@@ -23,8 +23,6 @@ export const RouteList = () => {
 	const dispatch: (...args: unknown[]) => Promise<RouteType> | number =
 		useDispatch<AppDispatch>()
 
-	console.log('routesList: ', routes)
-
 	const handleDelete = async (id: number) => {
 		await routeService.remove(id)
 		dispatch(removeRoute(id))

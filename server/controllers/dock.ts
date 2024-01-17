@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 
 import { Dock, Route, Stop } from '../models'
 import { DockNoIdType } from '../../types'
+import { tokenExtractor } from '../util/middleware'
 
 dotenv.config()
 
@@ -13,9 +14,8 @@ router.get('/', (async (_req, res) => {
 	res.json(docks)
 }) as RequestHandler)
 
-router.post('/', (async (req: Request<object, object, DockNoIdType>, res) => {
-	// const body: string = req.body
-	console.log(req.body)
+router.post('/', tokenExtractor, (async (req: Request<object, object, DockNoIdType>, res) => {
+
 
 	try {
 		const dock = await Dock.create(req.body)
@@ -25,7 +25,7 @@ router.post('/', (async (req: Request<object, object, DockNoIdType>, res) => {
 	}
 }) as RequestHandler)
 
-router.delete('/:id', (async (req, res) => {
+router.delete('/:id', tokenExtractor, (async (req, res) => {
 	try {
 		const dock = await Dock.findByPk(req.params.id)
 

@@ -1,6 +1,6 @@
 import express, { RequestHandler, Request } from 'express'
 import dotenv from 'dotenv'
-
+import { tokenExtractor } from '../util/middleware'
 // import { Dock, Route, Stop } from '../models'
 // import { InitRouteType } from '../../types'
 import { Dayjs } from 'dayjs'
@@ -31,21 +31,13 @@ router.get('/', (async (_req, res) => {
 		],
 		attributes: { exclude: ['routeId'] },
 	})
-	// eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
-	console.log(
-		departures.map(
-			(d) =>
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-assignment
-				(d.dataValues.startTime =
-					// eslint-disable-next-line @typescript-eslint/no-unsafe-call
-					d.dataValues.startTime.toLocaleString('fi-FI'))
-		)
-	)
 
+
+	
 	res.json(departures)
 }) as RequestHandler)
 
-router.post('/', (async (
+router.post('/', tokenExtractor, (async (
 	req: Request<object, object, { routeId: number; startTime: Dayjs }>,
 	res
 ) => {
@@ -85,14 +77,14 @@ router.post('/', (async (
 			attributes: { exclude: ['routeId'] },
 		})
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-		resDeparture &&
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-			(resDeparture.dataValues.startTime =
-				resDeparture &&
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-call
-				resDeparture.dataValues.startTime.toLocaleString('fi-FI'))
+		// resDeparture &&
+		// 	// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+		// 	(resDeparture.dataValues.startTime =
+		// 		resDeparture &&
+		// 		// eslint-disable-next-line @typescript-eslint/no-unsafe-call
+		// 		resDeparture.dataValues.startTime.toLocaleString('fi-FI'))
 
-		console.log(resDeparture !== null && resDeparture.toJSON())
+	
 
 		res.status(201).json(resDeparture)
 	} catch (error) {
@@ -101,7 +93,7 @@ router.post('/', (async (
 	}
 }) as RequestHandler)
 
-router.delete('/:id', (async (req, res) => {
+router.delete('/:id', tokenExtractor, (async (req, res) => {
 	try {
 		const departure = await Departure.findByPk(req.params.id)
 		if (departure) {

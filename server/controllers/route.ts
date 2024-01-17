@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 
 import { Dock, Route, Stop } from '../models'
 import { InitRouteType } from '../../types'
+import { tokenExtractor } from '../util/middleware'
 
 dotenv.config()
 
@@ -54,14 +55,10 @@ router.post('/', (async (req: Request<object, object, InitRouteType>, res) => {
 	}
 }) as RequestHandler)
 
-router.delete('/:id', (async (req, res) => {
+router.delete('/:id', tokenExtractor, (async (req, res) => {
 	try {
 		const route = await Route.findByPk(req.params.id)
 		if (route) {
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-			// await Stop.destroy({ where: { routeId: route.dataValues.id } })
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-			// await Departure.destroy({ where: { routeId: route.dataValues.id } })
 			await route.destroy()
 		}
 		res.json(route)

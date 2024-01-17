@@ -17,7 +17,10 @@ const App = () => {
 		(state: { loggedUser: UserWithTokenType }) => state.loggedUser
 	)
 
-	return location.pathname === '/timetable' && !loggedUser.username ? (
+	console.log('luser: ',loggedUser);
+	
+
+	return location.pathname.startsWith('/timetable') && !loggedUser.username ? (
 		<Timetable />
 	) : !loggedUser.username ? (
 		<Login />

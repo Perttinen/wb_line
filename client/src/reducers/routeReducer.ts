@@ -22,8 +22,6 @@ const routeSlice = createSlice({
 })
 
 export const initializeRoutes = () => {
-	console.log('init')
-
 	return async (dispatch: Dispatch) => {
 		const routes = await routeService.getAll()
 		dispatch(routeSlice.actions.setRoutes(routes))

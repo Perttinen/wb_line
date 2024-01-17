@@ -11,6 +11,7 @@ import { DockNoIdType, ShipNoIdType, User, UserNoIdType } from '../../types'
 import userService from './services/users'
 import dockService from './services/docks'
 import shipService from './services/ships'
+import { useInitializers } from './hooks'
 
 const WS_BASE =
 	process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : '/'
@@ -85,6 +86,8 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 	useEffect(() => {
 		const newSocket = io(WS_BASE)
 		setSocket(newSocket)
+
+		
 
 		newSocket.on('time', (time) => {
 			dispatch(setTime(time))

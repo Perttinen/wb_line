@@ -22,8 +22,6 @@ const shipSlice = createSlice({
 })
 
 export const initializeShips = () => {
-	console.log('init')
-
 	return async (dispatch: Dispatch) => {
 		const ships = await shipService.getAll()
 		dispatch(shipSlice.actions.setShips(ships))
