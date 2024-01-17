@@ -5,8 +5,10 @@ const baseUrl =
 		? 'http://localhost:3001/api/userlevel'
 		: '/api/userlevel'
 
+const token = localStorage.getItem('token')
+
 const getAll = async () => {
-	const res = await axios.get(baseUrl)
+	const res = await axios.get(baseUrl, {headers: {'Authorization': `bearer ${token}`}})
 	return res.data
 }
 

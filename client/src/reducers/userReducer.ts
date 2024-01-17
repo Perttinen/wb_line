@@ -22,10 +22,15 @@ const userSlice = createSlice({
 })
 
 export const initializeUsers = () => {
+
 	return async (dispatch: Dispatch) => {
+		
 		const users = await userService.getAll()
+
 		dispatch(userSlice.actions.setUsers(users))
+
 	}
+
 }
 
 export const createUser = (content: UserNoIdType) => {

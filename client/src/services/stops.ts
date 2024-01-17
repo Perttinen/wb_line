@@ -1,10 +1,10 @@
 import axios from 'axios'
-import { ShipNoIdType } from '../../../types'
+import { StopNoIdType, RouteNoIdType } from '../../../types'
 
 const baseUrl =
 	process.env.NODE_ENV === 'development'
-		? 'http://localhost:3001/api/ship'
-		: '/api/ship'
+		? 'http://localhost:3001/api/stop'
+		: '/api/stop'
 
 const token = localStorage.getItem('token')
 
@@ -13,11 +13,11 @@ const getAll = async () => {
 	return res.data
 }
 
-const create = async (ship: ShipNoIdType) => {
-	console.log(ship)
+const create = async (stop: StopNoIdType) => {
+	console.log('serv_req ', stop)
 
-	const res = await axios.post(baseUrl, ship, {headers: {'Authorization': `bearer ${token}`}})
-	console.log('serv ', res.data)
+	const res = await axios.post(baseUrl, stop, {headers: {'Authorization': `bearer ${token}`}})
+	console.log('serv_res ', res.data)
 
 	return res.data
 }

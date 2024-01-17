@@ -22,8 +22,6 @@ const dockSlice = createSlice({
 })
 
 export const initializeDocks = () => {
-	console.log('init')
-
 	return async (dispatch: Dispatch) => {
 		const docks = await dockService.getAll()
 		dispatch(dockSlice.actions.setDocks(docks))

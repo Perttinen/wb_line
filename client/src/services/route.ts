@@ -1,10 +1,10 @@
 import axios from 'axios'
-import { ShipNoIdType } from '../../../types'
+import { DockNoIdType, InitRouteType } from '../../../types'
 
 const baseUrl =
 	process.env.NODE_ENV === 'development'
-		? 'http://localhost:3001/api/ship'
-		: '/api/ship'
+		? 'http://localhost:3001/api/route'
+		: '/api/route'
 
 const token = localStorage.getItem('token')
 
@@ -13,11 +13,10 @@ const getAll = async () => {
 	return res.data
 }
 
-const create = async (ship: ShipNoIdType) => {
-	console.log(ship)
+const create = async (route: InitRouteType) => {
+	console.log(route)
 
-	const res = await axios.post(baseUrl, ship, {headers: {'Authorization': `bearer ${token}`}})
-	console.log('serv ', res.data)
+	const res = await axios.post(baseUrl, route, {headers: {'Authorization': `bearer ${token}`}})
 
 	return res.data
 }

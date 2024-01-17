@@ -20,8 +20,6 @@ export const UserCard = ({
 	)
 	const [pwChangeDialog, setPwChangeDialog] = useState(false)
 
-	console.log('card: ', user)
-
 	return (
 		<div>
 			{userCard && (

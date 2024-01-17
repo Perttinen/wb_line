@@ -1,3 +1,5 @@
+import { Dayjs } from 'dayjs'
+
 export type User = {
 	id: string
 	name: string
@@ -80,4 +82,74 @@ export type DockType = {
 
 export type DockNoIdType = {
 	name: string
+}
+
+export type RouteType = {
+	id: number
+	startDock: DockType
+	endDock: DockType
+	name: string
+	startDockId: number
+	endDockId: number
+	stops: StopType[]
+}
+
+export type RouteNoIdType = {
+	name: string
+	startDockId: number
+	endDockId: number
+}
+
+export type InitRouteType = {
+	name: string
+	startDockId: number
+	endDockId: number
+	stops: { dock: number | ''; time: number }[]
+}
+
+export type StopType = {
+	id: number
+	delayTimeMinutes: number
+	dockId: number
+	routeId: number
+	dock: DockType
+}
+export type StopNoIdType = {
+	delayTimeMinutes: number
+	dockId: number
+	routeId: number
+}
+
+export type initDepartureType = {
+	startTime: Dayjs | null
+	routeId: number | ''
+}
+
+export interface DepartureType {
+	id: number
+	startTime: string
+	route: {
+		id: number
+		name: string
+		startDock: {
+			id: number
+			name: string
+		}
+		endDock: {
+			id: number
+			name: string
+		}
+		stops: {
+			id: number
+			delayTimeMinutes: number
+			dock: {
+				id: number
+				name: string
+			}
+		}
+	}
+}
+
+export type DockNameType = {
+	dock: string
 }

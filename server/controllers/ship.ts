@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 
 import { Ship } from '../models'
 import { ShipNoIdType } from '../../types'
+import { tokenExtractor } from '../util/middleware'
 
 dotenv.config()
 
@@ -13,9 +14,8 @@ router.get('/', (async (_req, res) => {
 	res.json(ships)
 }) as RequestHandler)
 
-router.post('/', (async (req: Request<object, object, ShipNoIdType>, res) => {
-	// const body: string = req.body
-	console.log(req.body)
+router.post('/', tokenExtractor, (async (req: Request<object, object, ShipNoIdType>, res) => {
+
 
 	try {
 		const ship = await Ship.create(req.body)
@@ -25,7 +25,7 @@ router.post('/', (async (req: Request<object, object, ShipNoIdType>, res) => {
 	}
 }) as RequestHandler)
 
-router.delete('/:id', (async (req, res) => {
+router.delete('/:id', tokenExtractor, (async (req, res) => {
 	try {
 		const ship = await Ship.findByPk(req.params.id)
 		if (ship) await ship.destroy()

@@ -5,7 +5,17 @@ import App from './App'
 import { Provider } from 'react-redux'
 import { store } from './store'
 import WebSocketProvider from './WebSocket'
-import { Home, ResourceManagement, Timetable, UserManagement } from './views'
+import { LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import 'dayjs/locale/fi'
+import {
+	Home,
+	ResourceManagement,
+	Timetable,
+	UserManagement,
+	Lines,
+	Schedule,
+} from './views'
 
 const router = createBrowserRouter([
 	{
@@ -25,8 +35,20 @@ const router = createBrowserRouter([
 				element: <Timetable />,
 			},
 			{
+				path: '/timetable/:dock',
+				element: <Timetable />,
+			},
+			{
 				path: '/resources',
 				element: <ResourceManagement />,
+			},
+			{
+				path: '/routes',
+				element: <Lines />,
+			},
+			{
+				path: '/schedule',
+				element: <Schedule />,
 			},
 		],
 	},
@@ -36,7 +58,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 	<Container>
 		<Provider store={store}>
 			<WebSocketProvider>
-				<RouterProvider router={router} />
+				<LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='fi'>
+					<RouterProvider router={router} />
+				</LocalizationProvider>
 			</WebSocketProvider>
 		</Provider>
 	</Container>

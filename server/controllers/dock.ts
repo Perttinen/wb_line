@@ -1,8 +1,9 @@
 import express, { RequestHandler, Request } from 'express'
 import dotenv from 'dotenv'
 
-import { Dock } from '../models'
+import { Dock, Route, Stop } from '../models'
 import { DockNoIdType } from '../../types'
+import { tokenExtractor } from '../util/middleware'
 
 dotenv.config()
 
@@ -13,9 +14,8 @@ router.get('/', (async (_req, res) => {
 	res.json(docks)
 }) as RequestHandler)
 
-router.post('/', (async (req: Request<object, object, DockNoIdType>, res) => {
-	// const body: string = req.body
-	console.log(req.body)
+router.post('/', tokenExtractor, (async (req: Request<object, object, DockNoIdType>, res) => {
+
 
 	try {
 		const dock = await Dock.create(req.body)
@@ -25,11 +25,26 @@ router.post('/', (async (req: Request<object, object, DockNoIdType>, res) => {
 	}
 }) as RequestHandler)
 
-router.delete('/:id', (async (req, res) => {
+router.delete('/:id', tokenExtractor, (async (req, res) => {
 	try {
 		const dock = await Dock.findByPk(req.params.id)
-		if (dock) await dock.destroy()
-		res.json(dock)
+
+		if (dock) {
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+			await Stop.destroy({ where: { dockId: dock.dataValues.id } })
+
+			await Route.destroy({
+				where: {
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+					startDockId: dock.dataValues.id,
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+					endDockId: dock.dataValues.id,
+				},
+			})
+			await dock.destroy()
+
+			res.json(dock)
+		}
 	} catch (e) {
 		res.status(204).end()
 	}

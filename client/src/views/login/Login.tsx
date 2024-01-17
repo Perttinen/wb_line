@@ -41,7 +41,8 @@ export const Login = () => {
 				console.log('first time')
 			} else {
 				dispatch(setLoggedUser(loggedUser))
-				window.localStorage.setItem('loggedWbUser', JSON.stringify(loggedUser))
+				// window.localStorage.setItem('token', JSON.stringify(loggedUser.token))
+				localStorage.setItem('token', loggedUser.token)
 				navigate('/')
 			}
 		} catch (e) {
