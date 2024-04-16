@@ -1,4 +1,4 @@
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch } from '../../store'
 import { useNavigate } from 'react-router-dom'
 import { removeLoggedUser } from '../../reducers/loggedUserReducer'
@@ -17,10 +17,22 @@ import {
 	Typography,
 } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
-import { UserWithTokenType } from '../../../../types'
 import { UserCard } from '..'
+// import { useInitializers } from '../../hooks'
 
-export const AppBar = ({ loggedUser }: { loggedUser: UserWithTokenType }) => {
+import { UserWithTokenType } from '../../../../types'
+
+export const AppBar = (
+) => {
+	// useInitializers()
+
+	const loggedUser = useSelector(
+		(state: { loggedUser: UserWithTokenType }) => state.loggedUser
+	)
+
+	console.log('loggedUser: ', loggedUser);
+
+
 	const dispatch: (...args: unknown[]) => Promise<string> =
 		useDispatch<AppDispatch>()
 	const navigate = useNavigate()
@@ -124,36 +136,36 @@ export const AppBar = ({ loggedUser }: { loggedUser: UserWithTokenType }) => {
 										<Typography textAlign='center'>USERS</Typography>
 									</MenuItem>
 								)}
-								{loggedUser.userLevel.levelName === 'admin' && (
-									<MenuItem
-										onClick={() => {
-											navigate('/resources')
-											handleCloseNavMenu()
-										}}
-									>
-										<Typography textAlign='center'>RESOURCES</Typography>
-									</MenuItem>
-								)}
-								{loggedUser.userLevel.levelName === 'admin' && (
-									<MenuItem
-										onClick={() => {
-											navigate('/routes')
-											handleCloseNavMenu()
-										}}
-									>
-										<Typography textAlign='center'>ROUTES</Typography>
-									</MenuItem>
-								)}
-								{loggedUser.userLevel.levelName === 'admin' && (
-									<MenuItem
-										onClick={() => {
-											navigate('/schedule')
-											handleCloseNavMenu()
-										}}
-									>
-										<Typography textAlign='center'>SCHEDULE</Typography>
-									</MenuItem>
-								)}
+
+								<MenuItem
+									onClick={() => {
+										navigate('/resources')
+										handleCloseNavMenu()
+									}}
+								>
+									<Typography textAlign='center'>RESOURCES</Typography>
+								</MenuItem>
+
+
+								<MenuItem
+									onClick={() => {
+										navigate('/routes')
+										handleCloseNavMenu()
+									}}
+								>
+									<Typography textAlign='center'>ROUTES</Typography>
+								</MenuItem>
+
+
+								<MenuItem
+									onClick={() => {
+										navigate('/schedule')
+										handleCloseNavMenu()
+									}}
+								>
+									<Typography textAlign='center'>SCHEDULE</Typography>
+								</MenuItem>
+
 								<MenuItem
 									onClick={() => {
 										navigate('/timetable')
@@ -197,30 +209,30 @@ export const AppBar = ({ loggedUser }: { loggedUser: UserWithTokenType }) => {
 									users
 								</Button>
 							)}
-							{loggedUser.userLevel.levelName === 'admin' && (
-								<Button
-									onClick={() => navigate('/resources')}
-									sx={{ my: 2, color: 'white', display: 'block' }}
-								>
-									resources
-								</Button>
-							)}
-							{loggedUser.userLevel.levelName === 'admin' && (
-								<Button
-									onClick={() => navigate('/routes')}
-									sx={{ my: 2, color: 'white', display: 'block' }}
-								>
-									routes
-								</Button>
-							)}
-							{loggedUser.userLevel.levelName === 'admin' && (
-								<Button
-									onClick={() => navigate('/schedule')}
-									sx={{ my: 2, color: 'white', display: 'block' }}
-								>
-									schedule
-								</Button>
-							)}
+
+							<Button
+								onClick={() => navigate('/resources')}
+								sx={{ my: 2, color: 'white', display: 'block' }}
+							>
+								resources
+							</Button>
+
+
+							<Button
+								onClick={() => navigate('/routes')}
+								sx={{ my: 2, color: 'white', display: 'block' }}
+							>
+								routes
+							</Button>
+
+
+							<Button
+								onClick={() => navigate('/schedule')}
+								sx={{ my: 2, color: 'white', display: 'block' }}
+							>
+								schedule
+							</Button>
+
 							<Button
 								onClick={() => navigate('/timetable')}
 								sx={{ my: 2, color: 'white', display: 'block' }}

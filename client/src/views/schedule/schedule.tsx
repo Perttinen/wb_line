@@ -29,8 +29,8 @@ export const Schedule = () => {
 		(state: { departures: DepartureType[] }) => state.departures
 	)
 
-	console.log(departures);
-	
+
+
 
 	const scheduleDispatch: (
 		...args: unknown[]
@@ -46,26 +46,24 @@ export const Schedule = () => {
 		routeId: '',
 	}
 
-	const datesAreSame = (d1:Date,d2:Date) => {
-		if(d1.getFullYear() === d2.getFullYear() && d1.getMonth() === d2.getMonth() && d1.getDate() === d2.getDate()){
+	const datesAreSame = (d1: Date, d2: Date) => {
+		if (d1.getFullYear() === d2.getFullYear() && d1.getMonth() === d2.getMonth() && d1.getDate() === d2.getDate()) {
 			return true
-		} 
+		}
 		return false
 	}
 
 	const departuresToShow = (values: FormValues) => {
-		console.log(new Date (values.startTime.toDate()));
-		console.log(new Date (departures[0].startTime));
-		console.log(datesAreSame(new Date (values.startTime.toDate()), new Date (departures[0].startTime)));
-		let toShow = 
-		departures.filter(d => datesAreSame(new Date (values.startTime.toDate()), new Date (d.startTime)))
-		if(values.routeId !== ''){
+
+		let toShow =
+			departures.filter(d => datesAreSame(new Date(values.startTime.toDate()), new Date(d.startTime)))
+		if (values.routeId !== '') {
 			const filtered = toShow.filter(d => d.route.id === values.routeId)
 			return filtered
 		}
 		return toShow
 	}
-	
+
 
 	return (
 		<div>
@@ -75,7 +73,7 @@ export const Schedule = () => {
 					initialValues={initialValues}
 					onSubmit={async (values, { setSubmitting }) => {
 						const valuesToDisp = await scheduleService.create(values)
-						console.log('vtd', valuesToDisp)
+
 						scheduleDispatch(appendDeparture(valuesToDisp))
 						setSubmitting(false)
 					}}
@@ -113,10 +111,10 @@ export const Schedule = () => {
 										label='Departure Time'
 										value={values.startTime}
 										onChange=
-										{(newValue):void => {
+										{(newValue): void => {
 											setFieldValue('startTime', newValue)
-									
-											
+
+
 										}}
 									/>
 								)}
@@ -139,36 +137,36 @@ export const Schedule = () => {
 								Show
 							</Button>
 							{departures.length > 0 ?
-							<Table>
-								<TableBody>
-									{ departuresToShow(values).map(
-										(d) => (
-											<TableRow key={d.id}>
-												<TableCell>
-													<Typography>{`${new Date(d.startTime).toLocaleDateString()}`}</Typography>
-												</TableCell>
-												<TableCell>
-												<Typography>{`${new Date(d.startTime).toLocaleTimeString([],{timeStyle:'short'})}`}</Typography>
-												</TableCell>
-												<TableCell><Typography>{d.route.name}</Typography></TableCell>
-												
-												<TableCell>
-													<Button
-														onClick={() => {
-															scheduleDispatch(removeDeparture(d.id))
-															scheduleService.remove(d.id)
-														}}
-													>
-														<DeleteOutlinedIcon />
-													</Button>
-												</TableCell>
-											</TableRow>
-										)
-										// )
-									)}
-								</TableBody>
-							</Table>
-						:<Typography>Loading...</Typography>}
+								<Table>
+									<TableBody>
+										{departuresToShow(values).map(
+											(d) => (
+												<TableRow key={d.id}>
+													<TableCell>
+														<Typography>{`${new Date(d.startTime).toLocaleDateString()}`}</Typography>
+													</TableCell>
+													<TableCell>
+														<Typography>{`${new Date(d.startTime).toLocaleTimeString([], { timeStyle: 'short' })}`}</Typography>
+													</TableCell>
+													<TableCell><Typography>{d.route.name}</Typography></TableCell>
+
+													<TableCell>
+														<Button
+															onClick={() => {
+																scheduleDispatch(removeDeparture(d.id))
+																scheduleService.remove(d.id)
+															}}
+														>
+															<DeleteOutlinedIcon />
+														</Button>
+													</TableCell>
+												</TableRow>
+											)
+											// )
+										)}
+									</TableBody>
+								</Table>
+								: <Typography>Loading...</Typography>}
 						</Form>
 					)}
 				</Formik>

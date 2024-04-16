@@ -51,7 +51,7 @@ export const ChangePassword = ({
 				setErrorMsg(e.response.data.error)
 				formik.resetForm()
 			} else {
-				console.log(e)
+
 				formik.resetForm()
 			}
 		}

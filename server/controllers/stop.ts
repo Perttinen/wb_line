@@ -8,14 +8,14 @@ dotenv.config()
 
 const router = express.Router()
 
-router.get('/',tokenExtractor, (async (_req, res) => {
+router.get('/', tokenExtractor, (async (_req, res) => {
 	const stops: Stop[] = await Stop.findAll()
 	res.json(stops)
 }) as RequestHandler)
 
-router.post('/',tokenExtractor, (async (req: Request<object, object, StopNoIdType>, res) => {
+router.post('/', tokenExtractor, (async (req: Request<object, object, StopNoIdType>, res) => {
 	// const body: string = req.body
-	console.log(req.body)
+
 
 	try {
 		const stop = await Stop.create(req.body)
@@ -25,7 +25,7 @@ router.post('/',tokenExtractor, (async (req: Request<object, object, StopNoIdTyp
 	}
 }) as RequestHandler)
 
-router.delete('/:id',tokenExtractor, (async (req, res) => {
+router.delete('/:id', tokenExtractor, (async (req, res) => {
 	try {
 		const stop = await Stop.findByPk(req.params.id)
 		if (stop) await stop.destroy()

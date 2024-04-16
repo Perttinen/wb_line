@@ -20,6 +20,7 @@ import { useState } from 'react'
 import { useFormik } from 'formik'
 import { ChangePassword } from '../components'
 
+
 export const Login = () => {
 	const dispatch: (...args: unknown[]) => Promise<string> =
 		useDispatch<AppDispatch>()
@@ -30,6 +31,8 @@ export const Login = () => {
 	const [firstTime, setFirstTime] = useState(false)
 	const [user, setUser] = useState({} as UserType)
 
+
+
 	const handleSubmit = async (values: LoginUser) => {
 		try {
 			const loggedUser = await loginService.login(values)
@@ -38,21 +41,21 @@ export const Login = () => {
 				setUser(loggedUser)
 				setFirstTime(true)
 				formik.resetForm()
-				console.log('first time')
+
 			} else {
 				dispatch(setLoggedUser(loggedUser))
-				// window.localStorage.setItem('token', JSON.stringify(loggedUser.token))
-				localStorage.setItem('token', loggedUser.token)
 				navigate('/')
 			}
+
 		} catch (e) {
 			formik.resetForm()
 			if (axios.isAxiosError(e) && e.response) {
 				setErrorMsg(e.response.data.error)
 			} else {
-				console.log(e)
+
 			}
 		}
+
 	}
 
 	const formik = useFormik({

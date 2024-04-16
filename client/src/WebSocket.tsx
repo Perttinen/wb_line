@@ -87,14 +87,14 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 		const newSocket = io(WS_BASE)
 		setSocket(newSocket)
 
-		
+
 
 		newSocket.on('time', (time) => {
 			dispatch(setTime(time))
 		})
 
 		newSocket.on('event://get-message', (msg: any) => {
-			console.log('get-message: ', msg)
+
 		})
 
 		newSocket.on('event://get-add-user', (user: any) => {
@@ -126,20 +126,22 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 		}
 	}, [dispatch])
 
+
+
 	return (
 		<WebSocketContext.Provider
 			value={
 				socket
 					? {
-							socket,
-							sendMessage,
-							sendAddUser,
-							sendRemoveUser,
-							sendAddDock,
-							sendRemoveDock,
-							sendAddShip,
-							sendRemoveShip,
-					  }
+						socket,
+						sendMessage,
+						sendAddUser,
+						sendRemoveUser,
+						sendAddDock,
+						sendRemoveDock,
+						sendAddShip,
+						sendRemoveShip,
+					}
 					: null
 			}
 		>

@@ -9,21 +9,21 @@ const baseUrl =
 const token = localStorage.getItem('token')
 
 const getAll = async () => {
-	const res = await axios.get(baseUrl, {headers: {'Authorization': `bearer ${token}`}})
+	const res = await axios.get(baseUrl, { headers: { 'Authorization': `bearer ${token}` } })
 	return res.data
 }
 
 const create = async (dock: DockNoIdType) => {
-	console.log(dock)
 
-	const res = await axios.post(baseUrl, dock, {headers: {'Authorization': `bearer ${token}`}})
-	console.log('serv ', res.data)
+
+	const res = await axios.post(baseUrl, dock, { headers: { 'Authorization': `bearer ${token}` } })
+
 
 	return res.data
 }
 
 const remove = async (id: number) => {
-	await axios.delete(`${baseUrl}/${id}`, {headers: {'Authorization': `bearer ${token}`}})
+	await axios.delete(`${baseUrl}/${id}`, { headers: { 'Authorization': `bearer ${token}` } })
 }
 
 // const update = (id: number, pwdata: ChangePasswordType) => {

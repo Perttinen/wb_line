@@ -29,10 +29,7 @@ export const Timetable = () => {
 
 	const starts = [...new Set(routes.map((r) => r.startDock.name))]
 
-	console.log(departures);
-	console.log(routes);
-	
-	
+
 
 	return (
 		<div>

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { initDepartureType} from '../../../types'
+import { initDepartureType } from '../../../types'
 
 const baseUrl =
 	process.env.NODE_ENV === 'development'
@@ -10,7 +10,7 @@ const baseUrl =
 const token = localStorage.getItem('token')
 
 const getAll = async () => {
-	const res = await axios.get(baseUrl, {headers: {'Authorization': `bearer ${token}`}})
+	const res = await axios.get(baseUrl, { headers: { 'Authorization': `bearer ${token}` } })
 	return res.data
 }
 
@@ -21,10 +21,10 @@ const getAll = async () => {
 
 const create = async (values: initDepartureType) => {
 	const valuesToSave = values
-	console.log(valuesToSave)
+
 
 	// try {
-	const response = await axios.post(baseUrl, valuesToSave, {headers: {'Authorization': `bearer ${token}`}})
+	const response = await axios.post(baseUrl, valuesToSave, { headers: { 'Authorization': `bearer ${token}` } })
 	return response.data
 	// } catch (error) {
 	// 	return
@@ -32,9 +32,9 @@ const create = async (values: initDepartureType) => {
 }
 
 const remove = async (id: number) => {
-	console.log('serv', id)
 
-	await axios.delete(`${baseUrl}/${id}`, {headers: {'Authorization': `bearer ${token}`}})
+
+	await axios.delete(`${baseUrl}/${id}`, { headers: { 'Authorization': `bearer ${token}` } })
 }
 
 const api = { getAll, create, remove }
