@@ -34,9 +34,11 @@ export const useInitializers = () => {
 	// }, [dispatch])
 
 	useEffect(() => {
-		if (localStorage.getItem('token')) {
-			dispatch(initializeLoggedUser())
-		}
+		console.log('effect token: ', localStorage.getItem('token'))
+
+		// if (localStorage.getItem('token')) {
+		dispatch(initializeLoggedUser())
+		// }
 	}, [dispatch])
 
 	useEffect(() => {
@@ -52,8 +54,6 @@ export const useInitializers = () => {
 	}, [dispatch])
 
 	useEffect(() => {
-
-
 		dispatch(initializeDocks())
 	}, [dispatch])
 
@@ -62,8 +62,6 @@ export const useInitializers = () => {
 	}, [dispatch])
 
 	useEffect(() => {
-
-
 		dispatch(initializeUsers())
 	}, [dispatch])
 }

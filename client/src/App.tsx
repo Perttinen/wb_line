@@ -11,7 +11,7 @@ import { useInitializers } from './hooks'
 
 
 const App = () => {
-	useInitializers()
+
 	const location = useLocation()
 
 	return location.pathname.startsWith('/timetable') && !localStorage.getItem('token') ? (

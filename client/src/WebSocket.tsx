@@ -83,6 +83,8 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 		socket?.emit('event://send-remove-ship', id)
 	}
 
+	useInitializers()
+
 	useEffect(() => {
 		const newSocket = io(WS_BASE)
 		setSocket(newSocket)

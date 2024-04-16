@@ -18,13 +18,13 @@ import {
 } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import { UserCard } from '..'
-// import { useInitializers } from '../../hooks'
+import { useInitializers } from '../../hooks'
 
 import { UserWithTokenType } from '../../../../types'
 
 export const AppBar = (
 ) => {
-	// useInitializers()
+	useInitializers()
 
 	const loggedUser = useSelector(
 		(state: { loggedUser: UserWithTokenType }) => state.loggedUser
@@ -67,225 +67,227 @@ export const AppBar = (
 	}
 
 	return (
-		<div>
-			<MuiAppBar position='static'>
-				<Container maxWidth='xl'>
-					<Toolbar disableGutters>
-						<Typography
-							variant='h6'
-							noWrap
-							component='a'
-							href='#app-bar-with-responsive-menu'
-							sx={{
-								mr: 2,
-								display: { xs: 'none', md: 'flex' },
-								fontFamily: 'monospace',
-								fontWeight: 700,
-								letterSpacing: '.3rem',
-								color: 'inherit',
-								textDecoration: 'none',
-							}}
-						>
-							WB-LINE
-						</Typography>
-
-						<Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-							<IconButton
-								size='large'
-								aria-label='account of current user'
-								aria-controls='menu-appbar'
-								aria-haspopup='true'
-								onClick={handleOpenNavMenu}
-								color='inherit'
-							>
-								<MenuIcon />
-							</IconButton>
-							<Menu
-								id='menu-appbar'
-								anchorEl={anchorElNav}
-								anchorOrigin={{
-									vertical: 'bottom',
-									horizontal: 'left',
-								}}
-								keepMounted
-								transformOrigin={{
-									vertical: 'top',
-									horizontal: 'left',
-								}}
-								open={Boolean(anchorElNav)}
-								onClose={handleCloseNavMenu}
+		loggedUser.userLevel ?
+			<div>
+				<MuiAppBar position='static'>
+					<Container maxWidth='xl'>
+						<Toolbar disableGutters>
+							<Typography
+								variant='h6'
+								noWrap
+								component='a'
+								href='#app-bar-with-responsive-menu'
 								sx={{
-									display: { xs: 'block', md: 'none' },
+									mr: 2,
+									display: { xs: 'none', md: 'flex' },
+									fontFamily: 'monospace',
+									fontWeight: 700,
+									letterSpacing: '.3rem',
+									color: 'inherit',
+									textDecoration: 'none',
 								}}
 							>
-								<MenuItem
-									onClick={() => {
-										navigate('/')
-										handleCloseNavMenu()
+								WB-LINE
+							</Typography>
+
+							<Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+								<IconButton
+									size='large'
+									aria-label='account of current user'
+									aria-controls='menu-appbar'
+									aria-haspopup='true'
+									onClick={handleOpenNavMenu}
+									color='inherit'
+								>
+									<MenuIcon />
+								</IconButton>
+								<Menu
+									id='menu-appbar'
+									anchorEl={anchorElNav}
+									anchorOrigin={{
+										vertical: 'bottom',
+										horizontal: 'left',
+									}}
+									keepMounted
+									transformOrigin={{
+										vertical: 'top',
+										horizontal: 'left',
+									}}
+									open={Boolean(anchorElNav)}
+									onClose={handleCloseNavMenu}
+									sx={{
+										display: { xs: 'block', md: 'none' },
 									}}
 								>
-									<Typography textAlign='center'>HOME</Typography>
-								</MenuItem>
-								{loggedUser.userLevel.levelName === 'admin' && (
 									<MenuItem
 										onClick={() => {
-											navigate('/usermanagement')
+											navigate('/')
 											handleCloseNavMenu()
 										}}
 									>
-										<Typography textAlign='center'>USERS</Typography>
+										<Typography textAlign='center'>HOME</Typography>
 									</MenuItem>
-								)}
+									{loggedUser.userLevel.levelName === 'admin' && (
+										<MenuItem
+											onClick={() => {
+												navigate('/usermanagement')
+												handleCloseNavMenu()
+											}}
+										>
+											<Typography textAlign='center'>USERS</Typography>
+										</MenuItem>
+									)}
 
-								<MenuItem
-									onClick={() => {
-										navigate('/resources')
-										handleCloseNavMenu()
-									}}
-								>
-									<Typography textAlign='center'>RESOURCES</Typography>
-								</MenuItem>
+									<MenuItem
+										onClick={() => {
+											navigate('/resources')
+											handleCloseNavMenu()
+										}}
+									>
+										<Typography textAlign='center'>RESOURCES</Typography>
+									</MenuItem>
 
 
-								<MenuItem
-									onClick={() => {
-										navigate('/routes')
-										handleCloseNavMenu()
-									}}
-								>
-									<Typography textAlign='center'>ROUTES</Typography>
-								</MenuItem>
+									<MenuItem
+										onClick={() => {
+											navigate('/routes')
+											handleCloseNavMenu()
+										}}
+									>
+										<Typography textAlign='center'>ROUTES</Typography>
+									</MenuItem>
 
 
-								<MenuItem
-									onClick={() => {
-										navigate('/schedule')
-										handleCloseNavMenu()
-									}}
-								>
-									<Typography textAlign='center'>SCHEDULE</Typography>
-								</MenuItem>
+									<MenuItem
+										onClick={() => {
+											navigate('/schedule')
+											handleCloseNavMenu()
+										}}
+									>
+										<Typography textAlign='center'>SCHEDULE</Typography>
+									</MenuItem>
 
-								<MenuItem
-									onClick={() => {
-										navigate('/timetable')
-										handleCloseNavMenu()
-									}}
-								>
-									<Typography textAlign='center'>TIMETABLES</Typography>
-								</MenuItem>
-							</Menu>
-						</Box>
-						<Typography
-							variant='h5'
-							noWrap
-							component='a'
-							// href="#app-bar-with-responsive-menu"
-							sx={{
-								mr: 2,
-								display: { xs: 'flex', md: 'none' },
-								flexGrow: 1,
-								fontFamily: 'monospace',
-								fontWeight: 700,
-								letterSpacing: '.3rem',
-								color: 'inherit',
-								textDecoration: 'none',
-							}}
-						>
-							WB-LINE
-						</Typography>
-						<Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-							<Button
-								onClick={() => navigate('/')}
-								sx={{ my: 2, color: 'white', display: 'block' }}
+									<MenuItem
+										onClick={() => {
+											navigate('/timetable')
+											handleCloseNavMenu()
+										}}
+									>
+										<Typography textAlign='center'>TIMETABLES</Typography>
+									</MenuItem>
+								</Menu>
+							</Box>
+							<Typography
+								variant='h5'
+								noWrap
+								component='a'
+								// href="#app-bar-with-responsive-menu"
+								sx={{
+									mr: 2,
+									display: { xs: 'flex', md: 'none' },
+									flexGrow: 1,
+									fontFamily: 'monospace',
+									fontWeight: 700,
+									letterSpacing: '.3rem',
+									color: 'inherit',
+									textDecoration: 'none',
+								}}
 							>
-								home
-							</Button>
-							{loggedUser.userLevel.levelName === 'admin' && (
+								WB-LINE
+							</Typography>
+							<Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
 								<Button
-									onClick={() => navigate('/usermanagement')}
+									onClick={() => navigate('/')}
 									sx={{ my: 2, color: 'white', display: 'block' }}
 								>
-									users
+									home
 								</Button>
-							)}
+								{loggedUser.userLevel.levelName === 'admin' && (
+									<Button
+										onClick={() => navigate('/usermanagement')}
+										sx={{ my: 2, color: 'white', display: 'block' }}
+									>
+										users
+									</Button>
+								)}
 
-							<Button
-								onClick={() => navigate('/resources')}
-								sx={{ my: 2, color: 'white', display: 'block' }}
-							>
-								resources
-							</Button>
-
-
-							<Button
-								onClick={() => navigate('/routes')}
-								sx={{ my: 2, color: 'white', display: 'block' }}
-							>
-								routes
-							</Button>
-
-
-							<Button
-								onClick={() => navigate('/schedule')}
-								sx={{ my: 2, color: 'white', display: 'block' }}
-							>
-								schedule
-							</Button>
-
-							<Button
-								onClick={() => navigate('/timetable')}
-								sx={{ my: 2, color: 'white', display: 'block' }}
-							>
-								timetables
-							</Button>
-						</Box>
-						<Box sx={{ flexGrow: 0 }}>
-							<Tooltip title='Open user settings'>
-								<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-									<Avatar alt='Remy Sharp' src='/static/images/avatar/2.jpg'>
-										{loggedUser.name.charAt(0)}
-									</Avatar>
-								</IconButton>
-							</Tooltip>
-							<Menu
-								sx={{ mt: '45px' }}
-								id='menu-applist'
-								anchorEl={anchorElUser}
-								anchorOrigin={{
-									vertical: 'top',
-									horizontal: 'right',
-								}}
-								keepMounted
-								transformOrigin={{
-									vertical: 'top',
-									horizontal: 'right',
-								}}
-								open={Boolean(anchorElUser)}
-								onClose={handleCloseUserMenu}
-							>
-								<MenuItem
-									onClick={() => {
-										handleCloseUserMenu()
-										handleLogout()
-									}}
+								<Button
+									onClick={() => navigate('/resources')}
+									sx={{ my: 2, color: 'white', display: 'block' }}
 								>
-									<Typography textAlign='center'>logout</Typography>
-								</MenuItem>
-								<MenuItem
-									onClick={() => {
-										handleCloseUserMenu()
-										handleUserCard()
-									}}
+									resources
+								</Button>
+
+
+								<Button
+									onClick={() => navigate('/routes')}
+									sx={{ my: 2, color: 'white', display: 'block' }}
 								>
-									<Typography textAlign='center'>user data</Typography>
-								</MenuItem>
-							</Menu>
-						</Box>
-					</Toolbar>
-				</Container>
-			</MuiAppBar>
-			<UserCard userCard={userCard} setUserCard={SetUserCard} />
-		</div>
+									routes
+								</Button>
+
+
+								<Button
+									onClick={() => navigate('/schedule')}
+									sx={{ my: 2, color: 'white', display: 'block' }}
+								>
+									schedule
+								</Button>
+
+								<Button
+									onClick={() => navigate('/timetable')}
+									sx={{ my: 2, color: 'white', display: 'block' }}
+								>
+									timetables
+								</Button>
+							</Box>
+							<Box sx={{ flexGrow: 0 }}>
+								<Tooltip title='Open user settings'>
+									<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+										<Avatar alt='Remy Sharp' src='/static/images/avatar/2.jpg'>
+											{loggedUser.name.charAt(0)}
+										</Avatar>
+									</IconButton>
+								</Tooltip>
+								<Menu
+									sx={{ mt: '45px' }}
+									id='menu-applist'
+									anchorEl={anchorElUser}
+									anchorOrigin={{
+										vertical: 'top',
+										horizontal: 'right',
+									}}
+									keepMounted
+									transformOrigin={{
+										vertical: 'top',
+										horizontal: 'right',
+									}}
+									open={Boolean(anchorElUser)}
+									onClose={handleCloseUserMenu}
+								>
+									<MenuItem
+										onClick={() => {
+											handleCloseUserMenu()
+											handleLogout()
+										}}
+									>
+										<Typography textAlign='center'>logout</Typography>
+									</MenuItem>
+									<MenuItem
+										onClick={() => {
+											handleCloseUserMenu()
+											handleUserCard()
+										}}
+									>
+										<Typography textAlign='center'>user data</Typography>
+									</MenuItem>
+								</Menu>
+							</Box>
+						</Toolbar>
+					</Container>
+				</MuiAppBar>
+				<UserCard userCard={userCard} setUserCard={SetUserCard} />
+			</div>
+			: <>loading..</>
 	)
 }
