@@ -1,32 +1,27 @@
 import { Outlet, useLocation } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+
 
 import { Login, Timetable } from './views'
 
-import { UserWithTokenType } from '../../types'
+
 
 import { AppBar } from './views/components'
 import { useInitializers } from './hooks'
 
+
+
 const App = () => {
+
 	const location = useLocation()
 
-	useInitializers()
-
-	const loggedUser = useSelector(
-		(state: { loggedUser: UserWithTokenType }) => state.loggedUser
-	)
-
-	console.log('luser: ',loggedUser);
-	
-
-	return location.pathname.startsWith('/timetable') && !loggedUser.username ? (
+	return location.pathname.startsWith('/timetable') && !localStorage.getItem('token') ? (
 		<Timetable />
-	) : !loggedUser.username ? (
+	) : !localStorage.getItem('token') ? (
 		<Login />
 	) : (
 		<div>
-			<AppBar loggedUser={loggedUser} />
+			<AppBar
+			/>
 			<div id='detail'>
 				<Outlet />
 			</div>

@@ -25,7 +25,7 @@ export const ResourceManagement = () => {
 		(state: { loggedUser: UserWithTokenType }) => state.loggedUser
 	)
 
-	return loggedUser.userLevel.levelNumber > 20 ? (
+	return loggedUser.userLevel ? (
 		<div>
 			<CssBaseline />
 			<TableContainer component={Paper}>
@@ -75,6 +75,6 @@ export const ResourceManagement = () => {
 			</TableContainer>
 		</div>
 	) : (
-		<h2>You shouldn't be here...!</h2>
+		null
 	)
 }

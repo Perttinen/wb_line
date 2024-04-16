@@ -1,5 +1,6 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction, Dispatch } from '@reduxjs/toolkit'
 import { UserWithTokenType } from '../../../types'
+import userService from '../services/users'
 
 const initialState: UserWithTokenType = {} as UserWithTokenType
 
@@ -22,6 +23,18 @@ const loggedUserSlice = createSlice({
 		},
 	},
 })
+
+export const initializeLoggedUser = () => {
+	return async (dispatch: Dispatch) => {
+		try {
+			const user = await userService.getCurrentUser()
+			console.log('currentuserreducer: ', user);
+
+			dispatch(loggedUserSlice.actions.setLoggedUser(user))
+		} catch (e) {
+		}
+	}
+}
 
 export const { setLoggedUser, getLoggedUser, removeLoggedUser } =
 	loggedUserSlice.actions

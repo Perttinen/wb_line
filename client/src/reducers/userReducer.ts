@@ -24,10 +24,17 @@ const userSlice = createSlice({
 export const initializeUsers = () => {
 
 	return async (dispatch: Dispatch) => {
-		
-		const users = await userService.getAll()
+		try {
+			const users = await userService.getAll()
+			console.log('userreducer: ', users);
 
-		dispatch(userSlice.actions.setUsers(users))
+			dispatch(userSlice.actions.setUsers(users))
+		} catch (e) {
+
+
+		}
+
+
 
 	}
 

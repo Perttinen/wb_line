@@ -12,8 +12,8 @@ import { useSelector } from 'react-redux'
 
 export const UserList = () => {
 	const users = useSelector((state: { users: UserType[] }) => state.users)
-	console.log(users);
-	
+
+
 	return (
 		<div>
 			<Typography variant='h5'>Users:</Typography>

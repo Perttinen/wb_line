@@ -4,9 +4,10 @@ import { Op } from 'sequelize'
 import bcrypt from 'bcrypt'
 
 import { User, UserLevel } from '../models'
-import { 
+import {
 	ChangePasswordType,
-	 UserNoIdType } from '../../types'
+	UserNoIdType
+} from '../../types'
 import { tokenExtractor } from '../util/middleware'
 import { parseString, toChangePasswordType } from '../util/typeguards'
 
@@ -15,31 +16,41 @@ dotenv.config()
 
 const router = express.Router()
 
-router.get('/', tokenExtractor, async (req, res) => {
+router.get('/', async (_req, res) => {
+	console.log('router');
 
-	try{
-	const user = await User.findByPk(req.decodedToken.id, {include:[{model: UserLevel, as: 'userLevel'} ]})
-	console.log('user: ',user?.toJSON())
-	
-	if(user?.dataValues.userLevel.levelNumber >= 50){
-	const users: User[] = await User.findAll({
-		include: {
-			model: UserLevel,
-		},
-		where: { username: { [Op.not]: [process.env.SU_USERNAME] } },
-	})
-	res.json(users)}}
-	catch (e){
-		res.status(400).json({e})
+	try {
+		// const user = await User.findByPk(req.decodedToken.id, {include:[{model: UserLevel, as: 'userLevel'} ]})
+
+
+		// if(user?.dataValues.userLevel.levelNumber >= 50){
+		const users: User[] = await User.findAll({
+			include: {
+				model: UserLevel,
+			},
+			where: { username: { [Op.not]: [process.env.SU_USERNAME] } },
+		})
+		console.log('get users: ', users.map(n => n.toJSON()));
+
+		res.json(users)
 	}
-}) 
+	// }
+	catch (e) {
+		console.log('error in get users! ', e);
 
-router.get('/currentUser', tokenExtractor, async (req,res) => {
-	const user = await User.findByPk(req.decodedToken.id, {include:[{model: UserLevel, as: 'userLevel'} ]})
+		res.status(400).json({ e })
+	}
+})
+
+router.get('/currentUser', tokenExtractor, async (req, res) => {
+	console.log('currentusercontroller');
+
+	const user = await User.findByPk(req.decodedToken.id, { include: [{ model: UserLevel, as: 'userLevel' }] })
+
 	res.json(user)
 })
 
-router.post('/',tokenExtractor, async (req, res) => {
+router.post('/', tokenExtractor, async (req, res) => {
 	const body: UserNoIdType = { ...req.body }
 	const saltRounds: number = 10
 	const newUser = {
@@ -58,7 +69,7 @@ router.post('/',tokenExtractor, async (req, res) => {
 	}
 })
 
-router.delete('/:id',tokenExtractor, async (req, res) => {
+router.delete('/:id', tokenExtractor, async (req, res) => {
 	try {
 		const user = await User.findByPk(req.params.id)
 		if (user) await user.destroy()
@@ -70,9 +81,9 @@ router.delete('/:id',tokenExtractor, async (req, res) => {
 
 router.put(
 	'/pw/:id', tokenExtractor, async (req, res) => {
-	// '/pw/:id', tokenExtractor, async (req: Request<{ id: number }, object, object>, res) => {
+		// '/pw/:id', tokenExtractor, async (req: Request<{ id: number }, object, object>, res) => {
 		try {
-			const body: ChangePasswordType = toChangePasswordType({ ...req.body })		
+			const body: ChangePasswordType = toChangePasswordType({ ...req.body })
 			const user = await User.findByPk(req.params.id)
 			const saltRounds = 10
 			if (user) {

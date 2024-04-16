@@ -22,7 +22,7 @@ const stopSlice = createSlice({
 })
 
 export const initializeStops = () => {
-	console.log('init')
+
 
 	return async (dispatch: Dispatch) => {
 		const stops = await stopService.getAll()

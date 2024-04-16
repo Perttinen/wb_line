@@ -17,7 +17,7 @@ export const AddUser = ({
 	)
 
 	const handleSubmit = async (values: UserNoIdType) => {
-		console.log(values)
+
 		setShowAddUser(false)
 		ws?.sendAddUser(values)
 		formik.resetForm()

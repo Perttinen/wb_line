@@ -1,6 +1,7 @@
 import { CssBaseline } from '@mui/material'
 
 export const Home = () => {
+
 	return (
 		<div>
 			<CssBaseline />

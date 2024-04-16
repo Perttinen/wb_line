@@ -33,7 +33,7 @@ router.get('/', (async (_req, res) => {
 	})
 
 
-	
+
 	res.json(departures)
 }) as RequestHandler)
 
@@ -44,7 +44,7 @@ router.post('/', tokenExtractor, (async (
 	// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 	const { routeId, startTime } = req.body
 	// eslint-disable-next-line @typescript-eslint/no-unsafe-call
-	// console.log(departureTime)
+
 
 	try {
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -84,7 +84,7 @@ router.post('/', tokenExtractor, (async (
 		// 		// eslint-disable-next-line @typescript-eslint/no-unsafe-call
 		// 		resDeparture.dataValues.startTime.toLocaleString('fi-FI'))
 
-	
+
 
 		res.status(201).json(resDeparture)
 	} catch (error) {

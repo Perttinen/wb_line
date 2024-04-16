@@ -16,9 +16,12 @@ import {
 	Lines,
 	Schedule,
 } from './views'
+import { useInitializers } from './hooks'
 
 const router = createBrowserRouter([
+
 	{
+
 		path: '/',
 		element: <App />,
 		children: [

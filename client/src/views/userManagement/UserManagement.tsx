@@ -13,30 +13,31 @@ export const UserManagement = () => {
 		(state: { loggedUser: UserWithTokenType }) => state.loggedUser
 	)
 
-	return loggedUser.userLevel.levelNumber > 20 ? (
-		<div>
-			<CssBaseline />
-			<Box
-				sx={{
-					display: 'flex',
-					flexDirection: 'column',
-					alignItems: 'center',
-				}}
-			>
-				{!showAddUser && (
-					<Button
-						onClick={() => setShowAddUser(true)}
-						fullWidth
-						sx={{ mt: 3, mb: 2, fontSize: '1.2rem' }}
+	return (
+		loggedUser.userLevel ?
+			(
+				<div>
+					<CssBaseline />
+					<Box
+						sx={{
+							display: 'flex',
+							flexDirection: 'column',
+							alignItems: 'center',
+						}}
 					>
-						Create new user
-					</Button>
-				)}
-				{showAddUser && <AddUser setShowAddUser={setShowAddUser} />}
-			</Box>
-			<UserList />
-		</div>
-	) : (
-		<h2>You shouldn't be here...!</h2>
+						{!showAddUser && (
+							<Button
+								onClick={() => setShowAddUser(true)}
+								fullWidth
+								sx={{ mt: 3, mb: 2, fontSize: '1.2rem' }}
+							>
+								Create new user
+							</Button>
+						)}
+						{showAddUser && <AddUser setShowAddUser={setShowAddUser} />}
+					</Box>
+					<UserList />
+				</div>
+			) : null
 	)
 }
