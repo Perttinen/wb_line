@@ -11,42 +11,32 @@ import {
 import { tokenExtractor } from '../util/middleware'
 import { parseString, toChangePasswordType } from '../util/typeguards'
 
-
 dotenv.config()
 
 const router = express.Router()
 
-router.get('/', async (_req, res) => {
-	console.log('router');
-
+router.get('/', tokenExtractor, async (req, res) => {
 	try {
-		// const user = await User.findByPk(req.decodedToken.id, {include:[{model: UserLevel, as: 'userLevel'} ]})
-
-
-		// if(user?.dataValues.userLevel.levelNumber >= 50){
-		const users: User[] = await User.findAll({
-			include: {
-				model: UserLevel,
-			},
-			where: { username: { [Op.not]: [process.env.SU_USERNAME] } },
-		})
-		console.log('get users: ', users.map(n => n.toJSON()));
-
-		res.json(users)
+		const user: User | null = await User.findByPk(req.decodedToken.id)
+		if (user?.dataValues.user_level_id === 1) {
+			const users: User[] = await User.findAll({
+				include: {
+					model: UserLevel,
+				},
+				where: { username: { [Op.not]: [process.env.SU_USERNAME] } },
+			})
+			res.json(users)
+		} else {
+			res.json([])
+		}
 	}
-	// }
 	catch (e) {
-		console.log('error in get users! ', e);
-
 		res.status(400).json({ e })
 	}
 })
 
 router.get('/currentUser', tokenExtractor, async (req, res) => {
-	console.log('currentusercontroller');
-
 	const user = await User.findByPk(req.decodedToken.id, { include: [{ model: UserLevel, as: 'userLevel' }] })
-
 	res.json(user)
 })
 
@@ -81,7 +71,6 @@ router.delete('/:id', tokenExtractor, async (req, res) => {
 
 router.put(
 	'/pw/:id', tokenExtractor, async (req, res) => {
-		// '/pw/:id', tokenExtractor, async (req: Request<{ id: number }, object, object>, res) => {
 		try {
 			const body: ChangePasswordType = toChangePasswordType({ ...req.body })
 			const user = await User.findByPk(req.params.id)

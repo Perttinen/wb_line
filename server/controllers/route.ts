@@ -1,7 +1,7 @@
 import express, { RequestHandler, Request } from 'express'
 import dotenv from 'dotenv'
 
-import { Dock, Route, Stop } from '../models'
+import { Departure, Dock, Route, Stop } from '../models'
 import { InitRouteType } from '../../types'
 import { tokenExtractor } from '../util/middleware'
 
@@ -11,10 +11,11 @@ const router = express.Router()
 
 router.get('/', (async (_req, res) => {
 	const routes: Route[] = await Route.findAll({
+		attributes: { exclude: ['endDockId', 'startDockId'] },
 		include: [
 			{ model: Dock, as: 'startDock' },
 			{ model: Dock, as: 'endDock' },
-			{ model: Stop, as: 'stops', include: [{ model: Dock, as: 'dock' }] },
+			{ model: Stop, as: 'stops', include: [{ model: Dock, as: 'dock' }], attributes: { exclude: ['dockId', 'routeId'] } },
 		],
 	})
 	res.json(routes)
@@ -25,7 +26,6 @@ router.post('/', (async (req: Request<object, object, InitRouteType>, res) => {
 		const routeToSave = {
 			startDockId: req.body.startDockId,
 			endDockId: req.body.endDockId,
-			name: req.body.name,
 		}
 		const route = await Route.create(routeToSave)
 		if (req.body.stops.length > 0) {
@@ -57,9 +57,12 @@ router.post('/', (async (req: Request<object, object, InitRouteType>, res) => {
 
 router.delete('/:id', tokenExtractor, (async (req, res) => {
 	try {
+
 		const route = await Route.findByPk(req.params.id)
 		if (route) {
-			await route.destroy()
+			await Stop.destroy({ where: { routeId: req.params.id } })
+			await Departure.destroy({ where: { routeId: req.params.id } })
+			await route.destroy();
 		}
 		res.json(route)
 	} catch (e) {

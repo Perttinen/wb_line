@@ -1,5 +1,4 @@
 import {
-	Box,
 	Button,
 	CssBaseline,
 	Table,
@@ -9,104 +8,69 @@ import {
 	TableRow,
 	Typography,
 } from '@mui/material'
-import { useSelector } from 'react-redux'
-import { DepartureType, DockType, RouteType } from '../../../../types'
+import { useDispatch, useSelector } from 'react-redux'
+import { DepartureType, DockType } from '../../../../types'
 import { useNavigate, useParams } from 'react-router-dom'
-import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined'
+import { AppDispatch } from '../../store'
+import { useEffect } from 'react'
+import { initializeDepartures } from '../../reducers/departureReducer'
 
 export const Timetable = () => {
 	const navigate = useNavigate()
-	const dock = useParams().dock
+	// const dock = useParams().dockId
+	// console.log(dock);
 
-	// const time = useSelector((state: { time: number }) => state.time)
-	const routes = useSelector((state: { routes: RouteType[] }) => state.routes)
+	const dispatch: (...args: unknown[]) => Promise<string> =
+		useDispatch<AppDispatch>()
+
+	useEffect(() => {
+		if (!localStorage.getItem('token')) {
+			console.log('gettin deps');
+			dispatch(initializeDepartures())
+		}
+	}, [dispatch])
+
 	const departures = useSelector(
 		(state: { departures: any[] }) => state.departures
 	)
-	// const timeString = new Date(time).toLocaleTimeString('fi-FI', {
-	// 	timeStyle: 'short',
-	// })
-
-	const starts = [...new Set(routes.map((r) => r.startDock.name))]
 
 
+	const getDockList = (departures: DepartureType[]) => {
+		const docks: DockType[] = []
+		for (let i in departures) {
+			!docks.find(d => d.id === departures[i].route.startDock.id) && docks.push(departures[i].route.startDock)
+			for (let c in departures[i].route.stops) {
+				!docks.find(d => d.id === departures[i].route.stops[c].dock.id) && docks.push(departures[i].route.stops[c].dock)
+			}
+		}
+		return docks
+	}
 
 	return (
 		<div>
 			<CssBaseline />
-			{!dock ? (
-				<Table>
-					<TableHead>
-						<TableRow>
+			<Table>
+				<TableHead>
+					<TableRow>
+						<TableCell align='center'>
+							<Typography variant='h5' fontWeight={'bold'}>
+								timetables
+							</Typography>
+						</TableCell>
+					</TableRow>
+				</TableHead>
+				<TableBody>
+					{getDockList(departures).map((d) => (
+						<TableRow key={d.id}>
 							<TableCell align='center'>
-								<Typography variant='h5' fontWeight={'bold'}>
-									timetables
-								</Typography>
+								<Button onClick={() => localStorage.getItem('token') ? navigate(`/timetablebyid/${d.id}`) : navigate(`/public/timetablebyid/${d.id}`)}>
+									{d.name}
+								</Button>
 							</TableCell>
 						</TableRow>
-					</TableHead>
-					<TableBody>
-						{starts.map((r) => (
-							<TableRow key={r}>
-								<TableCell align='center'>
-									<Button onClick={() => navigate(`/timetable/${r}`)}>
-										{r}
-									</Button>
-								</TableCell>
-							</TableRow>
-						))}
-					</TableBody>
-				</Table>
-			) : (
-				<Box>
-					<Button onClick={() => navigate('/timetable')}>
-						<ArrowCircleLeftOutlinedIcon />
-					</Button>
-					<Table>
-						<TableHead>
-							<TableRow>
-								<TableCell align='center'>
-									<Typography variant='h5' fontWeight={'bold'}>
-										{dock}
-									</Typography>
-								</TableCell>
-							</TableRow>
-						</TableHead>
-						<TableBody>
-							{departures.map(
-								(d) =>
-									d.route.startDock.name === dock && (
-										<TableRow key={d.id}>
-											<TableCell align='left'>
-												<Typography sx={{ fontWeight: 'bold' }}>
-													{d.route.endDock.name}
-												</Typography>
-												{d.route.stops.length > 0 && (
-													<Typography>
-														{`via:  `}
-														{d.route.stops
-															.map((s: { dock: DockType }) => s.dock.name)
-															.toString()}
-													</Typography>
-												)}
-											</TableCell>
-											<TableCell
-												sx={{
-													verticalAlign: 'top',
-													justifySelf: 'right',
-												}}
-											>
-												<Typography sx={{ fontWeight: 'bold' }}>
-													{d.startTime}
-												</Typography>
-											</TableCell>
-										</TableRow>
-									)
-							)}
-						</TableBody>
-					</Table>
-				</Box>
-			)}
+					))}
+				</TableBody>
+			</Table>
 		</div>
 	)
 }

@@ -1,10 +1,10 @@
 import {
-	Divider,
+
 	Button,
 	TextField,
 	MenuItem,
 	Box,
-	Typography,
+
 } from '@mui/material'
 import { FieldArray, Form, Formik } from 'formik'
 import * as Yup from 'yup'
@@ -43,7 +43,6 @@ export const RoutePlanner = ({
 	})
 
 	interface FormValues {
-		name: string
 		start: {
 			dock: number | ''
 		}
@@ -62,7 +61,6 @@ export const RoutePlanner = ({
 			typeof values.end.dock === 'number'
 		) {
 			const newRoute = await routeService.create({
-				name: values.name,
 				startDockId: values.start.dock,
 				endDockId: values.end.dock,
 				stops: values.middle,
@@ -76,7 +74,6 @@ export const RoutePlanner = ({
 		<div>
 			<Formik<FormValues>
 				initialValues={{
-					name: '',
 					start: {
 						dock: '',
 					},
@@ -88,19 +85,9 @@ export const RoutePlanner = ({
 				validationSchema={validationSchema}
 				onSubmit={handleSubmit}
 			>
-				{({ values, touched, errors, handleChange, handleBlur, isValid }) => (
+				{({ values, handleChange, handleBlur }) => (
 					<Form noValidate autoComplete='off'>
-						<TextField
-							fullWidth
-							margin='normal'
-							variant='outlined'
-							required
-							name='name'
-							value={values.name}
-							onChange={handleChange}
-							onBlur={handleBlur}
-							label='name'
-						></TextField>
+
 						<TextField
 							fullWidth
 							select

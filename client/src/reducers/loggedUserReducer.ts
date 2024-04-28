@@ -28,7 +28,7 @@ export const initializeLoggedUser = () => {
 	return async (dispatch: Dispatch) => {
 		try {
 			const user = await userService.getCurrentUser()
-			console.log('currentuserreducer: ', user);
+
 
 			dispatch(loggedUserSlice.actions.setLoggedUser(user))
 		} catch (e) {

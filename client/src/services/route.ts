@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { DockNoIdType, InitRouteType } from '../../../types'
+import { InitRouteType } from '../../../types'
 
 const baseUrl =
 	process.env.NODE_ENV === 'development'
@@ -22,7 +22,7 @@ const create = async (route: InitRouteType) => {
 }
 
 const remove = async (id: number) => {
-	await axios.delete(`${baseUrl}/${id}`, { headers: { 'Authorization': `bearer ${token}` } })
+	console.log(await axios.delete(`${baseUrl}/${id}`, { headers: { 'Authorization': `bearer ${token}` } }));
 }
 
 // const update = (id: number, pwdata: ChangePasswordType) => {

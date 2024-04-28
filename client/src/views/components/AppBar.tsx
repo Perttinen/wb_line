@@ -30,7 +30,7 @@ export const AppBar = (
 		(state: { loggedUser: UserWithTokenType }) => state.loggedUser
 	)
 
-	console.log('loggedUser: ', loggedUser);
+
 
 
 	const dispatch: (...args: unknown[]) => Promise<string> =
@@ -156,17 +156,6 @@ export const AppBar = (
 									>
 										<Typography textAlign='center'>ROUTES</Typography>
 									</MenuItem>
-
-
-									<MenuItem
-										onClick={() => {
-											navigate('/schedule')
-											handleCloseNavMenu()
-										}}
-									>
-										<Typography textAlign='center'>SCHEDULE</Typography>
-									</MenuItem>
-
 									<MenuItem
 										onClick={() => {
 											navigate('/timetable')
@@ -181,7 +170,6 @@ export const AppBar = (
 								variant='h5'
 								noWrap
 								component='a'
-								// href="#app-bar-with-responsive-menu"
 								sx={{
 									mr: 2,
 									display: { xs: 'flex', md: 'none' },
@@ -224,14 +212,6 @@ export const AppBar = (
 									sx={{ my: 2, color: 'white', display: 'block' }}
 								>
 									routes
-								</Button>
-
-
-								<Button
-									onClick={() => navigate('/schedule')}
-									sx={{ my: 2, color: 'white', display: 'block' }}
-								>
-									schedule
 								</Button>
 
 								<Button
