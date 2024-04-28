@@ -51,8 +51,6 @@ export const Login = () => {
 			formik.resetForm()
 			if (axios.isAxiosError(e) && e.response) {
 				setErrorMsg(e.response.data.error)
-			} else {
-
 			}
 		}
 

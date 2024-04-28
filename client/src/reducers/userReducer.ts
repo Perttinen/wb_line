@@ -22,22 +22,10 @@ const userSlice = createSlice({
 })
 
 export const initializeUsers = () => {
-
 	return async (dispatch: Dispatch) => {
-		try {
-			const users = await userService.getAll()
-			console.log('userreducer: ', users);
-
-			dispatch(userSlice.actions.setUsers(users))
-		} catch (e) {
-
-
-		}
-
-
-
+		const users = await userService.getAll()
+		dispatch(userSlice.actions.setUsers(users))
 	}
-
 }
 
 export const createUser = (content: UserNoIdType) => {

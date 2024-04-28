@@ -1,24 +1,32 @@
-import { useEffect, useState } from 'react'
 import routeService from '../../services/route'
-import { RouteType } from '../../../../types'
+import { RouteDocksType, RouteType } from '../../../../types'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-	Box,
 	Button,
 	Table,
 	TableBody,
 	TableCell,
-	TableContainer,
 	TableRow,
 	Typography,
 } from '@mui/material'
 import { AppDispatch } from '../../store'
 import { removeRoute } from '../../reducers/routeReducer'
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
+import DepartureBoardOutlinedIcon from '@mui/icons-material/DepartureBoardOutlined';
+import { useNavigate } from 'react-router-dom'
+import { number } from 'yup'
 
 export const RouteList = () => {
-	// const [routes, setRoutes] = useState<RouteType[]>([])
 	const routes = useSelector((state: { routes: RouteType[] }) => state.routes)
+
+	const newRoutes = routes.map(r => {
+		const sortedStops = [...r.stops].sort((a, b) => a.delayTimeMinutes - b.delayTimeMinutes)
+		r = { ...r, stops: sortedStops }
+		return r
+	})
+
+	console.log(newRoutes);
+
 
 	const dispatch: (...args: unknown[]) => Promise<RouteType> | number =
 		useDispatch<AppDispatch>()
@@ -28,24 +36,40 @@ export const RouteList = () => {
 		dispatch(removeRoute(id))
 	}
 
+	const navigate = useNavigate()
+
+	const getRouteDocks = (id: number): any[] => {
+		const route = newRoutes.find(r => r.id === id)
+		let docks: RouteDocksType[] = []
+		if (route) {
+			docks.push({ id: route.startDock.id, name: route.startDock.name })
+			if (route && route.stops) {
+				route.stops.sort((a, b) => a.delayTimeMinutes - b.delayTimeMinutes)
+				for (let s of route?.stops) {
+					docks.push({ id: s.dock.id, name: s.dock.name })
+					console.log(s.dock.name)
+				}
+			}
+			docks.push({ id: route.endDock.id, name: route.endDock.name })
+		}
+		return docks
+	}
+
 	return routes ? (
 		<Table>
 			<TableBody>
-				{routes.map((r) => (
+				{newRoutes.map((r) => (
 					<TableRow key={r.id} sx={{ verticalAlign: 'top' }}>
 						<TableCell sx={{ paddingRight: '2px', paddingLeft: '4px' }}>
-							<Typography>{r.name}</Typography>
-							<Typography>{r.startDock.name}</Typography>
-							<Typography>{r.endDock.name}</Typography>
+							{getRouteDocks(r.id).map(r => <Typography key={r.id}>{r.name}</Typography>)}
 						</TableCell>
 
 						<TableCell sx={{ paddingRight: '2px', paddingLeft: '4px' }}>
-							{r.stops.length > 0 && <Typography>via:</Typography>}
-							{r.stops &&
-								r.stops.length > 0 &&
-								r.stops.map((s) => (
-									<Typography key={s.id}>{s.dock.name}</Typography>
-								))}
+
+							<Button onClick={() => navigate('/schedule', { state: { routeId: r.id, docks: getRouteDocks(r.id) } })}>
+								<DepartureBoardOutlinedIcon />
+							</Button>
+
 						</TableCell>
 
 						<TableCell sx={{ paddingRight: '2px', paddingLeft: '4px' }}>

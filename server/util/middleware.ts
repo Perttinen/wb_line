@@ -12,14 +12,16 @@ declare module 'express-serve-static-core' {
 
 export const tokenExtractor = (req: Request, res: Response, next: NextFunction): void | Response => {
   const authorization = req.get('authorization')
-  console.log('extractor: ', authorization);
+
+  console.log(authorization);
+
 
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
     try {
       if (typeof process.env.JWT_SECRET === 'string')
         req.decodedToken = jwt.verify(authorization.substring(7), process.env.JWT_SECRET) as jwt.JwtPayload
     } catch {
-      return res.status(401).json({ error: 'token invalid' })
+      return res.status(401).json({ error: 'token invalid', response: res })
     }
   } else {
     return res.status(401).json({ error: 'token missing' })

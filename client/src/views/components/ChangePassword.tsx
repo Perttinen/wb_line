@@ -11,6 +11,7 @@ import { Alert, Box, Snackbar } from '@mui/material'
 import userService from '../../services/users'
 import * as Yup from 'yup'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 export const ChangePassword = ({
 	pwChangeDialog,
@@ -27,6 +28,8 @@ export const ChangePassword = ({
 
 	const [errorMsg, setErrorMsg] = useState('')
 	const [successMsg, setSuccessMsg] = useState('')
+
+	const navigate = useNavigate()
 
 	const passwordSchema = Yup.object().shape({
 		currentPassword: Yup.string()
@@ -46,12 +49,12 @@ export const ChangePassword = ({
 		try {
 			await userService.update(user.id, values)
 			setSuccessMsg('Password updated')
+			user.firstTime && navigate('./')
 		} catch (e) {
 			if (axios.isAxiosError(e) && e.response) {
 				setErrorMsg(e.response.data.error)
 				formik.resetForm()
 			} else {
-
 				formik.resetForm()
 			}
 		}

@@ -15,13 +15,22 @@ import {
 	UserManagement,
 	Lines,
 	Schedule,
+	TimetableById
 } from './views'
-import { useInitializers } from './hooks'
 
 const router = createBrowserRouter([
 
-	{
 
+	{
+		path: '/public/timetablebyid/:dockId',
+		element: <TimetableById />,
+	},
+	{
+		path: '/public/timetable',
+		element: <Timetable />,
+	},
+
+	{
 		path: '/',
 		element: <App />,
 		children: [
@@ -38,8 +47,8 @@ const router = createBrowserRouter([
 				element: <Timetable />,
 			},
 			{
-				path: '/timetable/:dock',
-				element: <Timetable />,
+				path: '/timetablebyid/:dockId',
+				element: <TimetableById />,
 			},
 			{
 				path: '/resources',
@@ -54,7 +63,9 @@ const router = createBrowserRouter([
 				element: <Schedule />,
 			},
 		],
+
 	},
+
 ])
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

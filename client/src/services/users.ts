@@ -1,6 +1,8 @@
 import axios from 'axios'
 import { ChangePasswordType, UserNoIdType } from '../../../types'
 
+
+
 const baseUrl =
 	process.env.NODE_ENV === 'development'
 		? 'http://localhost:3001/api/user'
@@ -9,16 +11,18 @@ const baseUrl =
 
 
 const token = localStorage.getItem('token')
-console.log('token service: ', token);
+
+
+
 
 const getAll = async () => {
 
 	try {
 		// if (typeof token === 'string') {
 		const res = await axios.get(baseUrl
-			, { headers: { 'Authorization': `bearer ${token}` } }
+			, { headers: { 'Authorization': `bearer ${localStorage.getItem('token')}` } }
 		)
-		console.log('getAll in userService: ', res);
+
 
 
 		return res.data
@@ -31,9 +35,9 @@ const getAll = async () => {
 }
 
 const getCurrentUser = async () => {
-	console.log('token getCurrent service: ', token);
 
 	const res = await axios.get(`${baseUrl}/currentUser`, { headers: { 'Authorization': `bearer ${localStorage.getItem('token')}` } })
+
 	return res.data
 }
 

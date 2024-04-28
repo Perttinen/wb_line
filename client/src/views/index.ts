@@ -6,6 +6,7 @@ import { UserCard } from './components/UserCard'
 import { ResourceManagement } from './resourceManagement/ResourceManagement'
 import { Lines } from './Lines/Lines'
 import { Schedule } from './schedule/Schedule'
+import { TimetableById } from './timetable/TimetableById'
 
 export {
 	Login,
@@ -16,4 +17,5 @@ export {
 	ResourceManagement,
 	Lines,
 	Schedule,
+	TimetableById
 }

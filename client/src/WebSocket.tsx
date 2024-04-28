@@ -11,7 +11,7 @@ import { DockNoIdType, ShipNoIdType, User, UserNoIdType } from '../../types'
 import userService from './services/users'
 import dockService from './services/docks'
 import shipService from './services/ships'
-import { useInitializers } from './hooks'
+// import { useInitializers } from './hooks'
 
 const WS_BASE =
 	process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : '/'
@@ -83,7 +83,7 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 		socket?.emit('event://send-remove-ship', id)
 	}
 
-	useInitializers()
+	// useInitializers()
 
 	useEffect(() => {
 		const newSocket = io(WS_BASE)

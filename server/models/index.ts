@@ -22,7 +22,16 @@ Route.hasMany(Stop, { onDelete: 'CASCADE' })
 Dock.hasMany(Stop, { onDelete: 'CASCADE' })
 Stop.belongsTo(Dock, { as: 'dock' })
 
+// Departure.hasMany(Route, { onDelete: 'CASCADE' })
+// Route.belongsTo(Departure
+//     , { onDelete: 'CASCADE' }
+//     // , { as: 'departure' }
+// )
+// Route.hasMany(Departure, { onDelete: 'CASCADE' })
+// Departure.belongsTo(Route, { onDelete: 'CASCADE' })
 Route.hasMany(Departure, { onDelete: 'CASCADE' })
-Departure.belongsTo(Route, { as: 'route' })
+Departure.belongsTo(Route, { onDelete: 'CASCADE', as: 'route', foreignKey: 'routeId' })
+// Route.hasMany(Departure, { onDelete: 'CASCADE' })
+// Departure.belongsTo(Route, { onDelete: 'CASCADE', as: 'route', foreignKey: 'routeId' })
 
 export { User, UserLevel, Dock, Ship, Stop, Route, Departure }

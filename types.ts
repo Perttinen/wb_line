@@ -88,20 +88,17 @@ export type RouteType = {
 	id: number
 	startDock: DockType
 	endDock: DockType
-	name: string
 	startDockId: number
 	endDockId: number
 	stops: StopType[]
 }
 
 export type RouteNoIdType = {
-	name: string
 	startDockId: number
 	endDockId: number
 }
 
 export type InitRouteType = {
-	name: string
 	startDockId: number
 	endDockId: number
 	stops: { dock: number | ''; time: number }[]
@@ -130,7 +127,6 @@ export interface DepartureType {
 	startTime: string
 	route: {
 		id: number
-		name: string
 		startDock: {
 			id: number
 			name: string
@@ -146,10 +142,15 @@ export interface DepartureType {
 				id: number
 				name: string
 			}
-		}
+		}[]
 	}
 }
 
 export type DockNameType = {
 	dock: string
+}
+
+export type RouteDocksType = {
+	id: number,
+	name: string
 }

@@ -9,32 +9,25 @@ const baseUrl =
 
 const token = localStorage.getItem('token')
 
+
+
 const getAll = async () => {
+
 	const res = await axios.get(baseUrl, { headers: { 'Authorization': `bearer ${token}` } })
 	return res.data
+
 }
 
-// const getByStartpoint = async (dockname: string) => {
-// 	const res = await axios.get(baseUrl, { params: { dock: dockname } })
-// 	return res.data
-// }
-
-const create = async (values: initDepartureType) => {
+const create = async (values: initDepartureType[]) => {
+	console.log('token in service: ', token);
 	const valuesToSave = values
-
-
-	// try {
 	const response = await axios.post(baseUrl, valuesToSave, { headers: { 'Authorization': `bearer ${token}` } })
+	console.log(response.data);
 	return response.data
-	// } catch (error) {
-	// 	return
-	// }
 }
 
-const remove = async (id: number) => {
-
-
-	await axios.delete(`${baseUrl}/${id}`, { headers: { 'Authorization': `bearer ${token}` } })
+const remove = async (id: number[]) => {
+	await axios.delete(baseUrl, { data: id, headers: { 'Authorization': `bearer ${token}` } })
 }
 
 const api = { getAll, create, remove }
