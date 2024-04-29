@@ -14,7 +14,7 @@ Route.belongsTo(Dock, { as: 'startDock', foreignKey: 'startDockId' })
 Route.belongsTo(Dock, { as: 'endDock', foreignKey: 'endDockId' })
 
 Route.belongsToMany(Dock, { through: Stop, onDelete: 'CASCADE' })
-Dock.belongsToMany(Route, { through: Stop })
+Dock.belongsToMany(Route, { through: Stop, onDelete: 'CASCADE' })
 
 Stop.belongsTo(Route, { onDelete: 'CASCADE' })
 Route.hasMany(Stop, { onDelete: 'CASCADE' })

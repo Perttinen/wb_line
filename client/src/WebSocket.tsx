@@ -11,6 +11,8 @@ import { DockNoIdType, ShipNoIdType, User, UserNoIdType } from '../../types'
 import userService from './services/users'
 import dockService from './services/docks'
 import shipService from './services/ships'
+import { initializeDepartures } from './reducers/departureReducer'
+import { initializeRoutes } from './reducers/routeReducer'
 // import { useInitializers } from './hooks'
 
 const WS_BASE =
@@ -105,6 +107,7 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 
 		newSocket.on('event://get-remove-user', (id: number) => {
 			dispatch(dropUser(id))
+
 		})
 
 		newSocket.on('event://get-remove-dock', (id: number) => {

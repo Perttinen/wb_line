@@ -1,9 +1,7 @@
 import express from 'express'
-import dotenv from 'dotenv'
 import { tokenExtractor } from '../util/middleware'
 import { Departure, Dock, Route, Stop } from '../models'
 
-dotenv.config()
 const router = express.Router()
 
 router.get('/', async (_req, res) => {
@@ -74,7 +72,8 @@ router.delete('/', tokenExtractor, async (req, res) => {
 		await Departure.destroy({ where: { id: req.body } })
 		res.status(204)
 	} catch (e) {
-		res.status(520).json(e)
+		console.log(e)
+		res.status(500).json(e)
 	}
 })
 
