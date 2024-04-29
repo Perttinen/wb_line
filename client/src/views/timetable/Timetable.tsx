@@ -22,8 +22,10 @@ export const Timetable = () => {
 	const dispatch: (...args: unknown[]) => Promise<string> =
 		useDispatch<AppDispatch>()
 
+	const publicRoute = location.pathname === '/public/timetable'
+
 	useEffect(() => {
-		if (location.pathname === '/public/timetable') {
+		if (publicRoute) {
 			dispatch(initializeDepartures())
 		}
 	}, [dispatch])
@@ -60,7 +62,7 @@ export const Timetable = () => {
 					{getDockList(departures).map((d) => (
 						<TableRow key={d.id}>
 							<TableCell align='center'>
-								<Button onClick={() => localStorage.getItem('token') ? navigate(`/timetablebyid/${d.id}`) : navigate(`/public/timetablebyid/${d.id}`)}>
+								<Button onClick={() => !publicRoute ? navigate(`/timetablebyid/${d.id}`) : navigate(`/public/timetablebyid/${d.id}`)}>
 									{d.name}
 								</Button>
 							</TableCell>
