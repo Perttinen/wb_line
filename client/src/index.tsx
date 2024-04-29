@@ -19,8 +19,6 @@ import {
 } from './views'
 
 const router = createBrowserRouter([
-
-
 	{
 		path: '/public/timetablebyid/:dockId',
 		element: <TimetableById />,
@@ -29,7 +27,6 @@ const router = createBrowserRouter([
 		path: '/public/timetable',
 		element: <Timetable />,
 	},
-
 	{
 		path: '/',
 		element: <App />,

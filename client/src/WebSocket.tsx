@@ -83,19 +83,15 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 		socket?.emit('event://send-remove-ship', id)
 	}
 
-	// useInitializers()
-
 	useEffect(() => {
 		const newSocket = io(WS_BASE)
 		setSocket(newSocket)
-
-
 
 		newSocket.on('time', (time) => {
 			dispatch(setTime(time))
 		})
 
-		newSocket.on('event://get-message', (msg: any) => {
+		newSocket.on('event://get-message', (_msg: any) => {
 
 		})
 

@@ -4,7 +4,6 @@ import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 import { useDispatch } from "react-redux"
 import { AppDispatch } from "../../store"
 import { removeDeparture } from "../../reducers/departureReducer"
-import scheduleService from "../../services/schedules"
 
 export const DepartureList = ({ filteredDepartures }: { filteredDepartures: DepartureType[] }) => {
 
@@ -17,8 +16,6 @@ export const DepartureList = ({ filteredDepartures }: { filteredDepartures: Depa
     const handleDelete = (id: number) => {
         const idArr: number[] = [id]
         scheduleDispatch(removeDeparture(idArr))
-        scheduleService.remove(idArr)
-        console.log(id);
     }
 
     return (

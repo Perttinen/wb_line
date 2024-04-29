@@ -25,11 +25,6 @@ const remove = async (id: number) => {
 	console.log(await axios.delete(`${baseUrl}/${id}`, { headers: { 'Authorization': `bearer ${token}` } }));
 }
 
-// const update = (id: number, pwdata: ChangePasswordType) => {
-// 	// const idstr = id.toString()
-// 	return axios.put(`${baseUrl}/pw/${id}`, pwdata)
-// }
-
 const api = { getAll, create, remove }
 
 export default api

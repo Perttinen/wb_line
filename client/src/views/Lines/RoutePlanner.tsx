@@ -195,7 +195,6 @@ export const RoutePlanner = ({
 								</MenuItem>
 							))}
 						</TextField>
-						{/* <Divider style={{ marginTop: 20, marginBottom: 20 }} /> */}
 						<Box display={'flex'} flexDirection={'row'}>
 							<Button
 								type='submit'

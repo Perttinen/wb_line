@@ -10,15 +10,13 @@ import {
 } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { DepartureType, DockType } from '../../../../types'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { AppDispatch } from '../../store'
 import { useEffect } from 'react'
 import { initializeDepartures } from '../../reducers/departureReducer'
 
 export const Timetable = () => {
 	const navigate = useNavigate()
-	// const dock = useParams().dockId
-	// console.log(dock);
 
 	const dispatch: (...args: unknown[]) => Promise<string> =
 		useDispatch<AppDispatch>()

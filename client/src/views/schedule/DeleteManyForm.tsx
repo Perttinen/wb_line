@@ -64,17 +64,6 @@ export const DeleteManyForm = ({
         routeId: routeId,
     }
 
-    // const createStartList = (values: FormValues) => {
-    //     const startArray = []
-    //     for (let start = values.fromDate; start.isBefore(values.toDate.add(1, 'day')); start = start.add(1, 'day')) {
-    //         if (values.weekdays[start.day() - 1]) {
-    //             const dateTime = start.set('hour', values.time.hour()).set('minute', values.time.minute()).set('second', 0)
-    //             startArray.push({ startTime: dateTime, routeId: values.routeId })
-    //         }
-    //     }
-    //     return startArray
-    // }
-
     const handleSubmit = async (values: FormValues) => {
         console.log(filteredDepartures[0].startTime);
 

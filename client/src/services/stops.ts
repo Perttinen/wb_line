@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { StopNoIdType, RouteNoIdType } from '../../../types'
+import { StopNoIdType } from '../../../types'
 
 const baseUrl =
 	process.env.NODE_ENV === 'development'
@@ -25,11 +25,6 @@ const create = async (stop: StopNoIdType) => {
 const remove = async (id: number) => {
 	await axios.delete(`${baseUrl}/${id}`, { headers: { 'Authorization': `bearer ${token}` } })
 }
-
-// const update = (id: number, pwdata: ChangePasswordType) => {
-// 	// const idstr = id.toString()
-// 	return axios.put(`${baseUrl}/pw/${id}`, pwdata)
-// }
 
 const api = { getAll, create, remove }
 

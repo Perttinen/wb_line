@@ -69,9 +69,6 @@ export const TimetableById = () => {
                                             {d.startTime.toDate().toDateString()}
                                         </TableCell>
                                     </TableRow>}
-
-                                {/* </TableRow>
-                                } */}
                                 {d.via.length !== 0 ?
                                     <>
                                         <TableRow>
