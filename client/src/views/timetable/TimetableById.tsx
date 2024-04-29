@@ -63,7 +63,7 @@ export const TimetableById = () => {
                                 {((index > 0 &&
                                     arr[index - 1].startTime.isBefore(d.startTime, 'day')) || (index === 0 && d.startTime.isAfter(dayjs(Date.now()), 'day'))) &&
                                     <TableRow>
-                                        <TableCell colSpan={2} align='center' sx={{ fontSize: '1.5rem', color: '#e91e63', paddingY: '3px' }}>
+                                        <TableCell colSpan={2} align='left' sx={{ fontSize: '1.5rem', color: '#e91e63', paddingY: '3px' }}>
                                             {d.startTime.toDate().toDateString()}
                                         </TableCell>
                                     </TableRow>}
