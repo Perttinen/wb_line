@@ -1,24 +1,18 @@
 import express from 'express'
-import dotenv from 'dotenv'
 import { Op } from 'sequelize'
 import bcrypt from 'bcrypt'
 
 import { User, UserLevel } from '../models'
-import {
-	ChangePasswordType,
-	UserNoIdType
-} from '../../types'
+import { ChangePasswordType, UserNoIdType } from '../../types'
 import { tokenExtractor } from '../util/middleware'
 import { parseString, toChangePasswordType } from '../util/typeguards'
-
-dotenv.config()
 
 const router = express.Router()
 
 router.get('/', tokenExtractor, async (req, res) => {
 	try {
 		const user: User | null = await User.findByPk(req.decodedToken.id)
-		if (user?.dataValues.user_level_id === 1) {
+		if (user && user.dataValues.user_level_id === 1) {
 			const users: User[] = await User.findAll({
 				include: {
 					model: UserLevel,
@@ -26,12 +20,11 @@ router.get('/', tokenExtractor, async (req, res) => {
 				where: { username: { [Op.not]: [process.env.SU_USERNAME] } },
 			})
 			res.json(users)
-		} else {
-			res.json([])
 		}
 	}
 	catch (e) {
-		res.status(400).json({ e })
+		console.log(e)
+		res.status(500).json(e)
 	}
 })
 
@@ -41,21 +34,22 @@ router.get('/currentUser', tokenExtractor, async (req, res) => {
 })
 
 router.post('/', tokenExtractor, async (req, res) => {
-	const body: UserNoIdType = { ...req.body }
-	const saltRounds: number = 10
-	const newUser = {
-		...body,
-		password: await bcrypt.hash(body.password, saltRounds),
-		firstTime: true,
-	}
 	try {
+		const body: UserNoIdType = { ...req.body }
+		const saltRounds: number = 10
+		const newUser = {
+			...body,
+			password: await bcrypt.hash(body.password, saltRounds),
+			firstTime: true,
+		}
 		const user = await User.create(newUser)
 		const userWithLevel = await User.findByPk(user.dataValues.id, {
 			include: { model: UserLevel },
 		})
 		return res.json(userWithLevel)
 	} catch (e) {
-		return res.status(400).json({ e })
+		console.log(e);
+		return res.status(500).json(e)
 	}
 })
 
@@ -65,7 +59,8 @@ router.delete('/:id', tokenExtractor, async (req, res) => {
 		if (user) await user.destroy()
 		res.json(user)
 	} catch (e) {
-		res.status(204).end()
+		console.log(e)
+		res.status(500).json(e)
 	}
 })
 
@@ -83,15 +78,15 @@ router.put(
 						firstTime: false,
 					})
 					await user.save()
-					return res.json(user)
+					res.json(user)
 				}
 			}
 			throw new Error()
 		} catch (e) {
-			return res.status(401).json({ error: 'Wrong password!' })
+			console.log(e);
+			res.status(500).json({ error: 'Wrong password!' })
 		}
 	}
 )
-
 
 export default router

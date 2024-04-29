@@ -58,7 +58,7 @@ export const AddManyForm = ({
     const createStartList = (values: FormValues) => {
         const startArray = []
         for (let start = values.fromDate; start.isBefore(values.toDate.add(1, 'day')); start = start.add(1, 'day')) {
-            if (values.weekdays[start.day() - 1]) {
+            if (values.weekdays[start.subtract(1, 'day').day()]) {
                 const dateTime = start.set('hour', values.time.hour()).set('minute', values.time.minute()).set('second', 0)
                 startArray.push({ startTime: dateTime, routeId: values.routeId })
             }

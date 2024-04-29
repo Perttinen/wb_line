@@ -8,7 +8,6 @@ import { DepartureType, initDepartureType } from "../../../../types"
 import { useDispatch } from "react-redux"
 import {
     appendDeparture,
-    // removeDeparture,
 } from '../../reducers/departureReducer'
 
 export const AddOneForm = ({
@@ -33,7 +32,6 @@ export const AddOneForm = ({
     }
 
     const handleSubmit = async (values: FormValues) => {
-        // console.log(values[0].startTime.toDate());
         let valuesArr: initDepartureType[] = []
         valuesArr.push(values)
         const valuesToDisp = await scheduleService.create(valuesArr)

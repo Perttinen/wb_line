@@ -24,12 +24,8 @@ const create = async (dock: DockNoIdType) => {
 
 const remove = async (id: number) => {
 	await axios.delete(`${baseUrl}/${id}`, { headers: { 'Authorization': `bearer ${token}` } })
-}
 
-// const update = (id: number, pwdata: ChangePasswordType) => {
-// 	// const idstr = id.toString()
-// 	return axios.put(`${baseUrl}/pw/${id}`, pwdata)
-// }
+}
 
 const api = { getAll, create, remove }
 

@@ -14,7 +14,7 @@ import { removeRoute } from '../../reducers/routeReducer'
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 import DepartureBoardOutlinedIcon from '@mui/icons-material/DepartureBoardOutlined';
 import { useNavigate } from 'react-router-dom'
-import { number } from 'yup'
+
 
 export const RouteList = () => {
 	const routes = useSelector((state: { routes: RouteType[] }) => state.routes)

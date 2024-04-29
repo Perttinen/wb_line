@@ -1,53 +1,81 @@
-import express, { RequestHandler, Request } from 'express'
-import dotenv from 'dotenv'
+import express from 'express'
+import { Op } from 'sequelize'
 
-import { Dock, Route, Stop } from '../models'
-import { DockNoIdType } from '../../types'
+import {
+	Departure,
+	Dock, Route,
+	Stop,
+} from '../models'
 import { tokenExtractor } from '../util/middleware'
-
-dotenv.config()
 
 const router = express.Router()
 
-router.get('/', (async (_req, res) => {
-	const docks: Dock[] = await Dock.findAll()
-	res.json(docks)
-}) as RequestHandler)
+router.get('/', async (_req, res) => {
+	try {
+		const docks: Dock[] = await Dock.findAll()
+		res.json(docks)
+	} catch (e) {
+		res.status(500).json(e)
+	}
+})
 
-router.post('/', tokenExtractor, (async (req: Request<object, object, DockNoIdType>, res) => {
-
-
+router.post('/', tokenExtractor, async (req, res) => {
 	try {
 		const dock = await Dock.create(req.body)
 		return res.json(dock)
 	} catch (e) {
-		return res.status(400).json({ e })
+		return res.status(500).json(e)
 	}
-}) as RequestHandler)
+})
 
-router.delete('/:id', tokenExtractor, (async (req, res) => {
+router.delete('/:id', tokenExtractor, async (req, res) => {
 	try {
 		const dock = await Dock.findByPk(req.params.id)
-
 		if (dock) {
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-			await Stop.destroy({ where: { dockId: dock.dataValues.id } })
+			console.log(dock.toJSON())
+			console.log(dock.dataValues.id);
 
+			const routeIds: number[] = []
+			const routeIdsToDestroy: Route[] = await Route.findAll({
+				where: {
+					[Op.or]: {
+						startDockId: dock.dataValues.id,
+						endDockId: dock.dataValues.id,
+					}
+				},
+				attributes: { exclude: ['startDockId', 'endDockId'] },
+			})
+			for (let i in routeIdsToDestroy) {
+				routeIds.push(routeIdsToDestroy[i].dataValues.id)
+			}
+			if (routeIds.length > 0) {
+				await Departure.destroy({
+					where: {
+						routeId: routeIds
+					}
+				})
+			}
+			await Stop.destroy({
+				where:
+				{
+					[Op.or]: {
+						dockId: dock.dataValues.id,
+						routeId: routeIds,
+					}
+				}
+			})
 			await Route.destroy({
 				where: {
-					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-					startDockId: dock.dataValues.id,
-					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-					endDockId: dock.dataValues.id,
-				},
+					id: routeIds
+				}
 			})
 			await dock.destroy()
-
-			res.json(dock)
+			res.status(204).json(dock)
 		}
 	} catch (e) {
-		res.status(204).end()
+		console.log(e);
+		res.status(500).json(e)
 	}
-}) as RequestHandler)
+})
 
 export default router

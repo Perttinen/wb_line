@@ -18,26 +18,17 @@ const token = localStorage.getItem('token')
 const getAll = async () => {
 
 	try {
-		// if (typeof token === 'string') {
 		const res = await axios.get(baseUrl
 			, { headers: { 'Authorization': `bearer ${localStorage.getItem('token')}` } }
 		)
-
-
-
 		return res.data
-		// }
 	} catch (e) {
-
-
 		return e
 	}
 }
 
 const getCurrentUser = async () => {
-
 	const res = await axios.get(`${baseUrl}/currentUser`, { headers: { 'Authorization': `bearer ${localStorage.getItem('token')}` } })
-
 	return res.data
 }
 
