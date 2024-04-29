@@ -22,6 +22,7 @@ app.use(express.json())
 const DIST_PATH = path.resolve(__dirname, '../client/build')
 app.use(express.static(DIST_PATH))
 
+app.use('/api/departure', departureRouter)
 app.use('/api/login', loginRouter)
 app.use('/api/userlevel', userLevelRouter)
 app.use('/api/user', userRouter)
@@ -29,7 +30,7 @@ app.use('/api/dock', dockRouter)
 app.use('/api/ship', shipRouter)
 app.use('/api/route', routeRouter)
 app.use('/api/stop', stopRouter)
-app.use('/api/departure', departureRouter)
+
 
 app.get('/*', function (_req, res) {
 	res.sendFile(

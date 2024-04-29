@@ -2,13 +2,13 @@ import express from 'express'
 import { UserLevel } from '../models'
 import dotenv from 'dotenv'
 
-import { tokenExtractor } from '../util/middleware'
+// import { tokenExtractor } from '../util/middleware'
 
 dotenv.config()
 
 const router = express.Router()
 
-router.get('/', tokenExtractor, async (_req, res) => {
+router.get('/', async (_req, res) => {
 	try {
 		const users: UserLevel[] = await UserLevel.findAll()
 		res.json(users)

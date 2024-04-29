@@ -10,20 +10,20 @@ import {
 } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { DepartureType, DockType } from '../../../../types'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { AppDispatch } from '../../store'
 import { useEffect } from 'react'
 import { initializeDepartures } from '../../reducers/departureReducer'
 
 export const Timetable = () => {
 	const navigate = useNavigate()
+	const location = useLocation()
 
 	const dispatch: (...args: unknown[]) => Promise<string> =
 		useDispatch<AppDispatch>()
 
 	useEffect(() => {
-		if (!localStorage.getItem('token')) {
-			console.log('gettin deps');
+		if (location.pathname === '/public/timetable') {
 			dispatch(initializeDepartures())
 		}
 	}, [dispatch])
@@ -31,7 +31,6 @@ export const Timetable = () => {
 	const departures = useSelector(
 		(state: { departures: any[] }) => state.departures
 	)
-
 
 	const getDockList = (departures: DepartureType[]) => {
 		const docks: DockType[] = []

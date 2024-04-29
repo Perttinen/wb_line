@@ -1,6 +1,6 @@
 import express from 'express'
 import { UserType, UserForTokenType } from '../../types'
-import { User, UserLevel } from '../models'
+import { User } from '../models'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
@@ -11,7 +11,6 @@ router.post('/', async (req, res) => {
 		const body = { ...req.body }
 		const user: User | null = await User.findOne({
 			where: { username: body.username },
-			include: { model: UserLevel },
 		})
 		if (!user) res.status(401).json({ error: 'invalid username or password' })
 		if (user) {

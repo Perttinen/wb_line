@@ -1,6 +1,6 @@
 import { Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material"
 import { useDispatch, useSelector } from "react-redux"
-import { useParams } from "react-router-dom"
+import { useLocation, useParams } from "react-router-dom"
 import { DepartureType, StopType } from "../../../../types"
 import dayjs, { Dayjs } from 'dayjs'
 import { Fragment, useEffect } from "react"
@@ -8,12 +8,13 @@ import { initializeDepartures } from "../../reducers/departureReducer"
 import { AppDispatch } from "../../store"
 
 export const TimetableById = () => {
+    const location = useLocation()
 
     const dispatch: (...args: unknown[]) => Promise<string> =
         useDispatch<AppDispatch>()
 
     useEffect(() => {
-        if (!localStorage.getItem('token')) {
+        if (location.pathname.startsWith('/timetablebyid/')) {
             console.log('gettin deps');
             dispatch(initializeDepartures())
         }
@@ -29,9 +30,6 @@ export const TimetableById = () => {
 
     const dockId = parseInt(useParams().dockId as string)
     const departuresFromDock = departures.filter(d => d.route.startDock.id === dockId || d.route.stops.find(s => s.dock.id === dockId))
-
-    console.log(departuresFromDock);
-
 
     const tableData = departuresFromDock.map(d => {
         const rValue = {} as RValueType

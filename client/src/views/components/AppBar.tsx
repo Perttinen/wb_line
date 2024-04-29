@@ -41,7 +41,7 @@ export const AppBar = (
 	const handleLogout = () => {
 		window.localStorage.clear()
 		dispatch(removeLoggedUser())
-		navigate('/')
+		navigate('/login')
 	}
 
 	const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
