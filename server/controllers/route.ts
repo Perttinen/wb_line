@@ -1,27 +1,28 @@
-import express, { RequestHandler, Request } from 'express'
-import dotenv from 'dotenv'
+import express from 'express'
 
 import { Departure, Dock, Route, Stop } from '../models'
-import { InitRouteType } from '../../types'
 import { tokenExtractor } from '../util/middleware'
-
-dotenv.config()
 
 const router = express.Router()
 
-router.get('/', (async (_req, res) => {
-	const routes: Route[] = await Route.findAll({
-		attributes: { exclude: ['endDockId', 'startDockId'] },
-		include: [
-			{ model: Dock, as: 'startDock' },
-			{ model: Dock, as: 'endDock' },
-			{ model: Stop, as: 'stops', include: [{ model: Dock, as: 'dock' }], attributes: { exclude: ['dockId', 'routeId'] } },
-		],
-	})
-	res.json(routes)
-}) as RequestHandler)
+router.get('/', async (_req, res) => {
+	try {
+		const routes: Route[] = await Route.findAll({
+			attributes: { exclude: ['endDockId', 'startDockId'] },
+			include: [
+				{ model: Dock, as: 'startDock' },
+				{ model: Dock, as: 'endDock' },
+				{ model: Stop, as: 'stops', include: [{ model: Dock, as: 'dock' }], attributes: { exclude: ['dockId', 'routeId'] } },
+			],
+		})
+		res.json(routes)
+	} catch (e) {
+		console.log(e);
+		res.status(500).json(e)
+	}
+})
 
-router.post('/', (async (req: Request<object, object, InitRouteType>, res) => {
+router.post('/', async (req, res) => {
 	try {
 		const routeToSave = {
 			startDockId: req.body.startDockId,
@@ -29,19 +30,15 @@ router.post('/', (async (req: Request<object, object, InitRouteType>, res) => {
 		}
 		const route = await Route.create(routeToSave)
 		if (req.body.stops.length > 0) {
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 			for (const stop of req.body.stops) {
 				const toSave = {
 					delayTimeMinutes: stop.time,
 					dockId: stop.dock,
-					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 					routeId: route.dataValues.id,
 				}
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 				await Stop.create(toSave)
 			}
 		}
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 		const resRoute = await Route.findByPk(route.dataValues.id, {
 			include: [
 				{ model: Dock, as: 'startDock' },
@@ -51,13 +48,13 @@ router.post('/', (async (req: Request<object, object, InitRouteType>, res) => {
 		})
 		return res.json(resRoute)
 	} catch (e) {
-		return res.status(400).json({ e })
+		console.log(e)
+		return res.status(500).json(e)
 	}
-}) as RequestHandler)
+})
 
-router.delete('/:id', tokenExtractor, (async (req, res) => {
+router.delete('/:id', tokenExtractor, async (req, res) => {
 	try {
-
 		const route = await Route.findByPk(req.params.id)
 		if (route) {
 			await Stop.destroy({ where: { routeId: req.params.id } })
@@ -66,8 +63,9 @@ router.delete('/:id', tokenExtractor, (async (req, res) => {
 		}
 		res.json(route)
 	} catch (e) {
-		res.status(204).end()
+		console.log(e)
+		res.status(500).json(e)
 	}
-}) as RequestHandler)
+})
 
 export default router
