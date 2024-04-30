@@ -6,12 +6,13 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
 import { useFormik } from 'formik'
-import { ChangePasswordType, UserType } from '../../../../types'
 import { Alert, Box, Snackbar } from '@mui/material'
-import userService from '../../services/users'
 import * as Yup from 'yup'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+
+import { ChangePasswordType, UserType } from '../../../../types'
+import userService from 'services/users'
 
 export const ChangePassword = ({
 	pwChangeDialog,

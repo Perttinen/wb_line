@@ -17,6 +17,7 @@ router.get('/', async (_req, res) => {
 						{
 							model: Stop,
 							as: 'stops',
+							order: ['delayTimeMinutes'],
 							include: [{ model: Dock, as: 'dock' }],
 							attributes: { exclude: ['dockId', 'routeId'] },
 						},

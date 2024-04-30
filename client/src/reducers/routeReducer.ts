@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, Dispatch } from '@reduxjs/toolkit'
 
-import { InitRouteType, RouteNoIdType, RouteType } from '../../../types'
+import { InitRouteType, RouteType } from '../../../types'
 import routeService from '../services/route'
 
 type State = RouteType[]
@@ -38,7 +38,7 @@ export const createRoute = (content: InitRouteType) => {
 
 export const removeRoute = (id: number) => {
 	return async (dispatch: Dispatch) => {
-		routeService.remove(id)
+		await routeService.remove(id)
 		dispatch(dropRoute(id))
 	}
 }

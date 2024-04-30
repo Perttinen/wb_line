@@ -14,7 +14,15 @@ router.get('/', async (_req, res) => {
 				{ model: Dock, as: 'endDock' },
 				{ model: Stop, as: 'stops', include: [{ model: Dock, as: 'dock' }], attributes: { exclude: ['dockId', 'routeId'] } },
 			],
+			order: [
+				[{ model: Stop, as: 'stops' }, 'delayTimeMinutes'],
+			],
 		})
+		for (let r of routes) {
+			console.log(r.dataValues.stops);
+
+		}
+
 		res.json(routes)
 	} catch (e) {
 		console.log(e);

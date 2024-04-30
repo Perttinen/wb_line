@@ -17,8 +17,8 @@ import {
 	Typography,
 } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
-import { UserCard } from '..'
-import { useInitializers } from '../../hooks'
+import { UserCard } from 'views/components'
+import { useInitializers } from 'hooks'
 
 import { UserWithTokenType } from '../../../../types'
 

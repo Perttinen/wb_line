@@ -12,8 +12,7 @@ export const Lines = () => {
 				<Button
 					onClick={() => setShowRoutePlanner(!showRoutePlanner)}
 					fullWidth
-					sx={{ mt: 3, mb: 2, fontSize: '1.2rem' }}
-				>
+					sx={{ mt: 3, mb: 2, fontSize: '1.2rem' }}>
 					Create new route
 				</Button>
 			)}

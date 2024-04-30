@@ -1,5 +1,6 @@
-import routeService from '../../services/route'
-import { RouteDocksType, RouteType } from '../../../../types'
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
+import DepartureBoardOutlinedIcon from '@mui/icons-material/DepartureBoardOutlined';
+import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import {
 	Button,
@@ -9,43 +10,26 @@ import {
 	TableRow,
 	Typography,
 } from '@mui/material'
-import { AppDispatch } from '../../store'
-import { removeRoute } from '../../reducers/routeReducer'
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
-import DepartureBoardOutlinedIcon from '@mui/icons-material/DepartureBoardOutlined';
-import { useNavigate } from 'react-router-dom'
 
+import { RouteDocksType, RouteType } from 'types'
+import { AppDispatch } from 'store'
+import { removeRoute } from 'reducers/routeReducer'
 
 export const RouteList = () => {
+	const navigate = useNavigate()
 	const routes = useSelector((state: { routes: RouteType[] }) => state.routes)
-
-	const newRoutes = routes.map(r => {
-		const sortedStops = [...r.stops].sort((a, b) => a.delayTimeMinutes - b.delayTimeMinutes)
-		r = { ...r, stops: sortedStops }
-		return r
-	})
-
-	console.log(newRoutes);
-
-
 	const dispatch: (...args: unknown[]) => Promise<RouteType> | number =
 		useDispatch<AppDispatch>()
 
 	const handleDelete = async (id: number) => {
-		await routeService.remove(id)
 		dispatch(removeRoute(id))
 	}
-
-	const navigate = useNavigate()
-
-	const getRouteDocks = (id: number): any[] => {
-		const route = newRoutes.find(r => r.id === id)
+	const getRouteDocks = (route: RouteType) => {
 		let docks: RouteDocksType[] = []
 		if (route) {
 			docks.push({ id: route.startDock.id, name: route.startDock.name })
 			if (route && route.stops) {
-				route.stops.sort((a, b) => a.delayTimeMinutes - b.delayTimeMinutes)
-				for (let s of route?.stops) {
+				for (let s of route.stops) {
 					docks.push({ id: s.dock.id, name: s.dock.name })
 					console.log(s.dock.name)
 				}
@@ -58,27 +42,26 @@ export const RouteList = () => {
 	return routes ? (
 		<Table>
 			<TableBody>
-				{newRoutes.map((r) => (
-					<TableRow key={r.id} sx={{ verticalAlign: 'top' }}>
-						<TableCell sx={{ paddingRight: '2px', paddingLeft: '4px' }}>
-							{getRouteDocks(r.id).map(r => <Typography key={r.id}>{r.name}</Typography>)}
-						</TableCell>
-
-						<TableCell sx={{ paddingRight: '2px', paddingLeft: '4px' }}>
-
-							<Button onClick={() => navigate('/schedule', { state: { routeId: r.id, docks: getRouteDocks(r.id) } })}>
-								<DepartureBoardOutlinedIcon />
-							</Button>
-
-						</TableCell>
-
-						<TableCell sx={{ paddingRight: '2px', paddingLeft: '4px' }}>
-							<Button onClick={() => handleDelete(r.id)}>
-								<DeleteOutlinedIcon />
-							</Button>
-						</TableCell>
-					</TableRow>
-				))}
+				{routes.map((r) => {
+					const routeDocks = getRouteDocks(r)
+					return (
+						<TableRow key={r.id} sx={{ verticalAlign: 'top' }}>
+							<TableCell sx={{ paddingRight: '2px', paddingLeft: '4px' }}>
+								{routeDocks.map(r => <Typography key={r.id}>{r.name}</Typography>)}
+							</TableCell>
+							<TableCell sx={{ paddingRight: '2px', paddingLeft: '4px' }}>
+								<Button onClick={() => navigate('/schedule', { state: { routeId: r.id, docks: routeDocks } })}>
+									<DepartureBoardOutlinedIcon />
+								</Button>
+							</TableCell>
+							<TableCell sx={{ paddingRight: '2px', paddingLeft: '4px' }}>
+								<Button onClick={() => handleDelete(r.id)}>
+									<DeleteOutlinedIcon />
+								</Button>
+							</TableCell>
+						</TableRow>
+					)
+				})}
 			</TableBody>
 		</Table>
 	) : (

@@ -6,6 +6,7 @@ export const Home = () => {
 		<div>
 			<CssBaseline />
 			<h2>Home page</h2>
+			<p>Here will be something in future...</p>
 		</div>
 	)
 }
