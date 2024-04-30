@@ -1,31 +1,21 @@
-import axios from 'axios'
-import { ShipNoIdType } from '../../../types'
+import { api } from 'util/api'
 
-const baseUrl =
-	process.env.NODE_ENV === 'development'
-		? 'http://localhost:3001/api/ship'
-		: '/api/ship'
-
-const token = localStorage.getItem('token')
+import { ShipNoIdType } from 'types'
 
 const getAll = async () => {
-	const res = await axios.get(baseUrl, { headers: { 'Authorization': `bearer ${token}` } })
+	const res = await api.get('/ship')
 	return res.data
 }
 
 const create = async (ship: ShipNoIdType) => {
-
-
-	const res = await axios.post(baseUrl, ship, { headers: { 'Authorization': `bearer ${token}` } })
-
-
+	const res = await api.post('/ship', ship)
 	return res.data
 }
 
 const remove = async (id: number) => {
-	await axios.delete(`${baseUrl}/${id}`, { headers: { 'Authorization': `bearer ${token}` } })
+	await api.delete(`/ship/${id}`)
 }
 
-const api = { getAll, create, remove }
+const services = { getAll, create, remove }
 
-export default api
+export default services

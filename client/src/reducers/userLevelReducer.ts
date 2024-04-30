@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, Dispatch } from '@reduxjs/toolkit'
 
-import userLevelService from '../services/userLevel'
-import { UserLevelType } from '../../../types'
+import userLevelService from 'services/userLevel'
+import { UserLevelType } from 'types'
 
 type State = UserLevelType[]
 

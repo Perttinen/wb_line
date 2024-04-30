@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, Dispatch } from '@reduxjs/toolkit'
 
-import { InitRouteType, RouteType } from '../../../types'
-import routeService from '../services/route'
+import { InitRouteType, RouteType } from 'types'
+import routeService from 'services/route'
 
 type State = RouteType[]
 

@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, Dispatch } from '@reduxjs/toolkit'
 
-import { StopNoIdType, StopType } from '../../../types'
-import stopService from '../services/stops'
+import { StopNoIdType, StopType } from 'types'
+import stopService from 'services/stops'
 
 type State = StopType[]
 

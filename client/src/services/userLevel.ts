@@ -1,17 +1,10 @@
-import axios from 'axios'
-
-const baseUrl =
-	process.env.NODE_ENV === 'development'
-		? 'http://localhost:3001/api/userlevel'
-		: '/api/userlevel'
-
-const token = localStorage.getItem('token')
+import { api } from "util/api"
 
 const getAll = async () => {
-	const res = await axios.get(baseUrl, {headers: {'Authorization': `bearer ${token}`}})
+	const res = await api.get('/userlevel')
 	return res.data
 }
 
-const api = { getAll }
+const services = { getAll }
 
-export default api
+export default services

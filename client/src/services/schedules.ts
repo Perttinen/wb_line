@@ -1,32 +1,20 @@
-import axios from 'axios'
-
-import { initDepartureType } from '../../../types'
-
-const baseUrl =
-	process.env.NODE_ENV === 'development'
-		? 'http://localhost:3001/api/departure'
-		: '/api/departure'
-
-const token = localStorage.getItem('token')
-
-
+import { api } from 'util/api'
+import { initDepartureType } from 'types'
 
 const getAll = async () => {
-	const res = await axios.get(baseUrl, { headers: { 'Authorization': `bearer ${token}` } })
+	const res = await api.get('/departure')
 	return res.data
 }
 
 const create = async (values: initDepartureType[]) => {
-	console.log('token in service: ', token);
-	const valuesToSave = values
-	const response = await axios.post(baseUrl, valuesToSave, { headers: { 'Authorization': `bearer ${token}` } })
+	const response = await api.post('/departure', values)
 	return response.data
 }
 
 const remove = async (id: number[]) => {
-	await axios.delete(baseUrl, { data: id, headers: { 'Authorization': `bearer ${token}` } })
+	await api.delete('/departure', { data: id })
 }
 
-const api = { getAll, create, remove }
+const services = { getAll, create, remove }
 
-export default api
+export default services

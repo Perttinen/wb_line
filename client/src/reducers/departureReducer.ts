@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, Dispatch } from '@reduxjs/toolkit'
 
-import { DepartureType, initDepartureType } from '../../../types'
-import scheduleService from '../services/schedules'
+import { DepartureType, initDepartureType } from 'types'
+import scheduleService from 'services/schedules'
 
 type State = DepartureType[]
 
