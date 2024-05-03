@@ -10,7 +10,7 @@ import {
     Schedule,
     TimetableById,
     Login
-} from './views'
+} from 'views'
 import { ProtectedRoute } from './views/components/ProtectedRoute'
 
 export const Router = () => {
