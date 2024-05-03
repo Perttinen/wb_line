@@ -17,8 +17,8 @@ router.get('/', tokenExtractor, async (_req, res) => {
 
 router.post('/', tokenExtractor, async (req, res) => {
 	try {
-		const stop = await Stop.create(req.body)
-		res.json(stop)
+		const stops = await Stop.bulkCreate(req.body)
+		res.json(stops)
 	} catch (e) {
 		console.log(e);
 		res.status(500).json(e)

@@ -29,7 +29,6 @@ export const useInitializers = () => {
 			dispatch(initializeDepartures())
 			dispatch(initializeDocks())
 			dispatch(initializeShips())
-
 			dispatch(initializeUsers())
 		}
 	}, [dispatch])

@@ -6,8 +6,8 @@ const getAll = async () => {
 	return res.data
 }
 
-const create = async (stop: StopNoIdType) => {
-	const res = await api.post('/stop', stop)
+const create = async (stops: StopNoIdType[]) => {
+	const res = await api.post('/stop', stops)
 	return res.data
 }
 
@@ -15,6 +15,4 @@ const remove = async (id: number) => {
 	await api.delete(`/stop/${id}`)
 }
 
-const services = { getAll, create, remove }
-
-export default services
+export const stopService = { getAll, create, remove }

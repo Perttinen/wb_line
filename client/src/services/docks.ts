@@ -15,6 +15,5 @@ const remove = async (id: number) => {
 	await api.delete(`/dock/${id}`)
 }
 
-const services = { getAll, create, remove }
+export const dockService = { getAll, create, remove }
 
-export default services

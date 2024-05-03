@@ -5,6 +5,5 @@ const getAll = async () => {
 	return res.data
 }
 
-const services = { getAll }
+export const userLevelService = { getAll }
 
-export default services

@@ -7,14 +7,14 @@ const getAll = async () => {
 }
 
 const create = async (values: initDepartureType[]) => {
-	const response = await api.post('/departure', values)
-	return response.data
+	const res = await api.post('/departure', values)
+	return res.data
 }
 
 const remove = async (id: number[]) => {
 	await api.delete('/departure', { data: id })
 }
 
-const services = { getAll, create, remove }
+export const departureService = { getAll, create, remove }
 
-export default services
+

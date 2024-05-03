@@ -2,7 +2,7 @@ import { Box, Button } from "@mui/material"
 import { DateTimePicker } from "@mui/x-date-pickers"
 import dayjs, { Dayjs } from "dayjs"
 import { Field, Form, Formik } from "formik"
-import scheduleService from '../../services/schedules'
+import { departureService } from "services"
 import { AppDispatch } from '../../store'
 import { DepartureType, initDepartureType } from "../../../../types"
 import { useDispatch } from "react-redux"
@@ -34,7 +34,7 @@ export const AddOneForm = ({
     const handleSubmit = async (values: FormValues) => {
         let valuesArr: initDepartureType[] = []
         valuesArr.push(values)
-        const valuesToDisp = await scheduleService.create(valuesArr)
+        const valuesToDisp = await departureService.create(valuesArr)
         console.log(valuesToDisp);
 
         scheduleDispatch(appendDeparture(valuesToDisp))

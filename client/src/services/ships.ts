@@ -1,5 +1,4 @@
 import { api } from 'util/api'
-
 import { ShipNoIdType } from 'types'
 
 const getAll = async () => {
@@ -16,6 +15,5 @@ const remove = async (id: number) => {
 	await api.delete(`/ship/${id}`)
 }
 
-const services = { getAll, create, remove }
+export const shipService = { getAll, create, remove }
 
-export default services

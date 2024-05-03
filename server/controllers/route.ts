@@ -18,10 +18,6 @@ router.get('/', async (_req, res) => {
 				[{ model: Stop, as: 'stops' }, 'delayTimeMinutes'],
 			],
 		})
-		for (let r of routes) {
-			console.log(r.dataValues.stops);
-
-		}
 
 		res.json(routes)
 	} catch (e) {
@@ -30,31 +26,49 @@ router.get('/', async (_req, res) => {
 	}
 })
 
+router.get('/:id', async (req, res) => {
+	const route = await Route.findByPk(req.params.id, {
+		attributes: { exclude: ['endDockId', 'startDockId'] },
+		include: [
+			{ model: Dock, as: 'startDock' },
+			{ model: Dock, as: 'endDock' },
+			{ model: Stop, as: 'stops', include: [{ model: Dock, as: 'dock' }], attributes: { exclude: ['dockId', 'routeId'] } },
+		],
+		order: [
+			[{ model: Stop, as: 'stops' }, 'delayTimeMinutes'],
+		],
+	})
+	return res.json(route)
+})
+
 router.post('/', async (req, res) => {
+
+	console.log('controller');
+
 	try {
 		const routeToSave = {
 			startDockId: req.body.startDockId,
 			endDockId: req.body.endDockId,
 		}
 		const route = await Route.create(routeToSave)
-		if (req.body.stops.length > 0) {
-			for (const stop of req.body.stops) {
-				const toSave = {
-					delayTimeMinutes: stop.time,
-					dockId: stop.dock,
-					routeId: route.dataValues.id,
-				}
-				await Stop.create(toSave)
-			}
-		}
-		const resRoute = await Route.findByPk(route.dataValues.id, {
-			include: [
-				{ model: Dock, as: 'startDock' },
-				{ model: Dock, as: 'endDock' },
-				{ model: Stop, as: 'stops', include: [{ model: Dock, as: 'dock' }] },
-			],
-		})
-		return res.json(resRoute)
+		// if (req.body.stops.length > 0) {
+		// 	for (const stop of req.body.stops) {
+		// 		const toSave = {
+		// 			delayTimeMinutes: stop.time,
+		// 			dockId: stop.dock,
+		// 			routeId: route.dataValues.id,
+		// 		}
+		// 		await Stop.create(toSave)
+		// 	}
+		// }
+		// const resRoute = await Route.findByPk(route.dataValues.id, {
+		// 	include: [
+		// 		{ model: Dock, as: 'startDock' },
+		// 		{ model: Dock, as: 'endDock' },
+		// 		{ model: Stop, as: 'stops', include: [{ model: Dock, as: 'dock' }] },
+		// 	],
+		// })
+		return res.json(route)
 	} catch (e) {
 		console.log(e)
 		return res.status(500).json(e)

@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, Dispatch } from '@reduxjs/toolkit'
 
-import userService from 'services/users'
-import { UserType, UserNoIdType } from 'types'
+import { userService } from 'services'
+import { UserType, UserNoIdType, ChangePasswordType } from 'types'
 
 type State = UserType[]
 
@@ -18,6 +18,9 @@ const userSlice = createSlice({
 		dropUser(state, action: PayloadAction<number>) {
 			return state.filter((u) => u.id !== action.payload)
 		},
+		updatePassword(state, action: PayloadAction<UserType>) {
+			return state.map(u => u.id === action.payload.id ? action.payload : u)
+		}
 	},
 })
 
@@ -42,6 +45,17 @@ export const removeUser = (id: number) => {
 	}
 }
 
-export const { dropUser, appendUser, setUsers } = userSlice.actions
+export const changeCurrentPassword = (values: ChangePasswordType) => {
+	return async (dispatch: Dispatch) => {
+		console.log('reducer');
+
+		const newUser: UserType = await userService.update(values)
+		console.log('newUser: ', newUser);
+
+		dispatch(updatePassword(newUser))
+	}
+}
+
+export const { dropUser, appendUser, setUsers, updatePassword } = userSlice.actions
 
 export default userSlice.reducer

@@ -26,7 +26,6 @@ export type UserType = {
 	username: string
 	password: string
 	user_level_id: number
-	userLevel: UserLevelType
 	firstTime: boolean
 }
 
@@ -53,6 +52,13 @@ export type UserLevelType = {
 }
 
 export type ChangePasswordType = {
+	currentPassword: string
+	newPassword: string
+	confirmPassword: string
+	userId: number
+}
+
+export type ConfirmedPasswordsType = {
 	currentPassword: string
 	newPassword: string
 	confirmPassword: string
@@ -86,11 +92,8 @@ export type DockNoIdType = {
 
 export type RouteType = {
 	id: number
-	startDock: DockType
-	endDock: DockType
 	startDockId: number
 	endDockId: number
-	stops: StopType[]
 }
 
 export type RouteNoIdType = {
@@ -101,7 +104,7 @@ export type RouteNoIdType = {
 export type InitRouteType = {
 	startDockId: number
 	endDockId: number
-	stops: { dock: number | ''; time: number }[]
+	stops: { dockId: number, delayTimeMinutes: number }[]
 }
 
 export type StopType = {
@@ -109,7 +112,6 @@ export type StopType = {
 	delayTimeMinutes: number
 	dockId: number
 	routeId: number
-	dock: DockType
 }
 export type StopNoIdType = {
 	delayTimeMinutes: number
@@ -153,4 +155,19 @@ export type DockNameType = {
 export type RouteDocksType = {
 	id: number,
 	name: string
+}
+
+export type StopWithDockType = {
+	id: number
+	delayTimeMinutes: number
+	dockId: number
+	routeId: number
+	dock: DockType
+}
+
+export type RouteWithAllType = {
+	id: number
+	startDock: DockType
+	endDock: DockType
+	stops: StopWithDockType[]
 }
