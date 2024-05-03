@@ -17,6 +17,7 @@ router.get('/', async (_req, res) => {
 						{
 							model: Stop,
 							as: 'stops',
+							order: ['delayTimeMinutes'],
 							include: [{ model: Dock, as: 'dock' }],
 							attributes: { exclude: ['dockId', 'routeId'] },
 						},
@@ -68,7 +69,6 @@ router.post('/', tokenExtractor, async (req, res) => {
 
 router.delete('/', tokenExtractor, async (req, res) => {
 	try {
-		console.log(req.body);
 		await Departure.destroy({ where: { id: req.body } })
 		res.status(204)
 	} catch (e) {

@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction, Dispatch } from '@reduxjs/toolkit'
-import { UserWithTokenType } from '../../../types'
-import userService from '../services/users'
+
+import { UserWithTokenType } from 'types'
+import { userService } from 'services'
 
 const initialState: UserWithTokenType = {} as UserWithTokenType
 

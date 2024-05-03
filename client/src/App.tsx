@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom'
 
-import { AppBar } from './views/components'
+import { AppBar } from 'views'
 
 const App = () => {
 	return (

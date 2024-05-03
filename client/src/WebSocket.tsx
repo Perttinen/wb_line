@@ -8,12 +8,7 @@ import { appendShip, dropShip } from './reducers/shipReducer'
 import { setTime } from './reducers/timeReducer'
 import { AppDispatch } from './store'
 import { DockNoIdType, ShipNoIdType, User, UserNoIdType } from '../../types'
-import userService from './services/users'
-import dockService from './services/docks'
-import shipService from './services/ships'
-import { initializeDepartures } from './reducers/departureReducer'
-import { initializeRoutes } from './reducers/routeReducer'
-// import { useInitializers } from './hooks'
+import { userService, dockService, shipService } from 'services'
 
 const WS_BASE =
 	process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : '/'

@@ -5,13 +5,16 @@ import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
-import { useFormik } from 'formik'
-import { ChangePasswordType, UserType } from '../../../../types'
+import { ErrorMessage, useFormik } from 'formik'
 import { Alert, Box, Snackbar } from '@mui/material'
-import userService from '../../services/users'
 import * as Yup from 'yup'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import { changeCurrentPassword } from 'reducers/userReducer'
+
+import { ChangePasswordType, ConfirmedPasswordsType, UserType } from '../../../../types'
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from 'store'
 
 export const ChangePassword = ({
 	pwChangeDialog,
@@ -22,6 +25,10 @@ export const ChangePassword = ({
 	setPwChangeDialog: (val: boolean) => void
 	user: UserType
 }) => {
+
+	const dispatch: (...args: unknown[]) => Promise<string> =
+		useDispatch<AppDispatch>()
+
 	const handleClose = () => {
 		setPwChangeDialog(false)
 	}
@@ -45,9 +52,10 @@ export const ChangePassword = ({
 			.oneOf([Yup.ref('newPassword')], 'Passwords must match'),
 	})
 
-	const handleSubmit = async (values: ChangePasswordType) => {
+	const handleSubmit = async (values: ConfirmedPasswordsType) => {
+		const userToChange: ChangePasswordType = { ...values, userId: user.id }
 		try {
-			await userService.update(user.id, values)
+			dispatch(changeCurrentPassword(userToChange))
 			setSuccessMsg('Password updated')
 			user.firstTime && navigate('./')
 		} catch (e) {
@@ -84,13 +92,10 @@ export const ChangePassword = ({
 							label='Current Password'
 							type='password'
 							fullWidth
+
 							variant='standard'
 							value={formik.values.currentPassword}
 							onChange={formik.handleChange}
-							error={
-								formik.touched.currentPassword &&
-								Boolean(formik.errors.currentPassword)
-							}
 							helperText={
 								formik.touched.currentPassword && formik.errors.currentPassword
 							}

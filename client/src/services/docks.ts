@@ -1,32 +1,19 @@
-import axios from 'axios'
-import { DockNoIdType } from '../../../types'
-
-const baseUrl =
-	process.env.NODE_ENV === 'development'
-		? 'http://localhost:3001/api/dock'
-		: '/api/dock'
-
-const token = localStorage.getItem('token')
+import { DockNoIdType } from 'types'
+import { api } from 'util/api'
 
 const getAll = async () => {
-	const res = await axios.get(baseUrl, { headers: { 'Authorization': `bearer ${token}` } })
+	const res = await api.get('/dock')
 	return res.data
 }
 
 const create = async (dock: DockNoIdType) => {
-
-
-	const res = await axios.post(baseUrl, dock, { headers: { 'Authorization': `bearer ${token}` } })
-
-
+	const res = await api.post('/dock', dock)
 	return res.data
 }
 
 const remove = async (id: number) => {
-	await axios.delete(`${baseUrl}/${id}`, { headers: { 'Authorization': `bearer ${token}` } })
-
+	await api.delete(`/dock/${id}`)
 }
 
-const api = { getAll, create, remove }
+export const dockService = { getAll, create, remove }
 
-export default api

@@ -5,6 +5,8 @@ import { useContext } from 'react'
 import { WebSocketContext } from '../../WebSocket'
 import { useSelector } from 'react-redux'
 import * as Yup from 'yup'
+import HighlightOff from '@mui/icons-material/HighlightOff'
+import SaveAltIcon from '@mui/icons-material/SaveAlt'
 
 export const AddUser = ({
 	setShowAddUser,
@@ -119,9 +121,9 @@ export const AddUser = ({
 					<Button
 						type='submit'
 						fullWidth
-						sx={{ mt: 3, mb: 2, color: '#1E8449', fontSize: '1.2rem' }}
+						sx={{ mt: 3, mb: 2, color: '#1E8449', fontSize: '2rem' }}
 					>
-						Add User
+						<SaveAltIcon fontSize='inherit' />
 					</Button>
 					<Button
 						onClick={() => {
@@ -130,9 +132,9 @@ export const AddUser = ({
 						}}
 						type='button'
 						fullWidth
-						sx={{ mt: 3, mb: 2, color: '#B03A2E', fontSize: '1.2rem' }}
+						sx={{ mt: 3, mb: 2, color: '#B03A2E', fontSize: '2rem' }}
 					>
-						Cancel
+						<HighlightOff fontSize='inherit' />
 					</Button>
 				</Box>
 			</Box>

@@ -1,25 +1,27 @@
 import { Button, CssBaseline } from '@mui/material'
 import { useState } from 'react'
-import { RoutePlanner } from './RoutePlanner'
-import { RouteList } from './RouteList'
+import { RoutePlanner } from 'views/Lines/RoutePlanner'
+import { RouteList } from 'views/Lines/RouteList'
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 
 export const Lines = () => {
 	const [showRoutePlanner, setShowRoutePlanner] = useState(false)
 	return (
 		<div>
 			<CssBaseline />
-			{!showRoutePlanner && (
-				<Button
-					onClick={() => setShowRoutePlanner(!showRoutePlanner)}
-					fullWidth
-					sx={{ mt: 3, mb: 2, fontSize: '1.2rem' }}
-				>
-					Create new route
-				</Button>
-			)}
-			{showRoutePlanner && (
-				<RoutePlanner setShowRoutePlanner={setShowRoutePlanner} />
-			)}
+			{showRoutePlanner
+				? (
+					<RoutePlanner setShowRoutePlanner={setShowRoutePlanner} />
+				)
+				: (
+					<Button
+						onClick={() => setShowRoutePlanner(!showRoutePlanner)}
+						fullWidth
+						sx={{ mt: 3, mb: 2, fontSize: '2rem' }}>
+						<AddCircleOutlineIcon fontSize='inherit' />
+					</Button>
+				)
+			}
 			<RouteList />
 		</div>
 	)

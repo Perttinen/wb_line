@@ -1,6 +1,6 @@
-import { ChangePasswordType } from "../../types"
+import { ConfirmedPasswordsType } from "../../types"
 
-export const toChangePasswordType = (object: unknown): ChangePasswordType => {
+export const toChangePasswordType = (object: unknown): ConfirmedPasswordsType => {
 	const isString = (text: unknown): text is string => {
 		return typeof text === 'string' || text instanceof String
 	}
@@ -18,7 +18,7 @@ export const toChangePasswordType = (object: unknown): ChangePasswordType => {
 		'newPassword' in object &&
 		'confirmPassword' in object
 	) {
-		const newPWT: ChangePasswordType = {
+		const newPWT: ConfirmedPasswordsType = {
 			currentPassword: parseString(object.currentPassword),
 			newPassword: parseString(object.newPassword),
 			confirmPassword: parseString(object.confirmPassword),

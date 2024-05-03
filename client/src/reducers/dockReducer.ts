@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, Dispatch } from '@reduxjs/toolkit'
 
-import { DockType, DockNoIdType } from '../../../types'
-import dockService from '../services/docks'
+import { DockType, DockNoIdType } from 'types'
+import { dockService } from 'services'
 
 type State = DockType[]
 

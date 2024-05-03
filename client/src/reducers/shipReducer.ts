@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, Dispatch } from '@reduxjs/toolkit'
 
-import { ShipType, ShipNoIdType } from '../../../types'
-import shipService from '../services/ships'
+import { ShipType, ShipNoIdType } from 'types'
+import { shipService } from 'services'
 
 type State = ShipType[]
 

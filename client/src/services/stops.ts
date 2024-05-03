@@ -1,31 +1,18 @@
-import axios from 'axios'
-import { StopNoIdType } from '../../../types'
-
-const baseUrl =
-	process.env.NODE_ENV === 'development'
-		? 'http://localhost:3001/api/stop'
-		: '/api/stop'
-
-const token = localStorage.getItem('token')
+import { api } from 'util/api'
+import { StopNoIdType } from 'types'
 
 const getAll = async () => {
-	const res = await axios.get(baseUrl, { headers: { 'Authorization': `bearer ${token}` } })
+	const res = await api.get('/stop')
 	return res.data
 }
 
-const create = async (stop: StopNoIdType) => {
-
-
-	const res = await axios.post(baseUrl, stop, { headers: { 'Authorization': `bearer ${token}` } })
-
-
+const create = async (stops: StopNoIdType[]) => {
+	const res = await api.post('/stop', stops)
 	return res.data
 }
 
 const remove = async (id: number) => {
-	await axios.delete(`${baseUrl}/${id}`, { headers: { 'Authorization': `bearer ${token}` } })
+	await api.delete(`/stop/${id}`)
 }
 
-const api = { getAll, create, remove }
-
-export default api
+export const stopService = { getAll, create, remove }

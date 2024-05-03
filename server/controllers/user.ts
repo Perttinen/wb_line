@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt'
 import { User, UserLevel } from '../models'
 import { ChangePasswordType, UserNoIdType } from '../../types'
 import { tokenExtractor } from '../util/middleware'
-import { parseString, toChangePasswordType } from '../util/typeguards'
+import { parseString } from '../util/typeguards'
 
 const router = express.Router()
 
@@ -64,29 +64,28 @@ router.delete('/:id', tokenExtractor, async (req, res) => {
 	}
 })
 
-router.put(
-	'/pw/:id', tokenExtractor, async (req, res) => {
-		try {
-			const body: ChangePasswordType = toChangePasswordType({ ...req.body })
-			const user = await User.findByPk(req.params.id)
-			const saltRounds = 10
-			if (user) {
-				const passw = parseString(user.get('password'))
-				if (await bcrypt.compare(body.currentPassword, passw)) {
-					user.set({
-						password: await bcrypt.hash(body.newPassword, saltRounds),
-						firstTime: false,
-					})
-					await user.save()
-					res.json(user)
-				}
+router.put('/pw', tokenExtractor, async (req, res) => {
+	console.log('router');
+	try {
+		const body: ChangePasswordType = req.body
+		const user = await User.findByPk(body.userId)
+		const saltRounds = 10
+		if (user) {
+			const passw = parseString(user.get('password'))
+			if (await bcrypt.compare(body.currentPassword, passw)) {
+				user.set({
+					password: await bcrypt.hash(body.newPassword, saltRounds),
+					firstTime: false,
+				})
+				await user.save()
+				res.json(user)
 			}
-			throw new Error()
-		} catch (e) {
-			console.log(e);
-			res.status(500).json({ error: 'Wrong password!' })
 		}
+	} catch (e) {
+		console.log(e);
+		res.status(500).json({ error: 'Wrong password!' })
 	}
+}
 )
 
 export default router

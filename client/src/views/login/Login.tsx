@@ -1,9 +1,9 @@
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from '../../store'
 import { setLoggedUser } from '../../reducers/loggedUserReducer'
-import { LoginUser, UserType } from '../../../../types'
-import loginService from '../../services/login'
-import axios from 'axios'
+import { LoginUser, UserType, UserWithTokenType } from '../../../../types'
+import { loginService } from 'services'
+import axios, { AxiosError } from 'axios'
 import { useNavigate } from 'react-router-dom'
 import {
 	TextField,
@@ -35,23 +35,26 @@ export const Login = () => {
 
 	const handleSubmit = async (values: LoginUser) => {
 		try {
-			const loggedUser = await loginService.login(values)
-
-			if (loggedUser.firstTime === true) {
-				setUser(loggedUser)
-				setFirstTime(true)
+			const response = await loginService.login(values)
+			if (response instanceof AxiosError) {
+				setErrorMsg(response.response?.data)
 				formik.resetForm()
-
+				console.log('error in submit: ', response.response?.data);
 			} else {
-				dispatch(setLoggedUser(loggedUser))
-				navigate('/')
-			}
+				const loggedUser = response
+				if (loggedUser.firstTime === true) {
+					setUser(loggedUser)
+					setFirstTime(true)
+					formik.resetForm()
 
-		} catch (e) {
-			formik.resetForm()
-			if (axios.isAxiosError(e) && e.response) {
-				setErrorMsg(e.response.data.error)
+				} else {
+					console.log('notfirst');
+					dispatch(setLoggedUser(loggedUser))
+					navigate('/')
+				}
 			}
+		} catch (e) {
+			console.log(e);
 		}
 
 	}

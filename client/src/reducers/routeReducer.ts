@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction, Dispatch } from '@reduxjs/toolkit'
 
-import { InitRouteType, RouteNoIdType, RouteType } from '../../../types'
-import routeService from '../services/route'
+import { InitRouteType, RouteType, StopNoIdType, StopType } from 'types'
+import { routeService, stopService } from 'services'
+import { createStop } from './stopReducer'
 
 type State = RouteType[]
 
@@ -30,15 +31,17 @@ export const initializeRoutes = () => {
 
 export const createRoute = (content: InitRouteType) => {
 	return async (dispatch: Dispatch) => {
-		const newRoute = await routeService.create(content)
-
-		dispatch(appendRoute(newRoute.data))
+		const newRoute: RouteType = await routeService.create({ startDockId: content.startDockId, endDockId: content.endDockId })
+		const stopsWithRouteId: StopNoIdType[] = content.stops.map(s => { return { ...s, routeId: newRoute.id } })
+		const newStops: StopNoIdType[] = await stopService.create(stopsWithRouteId)
+		createStop(newStops)
+		dispatch(appendRoute(await routeService.getOne(newRoute.id)))
 	}
 }
 
 export const removeRoute = (id: number) => {
 	return async (dispatch: Dispatch) => {
-		routeService.remove(id)
+		await routeService.remove(id)
 		dispatch(dropRoute(id))
 	}
 }

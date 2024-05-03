@@ -8,17 +8,18 @@ import { initializeDepartures } from "../../reducers/departureReducer"
 import { AppDispatch } from "../../store"
 
 export const TimetableById = () => {
-    const location = useLocation()
+    // const location = useLocation()
 
-    const dispatch: (...args: unknown[]) => Promise<string> =
-        useDispatch<AppDispatch>()
+    // const dispatch: (...args: unknown[]) => Promise<string> =
+    //     useDispatch<AppDispatch>()
 
-    useEffect(() => {
-        if (location.pathname.startsWith('/timetablebyid/')) {
-            console.log('gettin deps');
-            dispatch(initializeDepartures())
-        }
-    }, [dispatch])
+    // const dispatch = useDispatch<AppDispatch>()
+
+    // useEffect(() => {
+    //     if (location.pathname.startsWith('/public')) {
+    //         dispatch(initializeDepartures())
+    //     }
+    // }, [dispatch])
 
     const departures = useSelector(
         (state: { departures: DepartureType[] }) => state.departures
@@ -39,11 +40,13 @@ export const TimetableById = () => {
             rValue.startTime = dayjs(d.startTime)
             rValue.via = d.route.stops.map(s => s.dock.name)
         } else {
-            const thisStop = d.route.stops.find(s => s.dock.id === dockId) as StopType
-            const delayTime = thisStop.delayTimeMinutes
-            rValue.startTime = dayjs(d.startTime).add(delayTime, 'minute')
-            const i = d.route.stops.indexOf(thisStop)
-            rValue.via = d.route.stops.slice(i + 1).map(s => s.dock.name)
+            const thisStop = d.route.stops.find(s => s.dock.id === dockId)
+            if (thisStop) {
+                const delayTime = thisStop.delayTimeMinutes
+                rValue.startTime = dayjs(d.startTime).add(delayTime, 'minute')
+                const i = d.route.stops.indexOf(thisStop)
+                rValue.via = d.route.stops.slice(i + 1).map(s => s.dock.name)
+            }
         }
         return rValue
     })

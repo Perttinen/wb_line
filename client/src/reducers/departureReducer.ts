@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, Dispatch } from '@reduxjs/toolkit'
 
-import { DepartureType, initDepartureType } from '../../../types'
-import scheduleService from '../services/schedules'
+import { DepartureType, initDepartureType } from 'types'
+import { departureService } from 'services'
 
 type State = DepartureType[]
 
@@ -23,24 +23,21 @@ const departureSlice = createSlice({
 
 export const initializeDepartures = () => {
 	return async (dispatch: Dispatch) => {
-		const departures = await scheduleService.getAll()
-
-
+		const departures = await departureService.getAll()
 		dispatch(departureSlice.actions.setDepartures(departures))
 	}
 }
 
-export const createDeparture = (content: initDepartureType[]) => {
+export const createDeparture = (departures: initDepartureType[]) => {
 	return async (dispatch: Dispatch) => {
-		const newDeparture = await scheduleService.create(content)
-		console.log(newDeparture);
-		dispatch(appendDeparture(newDeparture))
+		const newDepartures = await departureService.create(departures)
+		dispatch(appendDeparture(newDepartures))
 	}
 }
 
 export const removeDeparture = (id: number[]) => {
 	return async (dispatch: Dispatch) => {
-		scheduleService.remove(id)
+		await departureService.remove(id)
 		dispatch(dropDeparture(id))
 	}
 }

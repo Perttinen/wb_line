@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, Dispatch } from '@reduxjs/toolkit'
 
-import { StopNoIdType, StopType } from '../../../types'
-import stopService from '../services/stops'
+import { StopNoIdType, StopType } from 'types'
+import { stopService } from 'services'
 
 type State = StopType[]
 
@@ -30,10 +30,11 @@ export const initializeStops = () => {
 	}
 }
 
-export const createStop = (content: StopNoIdType) => {
+export const createStop = (content: StopNoIdType[]) => {
 	return async (dispatch: Dispatch) => {
 		const newStop = await stopService.create(content)
 		dispatch(appendStop(newStop.data))
+		return newStop
 	}
 }
 

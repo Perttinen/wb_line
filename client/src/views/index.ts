@@ -1,12 +1,13 @@
-import { Login } from './login/Login'
-import { Home } from './home/Home'
-import { Timetable } from './timetable/Timetable'
-import { UserManagement } from './userManagement/UserManagement'
-import { UserCard } from './components/UserCard'
-import { ResourceManagement } from './resourceManagement/ResourceManagement'
-import { Lines } from './Lines/Lines'
-import { Schedule } from './schedule/Schedule'
-import { TimetableById } from './timetable/TimetableById'
+import { Login } from 'views/login/Login'
+import { Home } from 'views/home/Home'
+import { Timetable } from 'views/timetable/Timetable'
+import { UserManagement } from 'views/userManagement/UserManagement'
+import { UserCard } from 'views/components/UserCard'
+import { ResourceManagement } from 'views/resourceManagement/ResourceManagement'
+import { Lines } from 'views/Lines/Lines'
+import { Schedule } from 'views/schedule/Schedule'
+import { TimetableById } from 'views/timetable/TimetableById'
+import { AppBar } from 'views/AppBar/AppBar'
 
 export {
 	Login,
@@ -17,5 +18,7 @@ export {
 	ResourceManagement,
 	Lines,
 	Schedule,
-	TimetableById
+	TimetableById,
+	AppBar,
 }
+//fdfd

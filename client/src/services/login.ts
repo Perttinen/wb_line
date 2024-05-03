@@ -1,22 +1,17 @@
-import axios from 'axios'
-import { LoginUser } from '../../../types'
-
-
-const baseUrl =
-	process.env.NODE_ENV === 'development'
-		? 'http://localhost:3001/api/login'
-		: '/api/login'
-
-
+import { api } from 'util/api'
+import { LoginUser } from 'types'
 
 const login = async (credentials: LoginUser) => {
-	const res = await axios.post(baseUrl, credentials)
-
-	localStorage.setItem('token', res.data.token)
-
-	return res.data
+	try {
+		const res = await api.post('/login', credentials)
+		localStorage.setItem('token', res.data.token)
+		return res.data
+	} catch (e) {
+		console.log('e in serv: ', e);
+		return e
+	}
 }
 
-const api = { login }
+export const loginService = { login }
 
-export default api
+
