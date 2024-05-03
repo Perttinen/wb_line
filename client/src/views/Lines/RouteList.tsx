@@ -55,13 +55,13 @@ export const RouteList = () => {
 								{routeDocks.map((r, i) => <Typography key={i}>{r.name}</Typography>)}
 							</TableCell>
 							<TableCell sx={{ paddingRight: '2px', paddingLeft: '4px' }}>
-								<Button onClick={() => navigate('/schedule', { state: { routeId: r.id, docks: routeDocks } })}>
-									<DepartureBoardOutlinedIcon />
+								<Button sx={{ fontSize: '2rem' }} onClick={() => navigate('/schedule', { state: { routeId: r.id, docks: routeDocks } })} >
+									<DepartureBoardOutlinedIcon fontSize='inherit' />
 								</Button>
 							</TableCell>
 							<TableCell sx={{ paddingRight: '2px', paddingLeft: '4px' }}>
-								<Button onClick={() => handleDelete(r.id)}>
-									<DeleteOutlinedIcon />
+								<Button onClick={() => handleDelete(r.id)} sx={{ fontSize: '2rem' }}>
+									<DeleteOutlinedIcon fontSize='inherit' />
 								</Button>
 							</TableCell>
 						</TableRow>

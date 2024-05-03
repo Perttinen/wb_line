@@ -13,6 +13,8 @@ import { useSelector } from 'react-redux'
 import { ShipType } from '../../../../types'
 import { useContext } from 'react'
 import { WebSocketContext } from '../../WebSocket'
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 
 export const Ships = ({ open }: { open: boolean }) => {
 	const [showAddShip, setShowAddShip] = useState(false)
@@ -32,10 +34,10 @@ export const Ships = ({ open }: { open: boolean }) => {
 						) : (
 							<Button
 								fullWidth
-								sx={{ fontSize: '1.2rem' }}
+								sx={{ fontSize: '2rem' }}
 								onClick={() => setShowAddShip(true)}
 							>
-								add ship
+								<AddCircleOutlineIcon fontSize='inherit' />
 							</Button>
 						)}
 					</Box>
@@ -43,10 +45,10 @@ export const Ships = ({ open }: { open: boolean }) => {
 						<TableBody>
 							{ships.map((s) => (
 								<TableRow key={s.id}>
-									<TableCell>{s.name}</TableCell>
+									<TableCell sx={{ fontSize: '1.5rem' }}>{s.name}</TableCell>
 									<TableCell>
-										<Button onClick={() => handleRemoveShip(s.id)}>
-											delete
+										<Button sx={{ fontSize: '2rem' }} onClick={() => handleRemoveShip(s.id)}>
+											<DeleteOutlinedIcon fontSize='inherit' />
 										</Button>
 									</TableCell>
 								</TableRow>

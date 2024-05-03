@@ -1,6 +1,8 @@
 import { UserList } from './UserList'
 import { useState } from 'react'
 import { Button, Box, CssBaseline } from '@mui/material'
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
+
 
 import { AddUser } from './AddUser'
 import { useSelector } from 'react-redux'
@@ -27,11 +29,12 @@ export const UserManagement = () => {
 					>
 						{!showAddUser && (
 							<Button
+
+								sx={{ fontSize: '2rem', marginTop: '2rem' }}
+								type='button'
 								onClick={() => setShowAddUser(true)}
-								fullWidth
-								sx={{ mt: 3, mb: 2, fontSize: '1.2rem' }}
 							>
-								Create new user
+								<AddCircleOutlineIcon fontSize='inherit' />
 							</Button>
 						)}
 						{showAddUser && <AddUser setShowAddUser={setShowAddUser} />}

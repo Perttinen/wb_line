@@ -13,6 +13,8 @@ import { useSelector } from 'react-redux'
 import { DockType } from '../../../../types'
 import { useContext } from 'react'
 import { WebSocketContext } from '../../WebSocket'
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 
 export const Docks = ({ open }: { open: boolean }) => {
 	const [showAddDock, setShowAddDock] = useState(false)
@@ -34,10 +36,10 @@ export const Docks = ({ open }: { open: boolean }) => {
 							) : (
 								<Button
 									fullWidth
-									sx={{ fontSize: '1.2rem' }}
+									sx={{ fontSize: '2rem' }}
 									onClick={() => setShowAddDock(true)}
 								>
-									add dock
+									<AddCircleOutlineIcon fontSize='inherit' />
 								</Button>
 							)}
 						</Box>
@@ -45,10 +47,10 @@ export const Docks = ({ open }: { open: boolean }) => {
 							<TableBody>
 								{docks.map((d) => (
 									<TableRow key={d.id}>
-										<TableCell>{d.name}</TableCell>
+										<TableCell sx={{ fontSize: '1.5rem' }}>{d.name}</TableCell>
 										<TableCell>
-											<Button onClick={() => handleRemoveDock(d.id)}>
-												delete
+											<Button sx={{ fontSize: '2rem' }} onClick={() => handleRemoveDock(d.id)}>
+												<DeleteOutlinedIcon fontSize='inherit' />
 											</Button>
 										</TableCell>
 									</TableRow>

@@ -6,15 +6,17 @@ import {
 	Box
 
 } from '@mui/material'
-import { ErrorMessage, Field, FieldArray, Form, Formik, getIn } from 'formik'
+import { ErrorMessage, FieldArray, Form, Formik } from 'formik'
 import * as Yup from 'yup'
-import { DockType, RouteType } from 'types'
+import { DockType } from 'types'
 import { useDispatch, useSelector } from 'react-redux'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 import { createRoute, initializeRoutes } from 'reducers/routeReducer'
 import { AppDispatch } from 'store'
-import 'Form.css'
+import HighlightOff from '@mui/icons-material/HighlightOff'
+import SaveAltIcon from '@mui/icons-material/SaveAlt'
+
 
 
 
@@ -38,10 +40,6 @@ export const RoutePlanner = ({
 		endDockId: Yup.number().min(0, 'End point is required!').required('End point is required!'),
 	})
 
-	type StoppiType = {
-		dockId: number
-		delayTimeMinutes: number
-	}
 	interface FormValues {
 
 		startDockId: number
@@ -180,14 +178,15 @@ export const RoutePlanner = ({
 												</Box>
 											)
 										})}
-									<Button
-										fullWidth
-										sx={{ fontSize: '1.2rem' }}
-										type='button'
-										onClick={() => push({ dockId: '', delayTimeMinutes: '' })}
-									>
-										<AddCircleOutlineIcon />
-									</Button>
+									<Box display={'flex'} flexDirection={'row'} justifyContent={'center'}>
+										<Button
+											sx={{ fontSize: '2rem' }}
+											type='button'
+											onClick={() => push({ dockId: '', delayTimeMinutes: '' })}
+										>
+											<AddCircleOutlineIcon fontSize='inherit' />
+										</Button>
+									</Box>
 								</div>
 							)}
 						</FieldArray>
@@ -216,17 +215,17 @@ export const RoutePlanner = ({
 							<Button
 								type='submit'
 								fullWidth
-								sx={{ mt: 3, mb: 2, color: '#1E8449', fontSize: '1.2rem' }}
+								sx={{ mt: 3, mb: 2, color: '#1E8449', fontSize: '2rem' }}
 							>
-								save
+								<SaveAltIcon fontSize='inherit' />
 							</Button>
 							<Button
 								type='reset'
 								onClick={() => setShowRoutePlanner(false)}
 								fullWidth
-								sx={{ mt: 3, mb: 2, color: '#B03A2E', fontSize: '1.2rem' }}
+								sx={{ mt: 3, mb: 2, color: '#B03A2E', fontSize: '2rem' }}
 							>
-								cancel
+								<HighlightOff fontSize='inherit' />
 							</Button>
 						</Box>
 					</Form>
