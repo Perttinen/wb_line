@@ -1,7 +1,7 @@
 import { Button, CssBaseline } from '@mui/material'
 import { useState } from 'react'
-import { RoutePlanner } from 'views/lines/RoutePlanner'
-import { RouteList } from 'views/lines/RouteList'
+import { RoutePlanner } from 'views/Lines/RoutePlanner'
+import { RouteList } from 'views/Lines/RouteList'
 
 export const Lines = () => {
 	const [showRoutePlanner, setShowRoutePlanner] = useState(false)
