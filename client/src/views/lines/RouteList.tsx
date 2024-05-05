@@ -1,9 +1,6 @@
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
-import DepartureBoardOutlinedIcon from '@mui/icons-material/DepartureBoardOutlined';
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-	Button,
 	Table,
 	TableBody,
 	TableCell,
@@ -14,6 +11,7 @@ import {
 import { RouteDocksType, RouteType, RouteWithAllType } from 'types'
 import { AppDispatch } from 'store'
 import { removeRoute } from 'reducers/routeReducer'
+import { IconButton } from 'views/components/SmallOnes';
 
 export const RouteList = () => {
 
@@ -55,14 +53,10 @@ export const RouteList = () => {
 								{routeDocks.map((r, i) => <Typography key={i}>{r.name}</Typography>)}
 							</TableCell>
 							<TableCell sx={{ paddingRight: '2px', paddingLeft: '4px' }}>
-								<Button sx={{ fontSize: '2rem' }} onClick={() => navigate('/schedule', { state: { routeId: r.id, docks: routeDocks } })} >
-									<DepartureBoardOutlinedIcon fontSize='inherit' />
-								</Button>
+								<IconButton iconType='schedule' whenClicked={() => navigate('/schedule', { state: { routeId: r.id, docks: routeDocks } })} />
 							</TableCell>
 							<TableCell sx={{ paddingRight: '2px', paddingLeft: '4px' }}>
-								<Button onClick={() => handleDelete(r.id)} sx={{ fontSize: '2rem' }}>
-									<DeleteOutlinedIcon fontSize='inherit' />
-								</Button>
+								<IconButton whenClicked={() => handleDelete(r.id)} iconType='trash' />
 							</TableCell>
 						</TableRow>
 					)
