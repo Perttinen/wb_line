@@ -1,24 +1,16 @@
 import {
-
-	Button,
 	TextField,
-	MenuItem,
-	Box
-
+	Box,
+	Typography
 } from '@mui/material'
-import { ErrorMessage, FieldArray, Form, Formik } from 'formik'
+import { FieldArray, Form, Formik, getIn } from 'formik'
 import * as Yup from 'yup'
 import { DockType } from 'types'
 import { useDispatch, useSelector } from 'react-redux'
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 import { createRoute, initializeRoutes } from 'reducers/routeReducer'
 import { AppDispatch } from 'store'
-import HighlightOff from '@mui/icons-material/HighlightOff'
-import SaveAltIcon from '@mui/icons-material/SaveAlt'
-
-
-
+import { DockSelect } from './DockSelect'
+import { IconButton } from 'views/components/SmallOnes'
 
 export const RoutePlanner = ({
 	setShowRoutePlanner,
@@ -27,7 +19,7 @@ export const RoutePlanner = ({
 }) => {
 	const dispatch: (...args: unknown[]) => Promise<string> =
 		useDispatch<AppDispatch>()
-	const docks = useSelector((state: { docks: DockType[] }) => state.docks).concat({ id: -1, name: '' })
+	const docks = useSelector((state: { docks: DockType[] }) => state.docks)
 
 	const validationSchema = Yup.object().shape({
 		startDockId: Yup.number().min(0, 'Start point is required!').required('Start point is required!'),
@@ -40,28 +32,22 @@ export const RoutePlanner = ({
 		endDockId: Yup.number().min(0, 'End point is required!').required('End point is required!'),
 	})
 
-	interface FormValues {
-
-		startDockId: number
-
-		stops: {
-			dockId: number,
-			delayTimeMinutes: number
-		}[]
-
-
-		endDockId: number
-
+	type StoppiType = {
+		dockId: number,
+		delayTimeMinutes: number
 	}
 
-
+	type FormValues = {
+		startDockId: number
+		stops: StoppiType[]
+		endDockId: number
+	}
 
 	const handleSubmit = async (values: FormValues) => {
 		console.log();
-
 		if (
-			values.startDockId !== -1 &&
-			values.endDockId !== -1
+			typeof values.startDockId === 'number' &&
+			typeof values.endDockId === 'number'
 		) {
 			dispatch(createRoute(values))
 			dispatch(initializeRoutes)
@@ -70,91 +56,57 @@ export const RoutePlanner = ({
 		setShowRoutePlanner(false)
 	}
 
+	const initialValues: FormValues = {
+		startDockId: docks[0].id,
+		stops: [],
+		endDockId: docks[0].id,
+	}
 
 	return (
 		<div>
-			<Formik
-				initialValues={{
-					startDockId: -1,
-					stops: [],
-					endDockId: -1,
-				}}
-				validationSchema={validationSchema}
-				onSubmit={async (values) => {
-					console.log()
-					handleSubmit(values)
-				}}
-			>
-				{({ values, handleChange, handleBlur }) => (
-					<Form autoComplete='off'>
-						<TextField
-							fullWidth
-							select
-							margin='normal'
-							variant='outlined'
-							name='startDockId'
-							value={values.startDockId}
-							onChange={handleChange}
-							onBlur={handleBlur}
-							label='Start point'
-						>
-							{docks.map((dock) => (
-								<MenuItem key={dock.id} value={dock.id}>
-									{dock.name}
-								</MenuItem>
-							))}
-						</TextField>
-						<ErrorMessage name="startDockId">
-							{msg => <div style={{ color: 'red' }}>{msg}</div>}
-						</ErrorMessage>
-						<FieldArray name='stops'>
-							{({ push, remove }) => (
-								<div>
-									{values.stops.length > 0 &&
-										values.stops.map((p: {
-											dockId: number
-											delayTimeMinutes: number
-										}, index) => {
-											const dock = `stops[${index}].dockId`
+			<Box sx={{ backgroundColor: '#f5f5f5', padding: '10px', border: 1, borderRadius: '5px', marginTop: '10px' }}>
+				<Box display={'flex'} flexDirection={'row'} justifyContent={'center'}>
+					<Typography fontSize={'1.2rem'}>New Route</Typography>
+				</Box>
+				<Formik
+					initialValues={initialValues}
+					validationSchema={validationSchema}
+					onSubmit={async (values) => {
+						handleSubmit(values)
+					}}
+				>
+					{props => (
+						<Form autoComplete='off'>
 
-											const time = `stops[${index}].delayTimeMinutes`
-
-											const fieldLabel = `stop point ${index + 1}`
-
-											return (
-												<Box
-													key={index}
-													display={'flex'}
-													flexDirection={'column'}
-												>
-													<TextField
-														fullWidth
-														select
-														margin='normal'
-														variant='outlined'
-														label={fieldLabel}
-														name={dock}
-														// name={dock}
-														value={p.dockId}
-														required
-														// id={dock}
-														onChange={handleChange}
-														onBlur={handleBlur}
+							<Box display={'flex'} flexDirection={'column'} sx={{ backgroundColor: 'white', borderBlockColor: 'black', borderWidth: '2px', border: 1, padding: '10px', borderRadius: '5px' }}>
+								<Box display={'flex'} flexDirection={'row'} justifyContent={'center'}>
+									<Typography fontSize={'1rem'}>Start point</Typography>
+								</Box>
+								<DockSelect formikProps={props} docks={docks} name='startDockId' label='Start point' />
+							</Box>
+							<FieldArray name='stops'>
+								{({ push, remove }) => (
+									<div>
+										{props.values.stops.length > 0 &&
+											props.values.stops.map((p: StoppiType, index) => {
+												const dock = `stops[${index}].dockId`
+												const time = `stops[${index}].delayTimeMinutes`
+												const fieldLabel = `stop point ${index + 1}`
+												return (
+													<Box
+														key={index}
+														display={'flex'}
+														flexDirection={'column'}
+														sx={{ borderBlockColor: 'black', borderWidth: '2px', border: 1, padding: '10px', backgroundColor: 'white', borderRadius: '5px' }}
 													>
-														{docks.map((dock) => (
-															<MenuItem key={dock.id} value={dock.id}>
-																{dock.name}
-															</MenuItem>
-														))}
-													</TextField>
-													<ErrorMessage name={dock}>
-														{msg => <div style={{ color: 'red' }}>{msg}</div>}
-													</ErrorMessage>
-
-													<Box display={'flex'} flexDirection={'row'}>
-														<Box display={'flex'} flexDirection={'column'}>
+														<Box display={'flex'} flexDirection={'row'} justifyContent={'center'}>
+															<Typography fontSize={'1rem'}>{`Stop point ${index + 1}`}</Typography>
+														</Box>
+														<DockSelect formikProps={props} docks={docks} name={dock} label={fieldLabel} />
+														<Box display={'flex'} flexDirection={'row'}>
+															{/* <Box display={'flex'} flexDirection={'column'}> */}
 															<TextField
-																sx={{ width: '20rem' }}
+																sx={{ width: '50%' }}
 																margin='normal'
 																variant='outlined'
 																label='Time from start point (min)'
@@ -162,75 +114,40 @@ export const RoutePlanner = ({
 																value={p.delayTimeMinutes}
 																type='number'
 																required
-																onChange={handleChange}
-																onBlur={handleBlur}
+																onChange={props.handleChange}
+																onBlur={props.handleBlur}
+																error={Boolean(getIn(props.touched, time)) && Boolean(getIn(props.errors, time))}
+																helperText={Boolean(getIn(props.touched, time)) && getIn(props.errors, time)}
 															/>
-															<ErrorMessage name={time}>
-																{msg => <div style={{ color: 'red' }}>{msg}</div>}
-															</ErrorMessage>
+															{/* </Box> */}
+															<IconButton iconType='trash' whenClicked={() => remove(index)} />
 														</Box>
-														<Button
-															onClick={() => remove(index)}
-														>
-															<DeleteOutlinedIcon />
-														</Button>
 													</Box>
-												</Box>
-											)
-										})}
-									<Box display={'flex'} flexDirection={'row'} justifyContent={'center'}>
-										<Button
-											sx={{ fontSize: '2rem' }}
-											type='button'
-											onClick={() => push({ dockId: '', delayTimeMinutes: '' })}
-										>
-											<AddCircleOutlineIcon fontSize='inherit' />
-										</Button>
-									</Box>
-								</div>
-							)}
-						</FieldArray>
-						<TextField
-							fullWidth
-							select
-							margin='normal'
-							variant='outlined'
-							required
-							name='endDockId'
-							value={values.endDockId}
-							onChange={handleChange}
-							onBlur={handleBlur}
-							label='End point'
-						>
-							{docks.map((dock) => (
-								<MenuItem key={dock.id} value={dock.id}>
-									{dock.name}
-								</MenuItem>
-							))}
-						</TextField>
-						<ErrorMessage name="endDockId">
-							{msg => <div style={{ color: 'red' }}>{msg}</div>}
-						</ErrorMessage>
-						<Box display={'flex'} flexDirection={'row'}>
-							<Button
-								type='submit'
-								fullWidth
-								sx={{ mt: 3, mb: 2, color: '#1E8449', fontSize: '2rem' }}
-							>
-								<SaveAltIcon fontSize='inherit' />
-							</Button>
-							<Button
-								type='reset'
-								onClick={() => setShowRoutePlanner(false)}
-								fullWidth
-								sx={{ mt: 3, mb: 2, color: '#B03A2E', fontSize: '2rem' }}
-							>
-								<HighlightOff fontSize='inherit' />
-							</Button>
-						</Box>
-					</Form>
-				)}
-			</Formik>
-		</div>
+												)
+											})}
+										<Box display={'flex'} flexDirection={'row'} justifyContent={'center'}>
+											<IconButton
+												whenClicked={() => push({ dockId: docks[0].id, delayTimeMinutes: 1 })}
+												iconType='add' />
+										</Box>
+									</div>
+								)}
+							</FieldArray>
+							<Box display={'flex'} flexDirection={'column'} sx={{ backgroundColor: 'white', borderBlockColor: 'black', borderWidth: '2px', border: 1, padding: '10px', borderRadius: '5px' }}>
+								<Box display={'flex'} flexDirection={'row'} justifyContent={'center'}>
+									<Typography fontSize={'1rem'}>End point</Typography>
+								</Box>
+								<DockSelect formikProps={props} docks={docks} name='endDockId' label='End point' />
+							</Box>
+							<Box display={'flex'} flexDirection={'row'}>
+								<IconButton buttonType='submit' iconType='save' />
+								<IconButton buttonType='reset' iconType='cancel' whenClicked={() => setShowRoutePlanner(false)} />
+							</Box>
+
+						</Form>
+					)}
+				</Formik>
+			</Box>
+		</div >
 	)
 }
