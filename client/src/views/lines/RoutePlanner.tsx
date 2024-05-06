@@ -1,24 +1,29 @@
 import {
-	TextField,
+	Alert,
 	Box,
+	Snackbar,
 	Typography
 } from '@mui/material'
-import { FieldArray, Form, Formik, getIn } from 'formik'
+import { FieldArray, Form, Formik } from 'formik'
 import * as Yup from 'yup'
-import { DockType } from 'types'
+import { DockType, RouteFormValuesType } from 'types'
 import { useDispatch, useSelector } from 'react-redux'
 import { createRoute, initializeRoutes } from 'reducers/routeReducer'
 import { AppDispatch } from 'store'
-import { DockSelect } from './DockSelect'
-import { IconButton } from 'views/components/SmallOnes'
+import { FormSelect, FormTextField, IconButton, RoutePointBox } from 'views/components/SmallOnes'
+import { useState } from 'react'
 
-export const RoutePlanner = ({
-	setShowRoutePlanner,
-}: {
+type PropsType = {
 	setShowRoutePlanner: (val: boolean) => void
-}) => {
+}
+
+export const RoutePlanner = ({ setShowRoutePlanner }: PropsType) => {
+
+	const [errorMsg, setErrorMsg] = useState('')
+
 	const dispatch: (...args: unknown[]) => Promise<string> =
 		useDispatch<AppDispatch>()
+
 	const docks = useSelector((state: { docks: DockType[] }) => state.docks)
 
 	const validationSchema = Yup.object().shape({
@@ -26,37 +31,30 @@ export const RoutePlanner = ({
 		stops: Yup.array().of(
 			Yup.object().shape({
 				dockId: Yup.number().min(0, "Stop point can't be empty!").required("Stop point can't be empty!"),
-				delayTimeMinutes: Yup.number().min(1, "Time can't be empty!").required("Time can't be empty!"),
+				delayTimeMinutes: Yup.number().min(1, "values 1-3000").max(3000, "values 1-3000").required("Time can't be empty!"),
 			})
 		),
 		endDockId: Yup.number().min(0, 'End point is required!').required('End point is required!'),
 	})
 
-	type StoppiType = {
-		dockId: number,
-		delayTimeMinutes: number
-	}
-
-	type FormValues = {
-		startDockId: number
-		stops: StoppiType[]
-		endDockId: number
-	}
-
-	const handleSubmit = async (values: FormValues) => {
-		console.log();
-		if (
-			typeof values.startDockId === 'number' &&
-			typeof values.endDockId === 'number'
-		) {
+	const handleSubmit = async (values: RouteFormValuesType) => {
+		let ids: number[] = []
+		ids.push(values.startDockId)
+		ids.push(values.endDockId)
+		for (let i in values.stops) {
+			ids.push(values.stops[i].dockId)
+		}
+		const distinctIds = [...new Set(ids)]
+		if (ids.length === distinctIds.length) {
 			dispatch(createRoute(values))
 			dispatch(initializeRoutes)
+			setShowRoutePlanner(false)
+		} else {
+			setErrorMsg('All docks should be unique!')
 		}
-
-		setShowRoutePlanner(false)
 	}
 
-	const initialValues: FormValues = {
+	const initialValues: RouteFormValuesType = {
 		startDockId: docks[0].id,
 		stops: [],
 		endDockId: docks[0].id,
@@ -73,56 +71,33 @@ export const RoutePlanner = ({
 					validationSchema={validationSchema}
 					onSubmit={async (values) => {
 						handleSubmit(values)
-					}}
-				>
+					}}>
 					{props => (
 						<Form autoComplete='off'>
+							<RoutePointBox caption='Start point'>
+								<FormSelect options={docks} name='startDockId' label='Start point' />
+							</RoutePointBox>
 
-							<Box display={'flex'} flexDirection={'column'} sx={{ backgroundColor: 'white', borderBlockColor: 'black', borderWidth: '2px', border: 1, padding: '10px', borderRadius: '5px' }}>
-								<Box display={'flex'} flexDirection={'row'} justifyContent={'center'}>
-									<Typography fontSize={'1rem'}>Start point</Typography>
-								</Box>
-								<DockSelect formikProps={props} docks={docks} name='startDockId' label='Start point' />
-							</Box>
 							<FieldArray name='stops'>
 								{({ push, remove }) => (
 									<div>
 										{props.values.stops.length > 0 &&
-											props.values.stops.map((p: StoppiType, index) => {
+											props.values.stops.map((_p, index) => {
 												const dock = `stops[${index}].dockId`
 												const time = `stops[${index}].delayTimeMinutes`
 												const fieldLabel = `stop point ${index + 1}`
 												return (
-													<Box
-														key={index}
-														display={'flex'}
-														flexDirection={'column'}
-														sx={{ borderBlockColor: 'black', borderWidth: '2px', border: 1, padding: '10px', backgroundColor: 'white', borderRadius: '5px' }}
-													>
-														<Box display={'flex'} flexDirection={'row'} justifyContent={'center'}>
-															<Typography fontSize={'1rem'}>{`Stop point ${index + 1}`}</Typography>
-														</Box>
-														<DockSelect formikProps={props} docks={docks} name={dock} label={fieldLabel} />
-														<Box display={'flex'} flexDirection={'row'}>
-															{/* <Box display={'flex'} flexDirection={'column'}> */}
-															<TextField
-																sx={{ width: '50%' }}
-																margin='normal'
-																variant='outlined'
-																label='Time from start point (min)'
-																name={time}
-																value={p.delayTimeMinutes}
-																type='number'
-																required
-																onChange={props.handleChange}
-																onBlur={props.handleBlur}
-																error={Boolean(getIn(props.touched, time)) && Boolean(getIn(props.errors, time))}
-																helperText={Boolean(getIn(props.touched, time)) && getIn(props.errors, time)}
-															/>
-															{/* </Box> */}
-															<IconButton iconType='trash' whenClicked={() => remove(index)} />
-														</Box>
-													</Box>
+													<RoutePointBox key={index} caption={`Stop point ${index + 1}`}>
+														<div>
+															<FormSelect options={docks} name={dock} label={fieldLabel} />
+															<Box display={'flex'} flexDirection={'row'}>
+																<FormTextField type='number' label='minutes from start' name={time} />
+																<Box display={'flex'} flexDirection={'row'} alignContent={'center'} >
+																	<IconButton iconType='trash' whenClicked={() => remove(index)} />
+																</Box>
+															</Box>
+														</div>
+													</RoutePointBox>
 												)
 											})}
 										<Box display={'flex'} flexDirection={'row'} justifyContent={'center'}>
@@ -133,21 +108,28 @@ export const RoutePlanner = ({
 									</div>
 								)}
 							</FieldArray>
-							<Box display={'flex'} flexDirection={'column'} sx={{ backgroundColor: 'white', borderBlockColor: 'black', borderWidth: '2px', border: 1, padding: '10px', borderRadius: '5px' }}>
-								<Box display={'flex'} flexDirection={'row'} justifyContent={'center'}>
-									<Typography fontSize={'1rem'}>End point</Typography>
-								</Box>
-								<DockSelect formikProps={props} docks={docks} name='endDockId' label='End point' />
-							</Box>
+							<RoutePointBox caption='End point'>
+								<FormSelect options={docks} name='endDockId' label='End point' />
+							</RoutePointBox>
 							<Box display={'flex'} flexDirection={'row'}>
 								<IconButton buttonType='submit' iconType='save' />
 								<IconButton buttonType='reset' iconType='cancel' whenClicked={() => setShowRoutePlanner(false)} />
 							</Box>
-
 						</Form>
 					)}
 				</Formik>
 			</Box>
+			<Snackbar
+				open={errorMsg !== ''}
+				autoHideDuration={4000}
+				onClose={() => setErrorMsg('')}
+			>
+				<Alert severity='error'>{errorMsg}</Alert>
+			</Snackbar>
 		</div >
 	)
 }
+
+
+
+

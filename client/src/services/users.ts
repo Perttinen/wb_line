@@ -1,5 +1,5 @@
 import { api } from 'util/api'
-import { ChangePasswordType, UserNoIdType, UserType } from 'types'
+import { ChangePasswordType, UserNoIdType } from 'types'
 
 const getAll = async () => {
 	const res = await api.get('/user')
@@ -21,10 +21,9 @@ const remove = async (id: number) => {
 }
 
 const update = async (pwdata: ChangePasswordType) => {
-	console.log('service', pwdata);
+	const res = await api.put('/user/pw', pwdata)
+	return res.data
 
-	const res: UserType = await api.put('/user/pw', pwdata)
-	return res
 }
 
 export const userService = { getAll, create, remove, update, getCurrentUser }

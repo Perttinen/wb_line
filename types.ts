@@ -171,3 +171,14 @@ export type RouteWithAllType = {
 	endDock: DockType
 	stops: StopWithDockType[]
 }
+
+type StoppiType = {
+	dockId: number,
+	delayTimeMinutes: number
+}
+
+export type RouteFormValuesType = {
+	startDockId: number
+	stops: StoppiType[]
+	endDockId: number
+}
