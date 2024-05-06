@@ -1,20 +1,18 @@
-import { Fragment, useState } from 'react'
+import { useState } from 'react'
 import Button from '@mui/material/Button'
-import TextField from '@mui/material/TextField'
-import Dialog from '@mui/material/Dialog'
-import DialogActions from '@mui/material/DialogActions'
-import DialogContent from '@mui/material/DialogContent'
-import DialogTitle from '@mui/material/DialogTitle'
-import { ErrorMessage, useFormik } from 'formik'
-import { Alert, Box, Snackbar } from '@mui/material'
+
+import { Form, Formik } from 'formik'
+import { Alert, Box, Modal, Snackbar } from '@mui/material'
 import * as Yup from 'yup'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
-import { changeCurrentPassword } from 'reducers/userReducer'
 
-import { ChangePasswordType, ConfirmedPasswordsType, UserType } from '../../../../types'
+import { changeCurrentPassword } from 'reducers/userReducer'
+import { userService } from 'services'
+import { ChangePasswordType, ConfirmedPasswordsType, UserType } from 'types'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'store'
+import { FormTextField } from './SmallOnes'
 
 export const ChangePassword = ({
 	pwChangeDialog,
@@ -53,92 +51,46 @@ export const ChangePassword = ({
 	})
 
 	const handleSubmit = async (values: ConfirmedPasswordsType) => {
+		console.log('submitting')
 		const userToChange: ChangePasswordType = { ...values, userId: user.id }
 		try {
-			dispatch(changeCurrentPassword(userToChange))
+			const user = await userService.update(userToChange)
+			dispatch(changeCurrentPassword(user))
 			setSuccessMsg('Password updated')
 			user.firstTime && navigate('./')
 		} catch (e) {
-			if (axios.isAxiosError(e) && e.response) {
-				setErrorMsg(e.response.data.error)
-				formik.resetForm()
+			if (axios.isAxiosError(e)) {
+				setErrorMsg(e.response?.data)
 			} else {
-				formik.resetForm()
+				console.log(e);
 			}
 		}
 	}
 
-	const formik = useFormik({
-		initialValues: {
-			currentPassword: '',
-			newPassword: '',
-			confirmPassword: '',
-		},
-		validationSchema: passwordSchema,
-		onSubmit: handleSubmit,
-		enableReinitialize: true,
-	})
-
+	const initialValues: ConfirmedPasswordsType = {
+		currentPassword: '',
+		newPassword: '',
+		confirmPassword: '',
+	}
 	return (
-		<Fragment>
-			<Dialog open={pwChangeDialog} onClose={handleClose}>
-				<Box component='form' onSubmit={formik.handleSubmit}>
-					<DialogTitle>Change Password</DialogTitle>
-					<DialogContent>
-						<TextField
-							autoFocus
-							margin='dense'
-							id='currentPassword'
-							label='Current Password'
-							type='password'
-							fullWidth
-
-							variant='standard'
-							value={formik.values.currentPassword}
-							onChange={formik.handleChange}
-							helperText={
-								formik.touched.currentPassword && formik.errors.currentPassword
-							}
-						/>
-						<TextField
-							margin='dense'
-							id='newPassword'
-							label='New Password'
-							type='password'
-							fullWidth
-							variant='standard'
-							value={formik.values.newPassword}
-							onChange={formik.handleChange}
-							error={
-								formik.touched.newPassword && Boolean(formik.errors.newPassword)
-							}
-							helperText={
-								formik.touched.newPassword && formik.errors.newPassword
-							}
-						/>
-						<TextField
-							margin='dense'
-							id='confirmPassword'
-							label='Confirm New Password'
-							type='password'
-							fullWidth
-							variant='standard'
-							value={formik.values.confirmPassword}
-							onChange={formik.handleChange}
-							error={
-								formik.touched.confirmPassword &&
-								Boolean(formik.errors.confirmPassword)
-							}
-							helperText={
-								formik.touched.confirmPassword && formik.errors.confirmPassword
-							}
-						/>
-					</DialogContent>
-					<DialogActions>
+		<Modal open={pwChangeDialog} sx={{ position: 'absolute', left: '10%', top: '20%', width: '90%' }}>
+			<Box sx={{ backgroundColor: 'white', width: '70%', border: 1, padding: '10px', borderRadius: '5px' }}>
+				<Formik
+					initialValues={initialValues}
+					validationSchema={passwordSchema}
+					onSubmit={async (values) => {
+						console.log('formik submit');
+						handleSubmit(values)
+					}}
+				>
+					<Form tabIndex={-1}>
+						<FormTextField name='currentPassword' label='current password' type='password' />
+						<FormTextField name='newPassword' label='new password' type='password' />
+						<FormTextField name='confirmPassword' label='new password again' type='password' />
 						<Button onClick={handleClose}>Cancel</Button>
 						<Button type='submit'>Save</Button>
-					</DialogActions>
-				</Box>
+					</Form>
+				</Formik>
 				<Snackbar
 					open={errorMsg !== ''}
 					autoHideDuration={4000}
@@ -156,7 +108,7 @@ export const ChangePassword = ({
 				>
 					<Alert severity='success'>{successMsg}</Alert>
 				</Snackbar>
-			</Dialog>
-		</Fragment>
+			</Box>
+		</Modal>
 	)
 }

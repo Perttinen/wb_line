@@ -1,18 +1,18 @@
-import { Button } from "@mui/material"
+import { Box, Button, MenuItem, TextField, Typography } from "@mui/material"
 import {
     DeleteOutlined, AddCircleOutline, HighlightOff, SaveAlt, DepartureBoardOutlined
 } from '@mui/icons-material'
+import { useField } from "formik"
+import { DockType } from "types"
 
 
-type PropsType = {
+type IconButtonProps = {
     whenClicked?: () => void
     buttonType?: "button" | "submit" | "reset" | undefined
     iconType: "add" | "save" | "cancel" | "trash" | "schedule"
 }
 
-const IconButton = (props: PropsType) => {
-    console.log(typeof props.whenClicked);
-
+const IconButton = (props: IconButtonProps) => {
     const getClicker = () => {
         if (typeof props.whenClicked === 'function') {
             return props.whenClicked()
@@ -53,4 +53,81 @@ const IconButton = (props: PropsType) => {
     )
 }
 
-export { IconButton }
+type RoutePointBoxProps = {
+    children: JSX.Element
+    caption: string
+}
+const RoutePointBox = (props: RoutePointBoxProps) => {
+    return (
+        <Box display={'flex'} flexDirection={'column'} sx={{ backgroundColor: 'white', borderBlockColor: 'black', borderWidth: '2px', border: 1, padding: '10px', borderRadius: '5px' }}>
+            <Box display={'flex'} flexDirection={'row'} justifyContent={'center'}>
+                <Typography fontSize={'1rem'}>{props.caption}</Typography>
+            </Box>
+            {props.children}
+        </Box>
+
+    )
+}
+
+type FormTextFieldProps = {
+    name: string
+    label: string
+    type: string
+}
+const FormTextField = (props: FormTextFieldProps) => {
+    const [field, meta] = useField(props);
+    return (
+        <TextField {...field} {...props}
+            margin='normal'
+            name={props.name}
+            label={props.label}
+            type={props.type}
+            fullWidth
+            required
+            variant='outlined'
+            value={field.value}
+            onChange={field.onChange}
+            onBlur={field.onBlur}
+            error={
+                meta.touched && Boolean(meta.error)
+            }
+            helperText={
+                meta.touched && meta.error
+            }
+        />
+    )
+}
+
+type FormSelectProps = {
+    options: DockType[]
+    name: string
+    label: string
+}
+const FormSelect = (props: FormSelectProps) => {
+    const [field, meta] = useField(props)
+    console.log('dockid: ');
+    return (
+        <TextField
+            fullWidth
+            required
+            select
+            margin='normal'
+            variant='outlined'
+            name={props.name}
+            label={props.label}
+            value={field.value}
+            onChange={field.onChange}
+            onBlur={field.onBlur}
+            error={meta.touched && Boolean(meta.error)}
+            helperText={meta.touched && meta.error}
+        >
+            {props.options.map((dock: DockType) => (
+                <MenuItem key={dock.id} value={dock.id}>
+                    {dock.name}
+                </MenuItem>
+            ))}
+        </TextField>
+    )
+}
+
+export { IconButton, RoutePointBox, FormTextField, FormSelect }
