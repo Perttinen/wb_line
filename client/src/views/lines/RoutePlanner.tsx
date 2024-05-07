@@ -1,8 +1,7 @@
 import {
 	Alert,
 	Box,
-	Snackbar,
-	Typography
+	Snackbar
 } from '@mui/material'
 import { FieldArray, Form, Formik } from 'formik'
 import * as Yup from 'yup'
@@ -10,7 +9,7 @@ import { DockType, RouteFormValuesType } from 'types'
 import { useDispatch, useSelector } from 'react-redux'
 import { createRoute, initializeRoutes } from 'reducers/routeReducer'
 import { AppDispatch } from 'store'
-import { FormSelect, FormTextField, IconButton, RoutePointBox } from 'views/components/SmallOnes'
+import { FormSelect, FormTextField, IconButton, FormGroupContainer, FormMainContainer } from 'views/components/SmallOnes'
 import { useState } from 'react'
 
 type PropsType = {
@@ -37,7 +36,7 @@ export const RoutePlanner = ({ setShowRoutePlanner }: PropsType) => {
 		endDockId: Yup.number().min(0, 'End point is required!').required('End point is required!'),
 	})
 
-	const handleSubmit = async (values: RouteFormValuesType) => {
+	const docksAreUnique = (values: RouteFormValuesType) => {
 		let ids: number[] = []
 		ids.push(values.startDockId)
 		ids.push(values.endDockId)
@@ -45,7 +44,11 @@ export const RoutePlanner = ({ setShowRoutePlanner }: PropsType) => {
 			ids.push(values.stops[i].dockId)
 		}
 		const distinctIds = [...new Set(ids)]
-		if (ids.length === distinctIds.length) {
+		return ids.length === distinctIds.length
+	}
+
+	const handleSubmit = async (values: RouteFormValuesType) => {
+		if (docksAreUnique(values)) {
 			dispatch(createRoute(values))
 			dispatch(initializeRoutes)
 			setShowRoutePlanner(false)
@@ -62,10 +65,7 @@ export const RoutePlanner = ({ setShowRoutePlanner }: PropsType) => {
 
 	return (
 		<div>
-			<Box sx={{ backgroundColor: '#f5f5f5', padding: '10px', border: 1, borderRadius: '5px', marginTop: '10px' }}>
-				<Box display={'flex'} flexDirection={'row'} justifyContent={'center'}>
-					<Typography fontSize={'1.2rem'}>New Route</Typography>
-				</Box>
+			<FormMainContainer caption='NEW ROUTE'>
 				<Formik
 					initialValues={initialValues}
 					validationSchema={validationSchema}
@@ -74,9 +74,9 @@ export const RoutePlanner = ({ setShowRoutePlanner }: PropsType) => {
 					}}>
 					{props => (
 						<Form autoComplete='off'>
-							<RoutePointBox caption='Start point'>
-								<FormSelect options={docks} name='startDockId' label='Start point' />
-							</RoutePointBox>
+							<FormGroupContainer caption='Start point'>
+								<FormSelect options={docks} name='startDockId' label='dock' />
+							</FormGroupContainer>
 
 							<FieldArray name='stops'>
 								{({ push, remove }) => (
@@ -85,10 +85,10 @@ export const RoutePlanner = ({ setShowRoutePlanner }: PropsType) => {
 											props.values.stops.map((_p, index) => {
 												const dock = `stops[${index}].dockId`
 												const time = `stops[${index}].delayTimeMinutes`
-												const fieldLabel = `stop point ${index + 1}`
+												const fieldLabel = `dock`
 												return (
-													<RoutePointBox key={index} caption={`Stop point ${index + 1}`}>
-														<div>
+													<FormGroupContainer key={index} caption={`Stop point ${index + 1}`}>
+														<>
 															<FormSelect options={docks} name={dock} label={fieldLabel} />
 															<Box display={'flex'} flexDirection={'row'}>
 																<FormTextField type='number' label='minutes from start' name={time} />
@@ -96,8 +96,8 @@ export const RoutePlanner = ({ setShowRoutePlanner }: PropsType) => {
 																	<IconButton iconType='trash' whenClicked={() => remove(index)} />
 																</Box>
 															</Box>
-														</div>
-													</RoutePointBox>
+														</>
+													</FormGroupContainer>
 												)
 											})}
 										<Box display={'flex'} flexDirection={'row'} justifyContent={'center'}>
@@ -108,9 +108,9 @@ export const RoutePlanner = ({ setShowRoutePlanner }: PropsType) => {
 									</div>
 								)}
 							</FieldArray>
-							<RoutePointBox caption='End point'>
-								<FormSelect options={docks} name='endDockId' label='End point' />
-							</RoutePointBox>
+							<FormGroupContainer caption='End point'>
+								<FormSelect options={docks} name='endDockId' label='dock' />
+							</FormGroupContainer>
 							<Box display={'flex'} flexDirection={'row'}>
 								<IconButton buttonType='submit' iconType='save' />
 								<IconButton buttonType='reset' iconType='cancel' whenClicked={() => setShowRoutePlanner(false)} />
@@ -118,7 +118,7 @@ export const RoutePlanner = ({ setShowRoutePlanner }: PropsType) => {
 						</Form>
 					)}
 				</Formik>
-			</Box>
+			</FormMainContainer>
 			<Snackbar
 				open={errorMsg !== ''}
 				autoHideDuration={4000}
