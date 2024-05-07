@@ -2,8 +2,9 @@ import { Box, Button, MenuItem, TextField, Typography } from "@mui/material"
 import {
     DeleteOutlined, AddCircleOutline, HighlightOff, SaveAlt, DepartureBoardOutlined
 } from '@mui/icons-material'
-import { useField } from "formik"
+import { Field, useField } from "formik"
 import { DockType } from "types"
+import { DatePicker, TimePicker } from "@mui/x-date-pickers"
 
 
 type IconButtonProps = {
@@ -22,7 +23,6 @@ const IconButton = (props: IconButtonProps) => {
 
     let icon = <></>
     let sxValues = {
-        //  mt: 3, mb: 2, 
         fontSize: '2rem', color: '',
     }
 
@@ -53,13 +53,31 @@ const IconButton = (props: IconButtonProps) => {
     )
 }
 
-type RoutePointBoxProps = {
+type FormMainContainerProps = {
+    children: JSX.Element
+    caption?: string
+}
+
+const FormMainContainer = (props: FormMainContainerProps) => {
+    return (
+        <Box sx={{ backgroundColor: '#f5f5f5', border: 1, borderRadius: '5px', marginY: '10px', padding: '5px' }}>
+            {props.caption &&
+                <Box display={'flex'} flexDirection={'row'} justifyContent={'center'}>
+                    <Typography fontSize={'1.2rem'}>{props.caption}</Typography>
+                </Box>
+            }
+            {props.children}
+        </Box>
+    )
+}
+
+type FormGroupContainerProps = {
     children: JSX.Element
     caption: string
 }
-const RoutePointBox = (props: RoutePointBoxProps) => {
+const FormGroupContainer = (props: FormGroupContainerProps) => {
     return (
-        <Box display={'flex'} flexDirection={'column'} sx={{ backgroundColor: 'white', borderBlockColor: 'black', borderWidth: '2px', border: 1, padding: '10px', borderRadius: '5px' }}>
+        <Box display={'flex'} flexDirection={'column'} sx={{ backgroundColor: 'white', borderBlockColor: 'black', borderWidth: '2px', border: 1, padding: '10px', borderRadius: '5px', margin: '5px' }}>
             <Box display={'flex'} flexDirection={'row'} justifyContent={'center'}>
                 <Typography fontSize={'1rem'}>{props.caption}</Typography>
             </Box>
@@ -130,4 +148,47 @@ const FormSelect = (props: FormSelectProps) => {
     )
 }
 
-export { IconButton, RoutePointBox, FormTextField, FormSelect }
+type FormTimeOrDatePickerProps = {
+    name: string
+    label: string
+    setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void
+}
+
+const FormTimePicker = (props: FormTimeOrDatePickerProps) => {
+    const [field, _meta] = useField(props)
+    return (
+        <Field name={props.name}>
+            {() => (
+                <TimePicker
+                    label={props.label}
+                    value={field.value}
+                    onChange=
+                    {(newValue): void => {
+                        props.setFieldValue(props.name, newValue)
+                    }}
+                />
+            )}
+        </Field>
+    )
+}
+
+const FormDatePicker = (props: FormTimeOrDatePickerProps) => {
+    const [field, _meta] = useField(props)
+    return (
+        <Field name={props.name}>
+            {() => (
+                <DatePicker
+                    label={props.label}
+                    value={field.value}
+                    onChange=
+                    {(newValue): void => {
+                        props.setFieldValue(props.name, newValue)
+                    }}
+                />
+            )}
+        </Field>
+    )
+}
+
+
+export { IconButton, FormGroupContainer, FormTextField, FormSelect, FormTimePicker, FormDatePicker, FormMainContainer }

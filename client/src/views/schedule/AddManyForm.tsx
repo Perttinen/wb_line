@@ -1,7 +1,6 @@
-import { Box, Button, Table, TableBody, TableCell, TableRow, Typography } from "@mui/material"
-import { DatePicker, TimePicker } from "@mui/x-date-pickers"
+import { Box, Typography } from "@mui/material"
 import dayjs, { Dayjs } from "dayjs"
-import { Field, Form, Formik } from "formik"
+import { Field, FieldArray, Form, Formik } from "formik"
 
 import { AppDispatch } from '../../store'
 import { DepartureType } from "../../../../types"
@@ -9,6 +8,7 @@ import { useDispatch } from "react-redux"
 import {
     createDeparture,
 } from '../../reducers/departureReducer'
+import { FormDatePicker, FormMainContainer, FormTimePicker, IconButton, FormGroupContainer } from "views/components/SmallOnes"
 
 export const AddManyForm = ({
     setAddManyForm, routeId
@@ -26,7 +26,7 @@ export const AddManyForm = ({
     interface FormValues {
         fromDate: Dayjs
         toDate: Dayjs
-        time: Dayjs
+        times: Dayjs[]
         weekdays: [
             boolean,
             boolean,
@@ -42,7 +42,7 @@ export const AddManyForm = ({
     const initialValues: FormValues = {
         fromDate: dayjs(),
         toDate: dayjs(),
-        time: dayjs(),
+        times: [dayjs()],
         weekdays: [
             false,
             false,
@@ -59,106 +59,86 @@ export const AddManyForm = ({
         const startArray = []
         for (let start = values.fromDate; start.isBefore(values.toDate.add(1, 'day')); start = start.add(1, 'day')) {
             if (values.weekdays[start.subtract(1, 'day').day()]) {
-                const dateTime = start.set('hour', values.time.hour()).set('minute', values.time.minute()).set('second', 0)
-                startArray.push({ startTime: dateTime, routeId: values.routeId })
+                for (let i in values.times) {
+                    const dateTime = start.set('hour', values.times[i].hour()).set('minute', values.times[i].minute()).set('second', 0)
+                    startArray.push({ startTime: dateTime, routeId: values.routeId })
+                }
+
             }
         }
         return startArray
     }
 
     const handleSubmit = async (values: FormValues) => {
+        console.log(createStartList(values));
+
         const starts = createStartList(values)
         scheduleDispatch(createDeparture(starts))
     }
 
     return (
-        <Box sx={{ marginTop: '1rem' }}>
+        <FormMainContainer caption="ADD MANY" >
             <Formik
                 initialValues={initialValues}
                 onSubmit={async (values) => {
                     handleSubmit(values)
                 }}>
-                {({
-                    submitForm,
-                    isSubmitting,
-                    setFieldValue,
-                    values
-                }) => (
+                {props => (
                     <Form>
-                        <Table >
-                            <TableBody>
-                                <TableRow >
+                        <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                            <FormGroupContainer caption="select weekdays">
+                                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
                                     {days.map((d, i) =>
-                                        <TableCell key={i} sx={{ borderBottom: 'none', paddingY: 0 }}>
+                                        <Box key={i} sx={{ display: 'flex', flexDirection: 'column' }}>
                                             <Typography >{d}</Typography>
-                                        </TableCell>
+                                            <Field type='checkbox' name={`weekdays[${i}]`} />
+                                        </Box>
                                     )}
-                                </TableRow>
-                                <TableRow >
-                                    {values.weekdays.map((_d, i) => {
-                                        return (
-                                            <TableCell key={i} sx={{ borderBottom: 'none', paddingTop: 0 }}>
-                                                <Field type='checkbox' name={`weekdays[${i}]`} />
-                                            </TableCell>)
-                                    })}
-                                </TableRow>
-                            </TableBody>
-                        </Table>
-                        <Field name='fromDate'>
-                            {() => (
-                                <DatePicker
-                                    label='From'
-                                    value={values.fromDate}
-                                    onChange=
-                                    {(newValue): void => {
-                                        setFieldValue('fromDate', newValue)
-                                    }}
-                                />
-                            )}
-                        </Field>
-                        <Field name='toDate'>
-                            {() => (
-                                <DatePicker
-                                    label='To'
-                                    value={values.toDate}
-                                    onChange=
-                                    {(newValue): void => {
-                                        setFieldValue('toDate', newValue)
-                                    }}
-                                />
-                            )}
-                        </Field>
-                        <Field name='time'>
-                            {() => (
-                                <TimePicker
-                                    label='Time'
-                                    value={values.time}
-                                    onChange=
-                                    {(newValue): void => {
-                                        setFieldValue('time', newValue)
-                                    }}
-                                />
-                            )}
-                        </Field>
-                        <Button
-                            sx={{ height: 55 }}
-                            variant='contained'
-                            color='primary'
-                            disabled={isSubmitting}
-                            onClick={submitForm}
-                        >
-                            Submit
-                        </Button>
-                        <Button
-                            sx={{ height: 55, bgcolor: '#B03A2E' }}
-                            variant='contained'
-                            disabled={isSubmitting}
-                            onClick={() => setAddManyForm(false)}
-                        >
-                            Close
-                        </Button>
+                                </Box>
+                            </FormGroupContainer>
+                            <FormGroupContainer caption="pick from & to dates">
+                                <Box display={'flex'} flexDirection={'row'} >
+                                    <FormDatePicker name="fromDate" label="from" setFieldValue={props.setFieldValue} />
+                                    <FormDatePicker name="toDate" label="to" setFieldValue={props.setFieldValue} />
+                                </Box>
+                            </FormGroupContainer>
+                            <FormGroupContainer caption="give departure times">
+                                <FieldArray name='times'>
+                                    {({ push, remove }) => (
+                                        <div>
+
+                                            <Box display={'flex'} flexDirection={'column'} >
+                                                {props.values.times.length > 0 &&
+                                                    props.values.times.map((_p, index) => {
+                                                        const time = `times[${index}]`
+                                                        const fieldLabel = `time ${index + 1}`
+                                                        return (
+                                                            <Box key={index} display={'flex'} flexDirection={'row'} justifyContent={'center'} marginY={'10px'}>
+                                                                <FormTimePicker name={time} label={fieldLabel} setFieldValue={props.setFieldValue} />
+                                                                <IconButton iconType='trash' whenClicked={() => remove(index)} />
+                                                            </Box>
+
+                                                        )
+                                                    })}
+                                                <Box display={'flex'} flexDirection={'row'} justifyContent={'center'}>
+                                                    <IconButton
+                                                        whenClicked={() => push(dayjs())}
+                                                        iconType='add' />
+                                                </Box>
+
+                                            </Box>
+                                        </div>
+                                    )}
+                                </FieldArray>
+                            </FormGroupContainer>
+                            <Box display={'flex'} flexDirection={'row'} justifyContent={'center'}>
+                                <IconButton iconType="save" buttonType="submit" />
+                                <IconButton iconType="cancel" whenClicked={() => setAddManyForm(false)} />
+                            </Box>
+                        </Box>
                     </Form>
                 )}
             </Formik>
-        </Box>)
+        </FormMainContainer>
+    )
 }

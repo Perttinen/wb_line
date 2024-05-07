@@ -43,7 +43,7 @@ export const Schedule = () => {
                 >
                     add one
                 </Button>}
-                {(!addOneForm && !delManyForm) && <Button
+                {(!addOneForm && !delManyForm && !addManyForm) && <Button
                     onClick={() => {
                         setAddManyForm(true);
                     }}
