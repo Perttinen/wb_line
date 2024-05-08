@@ -1,4 +1,4 @@
-import { Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material"
+import { CssBaseline, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material"
 import { useDispatch, useSelector } from "react-redux"
 import { useLocation, useParams } from "react-router-dom"
 import { DepartureType, StopType } from "../../../../types"
@@ -57,6 +57,7 @@ export const TimetableById = () => {
 
     return (
         <div>
+            <CssBaseline />
             <TableContainer>
                 <Table>
                     <TableBody>

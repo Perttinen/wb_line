@@ -69,8 +69,10 @@ router.post('/', tokenExtractor, async (req, res) => {
 
 router.delete('/', tokenExtractor, async (req, res) => {
 	try {
+		console.log('body: ', req.body);
+
 		await Departure.destroy({ where: { id: req.body } })
-		res.status(204)
+		res.status(204).json(req.body)
 	} catch (e) {
 		console.log(e)
 		res.status(500).json(e)

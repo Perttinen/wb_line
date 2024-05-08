@@ -9,7 +9,7 @@ import { DockType, RouteFormValuesType } from 'types'
 import { useDispatch, useSelector } from 'react-redux'
 import { createRoute, initializeRoutes } from 'reducers/routeReducer'
 import { AppDispatch } from 'store'
-import { FormSelect, FormTextField, IconButton, FormGroupContainer, FormMainContainer } from 'views/components/SmallOnes'
+import { FormSelect, FormTextField, IconButton, FormGroupContainer, FormMainContainer, SaveAndCancelButtons } from 'views/components/SmallOnes'
 import { useState } from 'react'
 
 type PropsType = {
@@ -111,10 +111,7 @@ export const RoutePlanner = ({ setShowRoutePlanner }: PropsType) => {
 							<FormGroupContainer caption='End point'>
 								<FormSelect options={docks} name='endDockId' label='dock' />
 							</FormGroupContainer>
-							<Box display={'flex'} flexDirection={'row'}>
-								<IconButton buttonType='submit' iconType='save' />
-								<IconButton buttonType='reset' iconType='cancel' whenClicked={() => setShowRoutePlanner(false)} />
-							</Box>
+							<SaveAndCancelButtons onCancel={() => setShowRoutePlanner(false)} />
 						</Form>
 					)}
 				</Formik>

@@ -1,10 +1,59 @@
 import { Box, Button, MenuItem, TextField, Typography } from "@mui/material"
 import {
-    DeleteOutlined, AddCircleOutline, HighlightOff, SaveAlt, DepartureBoardOutlined
+    DeleteOutlined, AddCircleOutline, HighlightOff, SaveAlt, DepartureBoardOutlined,
 } from '@mui/icons-material'
 import { Field, useField } from "formik"
 import { DockType } from "types"
 import { DatePicker, TimePicker } from "@mui/x-date-pickers"
+import { theme } from "mui/muiTheme"
+
+
+
+type TextButtonProps = {
+    whenClicked?: () => void
+    buttonType?: "button" | "submit" | "reset" | undefined
+    actionType: "add" | "save" | "cancel" | "trash" | "schedule"
+    label: string
+}
+const TextButton = (props: TextButtonProps) => {
+    const getClicker = () => {
+        if (typeof props.whenClicked === 'function') {
+            return props.whenClicked()
+        }
+        return void (0)
+    }
+    let sxValues = {
+        borderColor: ''
+    }
+
+    switch (props.actionType) {
+        case 'add':
+            // sxValues.borderColor = theme.palette.secondary.dark
+            break
+        case 'cancel':
+            // sxValues.color = theme.palette.error.dark
+            break
+        case 'save':
+
+            // sxValues.color = theme.palette.success.dark
+            break
+        case 'trash':
+            sxValues.borderColor = theme.palette.error.light
+            break
+        case 'schedule': break
+    }
+
+    return (
+        <Button
+            variant='outlined'
+            type={props.buttonType}
+            onClick={getClicker}
+            sx={{ ...sxValues, color: theme.palette.primary.dark, paddingX: '4px', paddingY: '0px', fontSize: '1rem' }}>
+            {props.label}
+        </Button>
+    )
+
+}
 
 
 type IconButtonProps = {
@@ -28,16 +77,17 @@ const IconButton = (props: IconButtonProps) => {
 
     switch (props.iconType) {
         case 'add': icon = <AddCircleOutline fontSize='inherit' />
+            sxValues.color = theme.palette.primary.dark
             break
         case 'cancel': icon = <HighlightOff fontSize='inherit' />
-            sxValues.color = '#B03A2E'
+            sxValues.color = theme.palette.error.dark
             break
         case 'save':
             icon = <SaveAlt fontSize='inherit' />
-            sxValues.color = '#1E8449'
+            sxValues.color = theme.palette.success.dark
             break
         case 'trash': icon = <DeleteOutlined fontSize='inherit' />
-            sxValues.color = 'black'
+            sxValues.color = theme.palette.primary.dark
             break
         case 'schedule': icon = <DepartureBoardOutlined fontSize='inherit' />
     }
@@ -46,7 +96,6 @@ const IconButton = (props: IconButtonProps) => {
         <Button
             type={props.buttonType}
             onClick={getClicker}
-            fullWidth
             sx={{ ...sxValues }}>
             {icon}
         </Button>
@@ -60,7 +109,7 @@ type FormMainContainerProps = {
 
 const FormMainContainer = (props: FormMainContainerProps) => {
     return (
-        <Box sx={{ backgroundColor: '#f5f5f5', border: 1, borderRadius: '5px', marginY: '10px', padding: '5px' }}>
+        <Box sx={{ border: 1, borderRadius: '5px', marginY: '10px', padding: '5px', backgroundColor: theme.palette.secondary.light }}>
             {props.caption &&
                 <Box display={'flex'} flexDirection={'row'} justifyContent={'center'}>
                     <Typography fontSize={'1.2rem'}>{props.caption}</Typography>
@@ -73,15 +122,19 @@ const FormMainContainer = (props: FormMainContainerProps) => {
 
 type FormGroupContainerProps = {
     children: JSX.Element
-    caption: string
+    caption?: string
+
 }
 const FormGroupContainer = (props: FormGroupContainerProps) => {
     return (
-        <Box display={'flex'} flexDirection={'column'} sx={{ backgroundColor: 'white', borderBlockColor: 'black', borderWidth: '2px', border: 1, padding: '10px', borderRadius: '5px', margin: '5px' }}>
-            <Box display={'flex'} flexDirection={'row'} justifyContent={'center'}>
-                <Typography fontSize={'1rem'}>{props.caption}</Typography>
-            </Box>
+        <Box display={'flex'} flexDirection={'column'} sx={{ backgroundColor: 'white', borderWidth: '2px', border: 1, padding: '10px', borderRadius: '5px', margin: '5px' }}>
+            {props.caption &&
+                <Box display={'flex'} flexDirection={'row'} justifyContent={'start'}>
+                    <Typography fontSize={'1rem'}>{props.caption}</Typography>
+                </Box>
+            }
             {props.children}
+
         </Box>
 
     )
@@ -126,6 +179,7 @@ const FormSelect = (props: FormSelectProps) => {
     console.log('dockid: ');
     return (
         <TextField
+            sx={{ borderColor: 'darkgrey' }}
             fullWidth
             required
             select
@@ -190,5 +244,20 @@ const FormDatePicker = (props: FormTimeOrDatePickerProps) => {
     )
 }
 
+type SaveAndCancelButtonsPropsType = {
+    onCancel: (val: boolean) => void
+    saveIcon?: "add" | "save" | "cancel" | "trash" | "schedule"
+}
 
-export { IconButton, FormGroupContainer, FormTextField, FormSelect, FormTimePicker, FormDatePicker, FormMainContainer }
+const SaveAndCancelButtons = (props: SaveAndCancelButtonsPropsType) => {
+    const saveButton = props.saveIcon ? props.saveIcon : 'save'
+    return (
+        <Box display={'flex'} flexDirection={'row'} justifyContent={'space-evenly'}>
+            <IconButton buttonType='submit' iconType={saveButton} />
+            <IconButton buttonType='reset' iconType='cancel' whenClicked={() => props.onCancel(false)} />
+        </Box>
+    )
+}
+
+
+export { IconButton, FormGroupContainer, FormTextField, FormSelect, FormTimePicker, FormDatePicker, FormMainContainer, SaveAndCancelButtons, TextButton }

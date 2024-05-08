@@ -13,6 +13,7 @@ import { useDispatch } from "react-redux"
 import {
     removeDeparture,
 } from '../../reducers/departureReducer'
+import { FormDatePicker, FormGroupContainer, FormMainContainer, SaveAndCancelButtons } from "views/components/SmallOnes"
 
 dayjs.extend(isSameOrAfter)
 dayjs.extend(isSameOrBefore)
@@ -82,7 +83,7 @@ export const DeleteManyForm = ({
     }
 
     return (
-        <Box sx={{ marginTop: '1rem' }}>
+        <FormMainContainer caption="DELETE MANY" >
             <Formik
                 initialValues={initialValues}
                 onSubmit={async (values) => {
@@ -95,92 +96,53 @@ export const DeleteManyForm = ({
                     values
                 }) => (
                     <Form>
-                        <Table >
-                            <TableBody>
-                                <TableRow >
-                                    {days.map((d, i) =>
-                                        <TableCell key={i} sx={{ borderBottom: 'none', paddingY: 0 }}>
-                                            <Typography >{d}</Typography>
-                                        </TableCell>
+                        <FormGroupContainer >
+                            <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
+                                {days.map((d, i) =>
+                                    <Box key={i} sx={{ display: 'flex', flexDirection: 'column' }}>
+                                        <Typography >{d}</Typography>
+                                        <Field type='checkbox' name={`weekdays[${i}]`} />
+                                    </Box>
+                                )}
+                            </Box>
+                        </FormGroupContainer>
+                        <FormGroupContainer>
+                            <Box display={'flex'} flexDirection={'row'} >
+                                <FormDatePicker name="fromDate" label="from date" setFieldValue={setFieldValue} />
+                                <FormDatePicker name="toDate" label="to date" setFieldValue={setFieldValue} />
+                            </Box>
+                        </FormGroupContainer>
+                        <FormGroupContainer>
+                            <Box display={'flex'} flexDirection={'row'} >
+                                <Field name='fromTime'>
+                                    {() => (
+                                        <TimePicker
+                                            label='From time'
+                                            value={values.fromTime}
+                                            onChange=
+                                            {(newValue): void => {
+                                                setFieldValue('fromTime', newValue)
+                                            }}
+                                        />
                                     )}
-                                </TableRow>
-                                <TableRow >
-                                    {values.weekdays.map((_d, i) => {
-                                        return (
-                                            <TableCell key={i} sx={{ borderBottom: 'none', paddingTop: 0 }}>
-                                                <Field type='checkbox' name={`weekdays[${i}]`} />
-                                            </TableCell>)
-                                    })}
-                                </TableRow>
-                            </TableBody>
-                        </Table>
-                        <Field name='fromDate'>
-                            {() => (
-                                <DatePicker
-                                    label='From'
-                                    value={values.fromDate}
-                                    onChange=
-                                    {(newValue): void => {
-                                        setFieldValue('fromDate', newValue)
-                                    }}
-                                />
-                            )}
-                        </Field>
-                        <Field name='toDate'>
-                            {() => (
-                                <DatePicker
-                                    label='To'
-                                    value={values.toDate}
-                                    onChange=
-                                    {(newValue): void => {
-                                        setFieldValue('toDate', newValue)
-                                    }}
-                                />
-                            )}
-                        </Field>
-                        <Field name='fromTime'>
-                            {() => (
-                                <TimePicker
-                                    label='From time'
-                                    value={values.fromTime}
-                                    onChange=
-                                    {(newValue): void => {
-                                        setFieldValue('fromTime', newValue)
-                                    }}
-                                />
-                            )}
-                        </Field>
-                        <Field name='toTime'>
-                            {() => (
-                                <TimePicker
-                                    label='To time'
-                                    value={values.toTime}
-                                    onChange=
-                                    {(newValue): void => {
-                                        setFieldValue('toTime', newValue)
-                                    }}
-                                />
-                            )}
-                        </Field>
-                        <Button
-                            sx={{ height: 55 }}
-                            variant='contained'
-                            color='primary'
-                            disabled={isSubmitting}
-                            onClick={submitForm}
-                        >
-                            Delete
-                        </Button>
-                        <Button
-                            sx={{ height: 55, bgcolor: '#B03A2E' }}
-                            variant='contained'
-                            disabled={isSubmitting}
-                            onClick={() => setDelManyForm(false)}
-                        >
-                            Close
-                        </Button>
+                                </Field>
+                                <Field name='toTime'>
+                                    {() => (
+                                        <TimePicker
+                                            label='To time'
+                                            value={values.toTime}
+                                            onChange=
+                                            {(newValue): void => {
+                                                setFieldValue('toTime', newValue)
+                                            }}
+                                        />
+                                    )}
+                                </Field>
+                            </Box>
+                        </FormGroupContainer>
+                        <SaveAndCancelButtons onCancel={() => { setDelManyForm(false) }} saveIcon="trash" />
                     </Form>
                 )}
             </Formik>
-        </Box>)
+        </FormMainContainer>)
 }
