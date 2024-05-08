@@ -12,7 +12,11 @@ const create = async (values: initDepartureType[]) => {
 }
 
 const remove = async (id: number[]) => {
-	await api.delete('/departure', { data: id })
+	console.log('service');
+
+	const res = await api.delete('/departure', { data: id })
+	console.log('serv: ', res);
+	return res
 }
 
 export const departureService = { getAll, create, remove }

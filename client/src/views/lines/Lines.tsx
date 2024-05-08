@@ -1,26 +1,20 @@
-import { CssBaseline } from '@mui/material'
+import { Box } from '@mui/material'
 import { useState } from 'react'
 import { RoutePlanner } from 'views/lines/RoutePlanner'
 import { RouteList } from 'views/lines/RouteList'
-import { IconButton } from 'views/components/SmallOnes'
+import { TextButton } from 'views/components/SmallOnes'
 
 export const Lines = () => {
 	const [showRoutePlanner, setShowRoutePlanner] = useState(false)
 	return (
 		<div>
-			<CssBaseline />
 			{showRoutePlanner
 				? (
 					<RoutePlanner setShowRoutePlanner={setShowRoutePlanner} />
 				)
-				: (
-					<IconButton iconType='add' whenClicked={() => { setShowRoutePlanner(!showRoutePlanner) }} />
-					// <Button
-					// 	onClick={() => setShowRoutePlanner(!showRoutePlanner)}
-					// 	fullWidth
-					// 	sx={{ mt: 3, mb: 2, fontSize: '2rem' }}>
-					// 	<AddCircleOutlineIcon fontSize='inherit' />
-					// </Button>
+				: (<Box display={'flex'} flexDirection={'row'} justifyContent={'center'} alignItems={'center'} height={'80px'} borderBottom={1}>
+					<TextButton actionType='add' label='create route' whenClicked={() => { setShowRoutePlanner(!showRoutePlanner) }}></TextButton>
+				</Box>
 				)
 			}
 			<RouteList />

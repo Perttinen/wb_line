@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, Dispatch } from '@reduxjs/toolkit'
 
-import { InitRouteType, RouteType, StopNoIdType, StopType } from 'types'
+import { InitRouteType, RouteType, StopNoIdType } from 'types'
 import { routeService, stopService } from 'services'
 import { createStop } from './stopReducer'
 

@@ -1,6 +1,6 @@
-import { RouterProvider, createBrowserRouter } from "react-router-dom"
+import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom"
 
-import App from './App'
+// import App from './App'
 import {
     Home,
     ResourceManagement,
@@ -12,6 +12,7 @@ import {
     Login
 } from 'views'
 import { ProtectedRoute } from './views/components/ProtectedRoute'
+import Appi from './Appi'
 
 export const Router = () => {
     const router = createBrowserRouter([
@@ -29,7 +30,7 @@ export const Router = () => {
         },
         {
             path: '/',
-            element: <ProtectedRoute><App /></ProtectedRoute>,
+            element: <ProtectedRoute><Appi /></ProtectedRoute>,
             children: [
                 {
                     path: '/usermanagement',

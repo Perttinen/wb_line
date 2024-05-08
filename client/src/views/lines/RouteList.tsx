@@ -1,6 +1,12 @@
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import {
+	Button,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogContentText,
+	DialogTitle,
 	Table,
 	TableBody,
 	TableCell,
@@ -11,9 +17,12 @@ import {
 import { RouteDocksType, RouteType, RouteWithAllType } from 'types'
 import { AppDispatch } from 'store'
 import { removeRoute } from 'reducers/routeReducer'
-import { IconButton } from 'views/components/SmallOnes';
+import { TextButton } from 'views/components/SmallOnes';
+import { useState } from 'react'
 
 export const RouteList = () => {
+
+	const [alert, setAlert] = useState(-1)
 
 	const navigate = useNavigate()
 
@@ -43,25 +52,51 @@ export const RouteList = () => {
 	}
 
 	return (
-		<Table>
-			<TableBody>
-				{routes.map((r) => {
-					const routeDocks = getRouteDocks(r)
-					return (
-						<TableRow key={r.id} sx={{ verticalAlign: 'top' }}>
-							<TableCell sx={{ paddingRight: '2px', paddingLeft: '4px' }}>
-								{routeDocks.map((r, i) => <Typography key={i}>{r.name}</Typography>)}
-							</TableCell>
-							<TableCell sx={{ paddingRight: '2px', paddingLeft: '4px' }}>
-								<IconButton iconType='schedule' whenClicked={() => navigate('/schedule', { state: { routeId: r.id, docks: routeDocks } })} />
-							</TableCell>
-							<TableCell sx={{ paddingRight: '2px', paddingLeft: '4px' }}>
-								<IconButton whenClicked={() => handleDelete(r.id)} iconType='trash' />
-							</TableCell>
-						</TableRow>
-					)
-				})}
-			</TableBody>
-		</Table>
+		<>
+			<Dialog
+				open={alert !== -1}
+				onClose={() => setAlert(-1)}
+				aria-labelledby="alert-dialog-title"
+				aria-describedby="alert-dialog-description"
+			>
+				<DialogTitle id="alert-dialog-title">
+					{"Are you sure?"}
+				</DialogTitle>
+				<DialogContent>
+					<DialogContentText id="alert-dialog-description">
+						Deleting route will also delete all routes scheduled starts from timetable!
+					</DialogContentText>
+				</DialogContent>
+				<DialogActions>
+					<TextButton actionType='cancel' label='cancel' whenClicked={() => setAlert(-1)} />
+					<TextButton actionType='trash' label='delete' whenClicked={() => {
+						handleDelete(alert)
+						setAlert(-1)
+					}} />
+				</DialogActions>
+			</Dialog>
+			<Table  >
+				<TableBody>
+					{routes.map((r) => {
+						const routeDocks = getRouteDocks(r)
+						return (
+
+							<TableRow key={r.id} sx={{ verticalAlign: 'top' }}>
+								<TableCell sx={{ paddingRight: '2px', paddingLeft: '4px' }}>
+									{routeDocks.map((r, i) => <Typography key={i}>{r.name}</Typography>)}
+								</TableCell>
+								<TableCell sx={{ paddingRight: '2px', paddingLeft: '4px' }}>
+									<TextButton label='schedule' actionType='schedule' whenClicked={() => navigate('/schedule', { state: { routeId: r.id, docks: routeDocks } })} />
+								</TableCell>
+								<TableCell sx={{ paddingRight: '2px', paddingLeft: '4px' }}>
+									<TextButton label='delete' actionType='trash' whenClicked={() => { setAlert(r.id) }} />
+
+								</TableCell>
+							</TableRow>
+						)
+					})}
+				</TableBody>
+			</Table>
+		</>
 	)
 }

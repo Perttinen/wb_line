@@ -8,6 +8,7 @@ import { useState } from 'react'
 import { AddOneForm } from './AddOneForm'
 import { AddManyForm } from './AddManyForm'
 import { DeleteManyForm } from './DeleteManyForm'
+import { theme } from 'mui/muiTheme'
 
 export const Schedule = () => {
 
@@ -27,7 +28,7 @@ export const Schedule = () => {
         <div>
             <CssBaseline />
 
-            <Box bgcolor={'lightgrey'}>
+            <Box bgcolor={theme.palette.secondary.light}>
                 <List component={Stack} direction={'row'}>
                     {docks.map(d => <ListItem sx={{ justifyContent: 'center' }} disablePadding key={d.id} > {d.name} </ListItem>)}
                 </List>
