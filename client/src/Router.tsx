@@ -11,7 +11,6 @@ import {
 } from 'views'
 import { ProtectedRoute } from './views/components/ProtectedRoute'
 import { AppBar } from "views"
-import { CssBaseline } from "@mui/material"
 
 export const Router = () => {
     const router = createBrowserRouter([
@@ -29,7 +28,7 @@ export const Router = () => {
         },
         {
             path: '/',
-            element: <ProtectedRoute><CssBaseline /><AppBar /></ProtectedRoute>,
+            element: <ProtectedRoute><AppBar /></ProtectedRoute>,
             children: [
                 {
                     path: '/usermanagement',
