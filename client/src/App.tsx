@@ -11,7 +11,7 @@ import { Router } from './Router'
 const App = () => {
 
     return (
-        <Container>
+        <Container disableGutters>
             <Provider store={store}>
                 <WebSocketProvider>
                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='fi'>

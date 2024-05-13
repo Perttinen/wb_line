@@ -56,43 +56,47 @@ export const TimetableById = () => {
     const tableDataFromToday = tableData.filter(d => d.startTime.isSameOrAfter(dayjs(Date.now())))
 
     return (
+        <>
 
-        <TableContainer  >
-            <Table sx={{ bgcolor: 'black', color: 'white' }}>
-                <TableBody>
-                    {tableDataFromToday.map((d, index, arr) =>
-                        <Fragment key={d.id}>
+            {/* <Container disableGutters maxWidth={false}> */}
+            <TableContainer  >
+                <Table sx={{ bgcolor: 'black', color: 'white' }}>
+                    <TableBody>
+                        {tableDataFromToday.map((d, index, arr) =>
+                            <Fragment key={d.id}>
 
-                            {((index > 0 &&
-                                arr[index - 1].startTime.isBefore(d.startTime, 'day')) || (index === 0 && d.startTime.isAfter(dayjs(Date.now()), 'day'))) &&
-                                <TableRow >
-                                    <TableCell colSpan={2} align='left' sx={{ fontSize: '1.5rem', color: '#e91e63', paddingY: '3px' }}>
-                                        {d.startTime.toDate().toDateString()}
-                                    </TableCell>
-                                </TableRow>}
-                            {d.via.length !== 0 ?
-                                <>
-                                    <TableRow sx={{ border: 0 }}>
-                                        <TableCell sx={{ color: 'lightyellow', border: 0, fontSize: '1.5rem', paddingTop: '3px', paddingBottom: 0 }}>{d.endDock.toUpperCase()}</TableCell>
-                                        <TableCell width={'10%'} sx={{ border: 0, fontSize: '1.5rem', paddingTop: '3px', paddingBottom: 0, color: 'lightyellow' }}>{d.startTime?.format('HH:mm')}</TableCell>
-
-                                    </TableRow>
-                                    <TableRow sx={{ borderBottom: 1 }}>
-                                        <TableCell colSpan={2} sx={{ display: "flex", color: 'lightyellow', paddingY: '0', verticalAlign: 'top', borderBottom: 0 }}>
-                                            <List component={Stack} direction='row' sx={{ paddingY: 0, border: 0 }} ><ListItem sx={{ paddingY: 0, paddingLeft: 0 }}>via:</ListItem> {d.via.map((v, i) => <ListItem key={i} sx={{ paddingY: 0 }}>{v}</ListItem>)}</List>
+                                {((index > 0 &&
+                                    arr[index - 1].startTime.isBefore(d.startTime, 'day')) || (index === 0 && d.startTime.isAfter(dayjs(Date.now()), 'day'))) &&
+                                    <TableRow >
+                                        <TableCell colSpan={2} align='left' sx={{ fontSize: '1.5rem', color: '#e91e63', paddingY: '3px' }}>
+                                            {d.startTime.toDate().toDateString()}
                                         </TableCell>
-                                    </TableRow>
-                                </> : <>
-                                    <TableRow>
-                                        <TableCell sx={{ fontSize: '1.5rem', paddingY: '3px', color: 'lightyellow' }}>{d.endDock.toUpperCase()}</TableCell>
-                                        <TableCell width={'10%'} sx={{ fontSize: '1.5rem', paddingY: '3px', color: 'lightyellow' }}>{d.startTime?.format('HH:mm')}</TableCell>
+                                    </TableRow>}
+                                {d.via.length !== 0 ?
+                                    <>
+                                        <TableRow sx={{ border: 0 }}>
+                                            <TableCell sx={{ color: 'lightyellow', border: 0, fontSize: '1.5rem', paddingTop: '3px', paddingBottom: 0 }}>{d.endDock.toUpperCase()}</TableCell>
+                                            <TableCell width={'10%'} sx={{ border: 0, fontSize: '1.5rem', paddingTop: '3px', paddingBottom: 0, color: 'lightyellow' }}>{d.startTime?.format('HH:mm')}</TableCell>
 
-                                    </TableRow>
-                                </>}
-                        </Fragment>
-                    )}
-                </TableBody>
-            </Table>
-        </TableContainer>
+                                        </TableRow>
+                                        <TableRow sx={{ borderBottom: 1 }}>
+                                            <TableCell colSpan={2} sx={{ display: "flex", color: 'lightyellow', paddingY: '0', verticalAlign: 'top', borderBottom: 0 }}>
+                                                <List component={Stack} direction='row' sx={{ paddingY: 0, border: 0 }} ><ListItem sx={{ paddingY: 0, paddingLeft: 0 }}>via:</ListItem> {d.via.map((v, i) => <ListItem key={i} sx={{ paddingY: 0 }}>{v}</ListItem>)}</List>
+                                            </TableCell>
+                                        </TableRow>
+                                    </> : <>
+                                        <TableRow>
+                                            <TableCell sx={{ fontSize: '1.5rem', paddingY: '3px', color: 'lightyellow' }}>{d.endDock.toUpperCase()}</TableCell>
+                                            <TableCell width={'10%'} sx={{ fontSize: '1.5rem', paddingY: '3px', color: 'lightyellow' }}>{d.startTime?.format('HH:mm')}</TableCell>
+
+                                        </TableRow>
+                                    </>}
+                            </Fragment>
+                        )}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+            {/* </Container> */}
+        </>
     )
 }

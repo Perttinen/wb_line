@@ -21,7 +21,7 @@ export const NavMenuXs = ({ loggedUser }: PropsType) => {
     }
 
     const pages = [
-        { label: 'HOME', admin: false, route: '/' },
+        { label: 'HOME', admin: false, route: '/home' },
         { label: 'USERS', admin: true, route: '/usermanagement' },
         { label: 'RESOURCES', admin: false, route: '/resources' },
         { label: 'ROUTES', admin: false, route: '/routes' },
@@ -32,7 +32,6 @@ export const NavMenuXs = ({ loggedUser }: PropsType) => {
         <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
                 size='large'
-                aria-label='account of current user'
                 aria-controls='menu-appbar'
                 aria-haspopup='true'
                 onClick={handleOpenNavMenu}

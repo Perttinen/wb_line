@@ -39,6 +39,7 @@ export const AppBar = (
 				<Outlet />
 				<UserCard userCard={userCard} setUserCard={setUserCard} />
 			</div>
+
 			: <>loading..</>
 	)
 }
