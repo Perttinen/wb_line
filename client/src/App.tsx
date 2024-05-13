@@ -1,4 +1,4 @@
-import { Container, CssBaseline } from '@mui/material'
+import { Container } from '@mui/material'
 import { Provider } from 'react-redux'
 import { store } from './store'
 import WebSocketProvider from './WebSocket'
@@ -16,7 +16,7 @@ const App = () => {
                 <WebSocketProvider>
                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='fi'>
 
-                        <CssBaseline />
+
                         <Router />
 
                     </LocalizationProvider>

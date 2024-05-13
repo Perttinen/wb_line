@@ -1,10 +1,8 @@
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material"
+import { Button, Table, TableBody, TableCell, TableContainer, TableRow } from "@mui/material"
 import { DepartureType } from "../../../../types"
 import { useDispatch } from "react-redux"
 import { AppDispatch } from "../../store"
 import { removeDeparture } from "../../reducers/departureReducer"
-import { IconButton } from "views/components/SmallOnes"
-
 
 export const DepartureList = ({ filteredDepartures }: { filteredDepartures: DepartureType[] }) => {
 
@@ -23,20 +21,14 @@ export const DepartureList = ({ filteredDepartures }: { filteredDepartures: Depa
         <>
             <TableContainer >
                 <Table>
-                    <TableHead>
-                        <TableRow sx={{ backgroundColor: 'primary.main' }}>
-                            <TableCell sx={{ color: 'white', fontSize: '1.2rem' }}>DAY</TableCell>
-                            <TableCell sx={{ color: 'white', fontSize: '1.2rem' }}>TIME</TableCell>
-                            <TableCell sx={{ color: 'white', fontSize: '1.2rem' }}>DELETE</TableCell>
-                        </TableRow>
-                    </TableHead>
                     <TableBody>
                         {filteredDepartures.map(d =>
                             <TableRow key={d.id}>
                                 <TableCell sx={{ fontWeight: 'bold' }}>{new Date(d.startTime).toLocaleDateString('fi-FI')}</TableCell>
                                 <TableCell sx={{ fontWeight: 'bold' }}>{new Date(d.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })}</TableCell>
-                                <TableCell><IconButton iconType="trash" whenClicked={() => handleDelete(d.id)} /></TableCell>
-                                {/* <TableCell><Button onClick={() => handleDelete(d.id)}><DeleteOutlinedIcon /></Button></TableCell> */}
+                                <TableCell><Button variant='text' onClick={() => handleDelete(d.id)} >
+                                    delete
+                                </Button></TableCell>
                             </TableRow>)}
                     </TableBody>
                 </Table>

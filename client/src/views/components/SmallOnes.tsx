@@ -109,9 +109,9 @@ type FormMainContainerProps = {
 
 const FormMainContainer = (props: FormMainContainerProps) => {
     return (
-        <Box sx={{ border: 1, borderRadius: '5px', marginY: '10px', padding: '5px', backgroundColor: theme.palette.secondary.light }}>
+        <Box sx={{ border: 1, marginBottom: '10px', padding: '5px', backgroundColor: theme.palette.secondary.light, }}>
             {props.caption &&
-                <Box display={'flex'} flexDirection={'row'} justifyContent={'center'}>
+                <Box display={'flex'} flexDirection={'row'} justifyContent={'center'} >
                     <Typography fontSize={'1.2rem'}>{props.caption}</Typography>
                 </Box>
             }
@@ -153,7 +153,7 @@ const FormTextField = (props: FormTextFieldProps) => {
             name={props.name}
             label={props.label}
             type={props.type}
-            fullWidth
+            // fullWidth
             required
             variant='outlined'
             value={field.value}
@@ -246,15 +246,16 @@ const FormDatePicker = (props: FormTimeOrDatePickerProps) => {
 
 type SaveAndCancelButtonsPropsType = {
     onCancel: (val: boolean) => void
-    saveIcon?: "add" | "save" | "cancel" | "trash" | "schedule"
 }
 
 const SaveAndCancelButtons = (props: SaveAndCancelButtonsPropsType) => {
-    const saveButton = props.saveIcon ? props.saveIcon : 'save'
+
     return (
         <Box display={'flex'} flexDirection={'row'} justifyContent={'space-evenly'}>
-            <IconButton buttonType='submit' iconType={saveButton} />
-            <IconButton buttonType='reset' iconType='cancel' whenClicked={() => props.onCancel(false)} />
+            <Button variant='contained' type='submit'>save</Button>
+            <Button onClick={() => props.onCancel(false)} variant='contained' type='reset'>cancel</Button>
+            {/* <IconButton buttonType='submit' iconType={saveButton} />
+            <IconButton buttonType='reset' iconType='cancel' whenClicked={() => props.onCancel(false)} /> */}
         </Box>
     )
 }

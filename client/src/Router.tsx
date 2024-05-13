@@ -1,6 +1,4 @@
-import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom"
-
-// import App from './App'
+import { RouterProvider, createBrowserRouter } from "react-router-dom"
 import {
     Home,
     ResourceManagement,
@@ -12,7 +10,8 @@ import {
     Login
 } from 'views'
 import { ProtectedRoute } from './views/components/ProtectedRoute'
-import Appi from './Appi'
+import { AppBar } from "views"
+import { CssBaseline } from "@mui/material"
 
 export const Router = () => {
     const router = createBrowserRouter([
@@ -30,14 +29,14 @@ export const Router = () => {
         },
         {
             path: '/',
-            element: <ProtectedRoute><Appi /></ProtectedRoute>,
+            element: <ProtectedRoute><CssBaseline /><AppBar /></ProtectedRoute>,
             children: [
                 {
                     path: '/usermanagement',
                     element: <UserManagement />,
                 },
                 {
-                    path: '/',
+                    path: '/home',
                     element: <Home />,
                 },
                 {

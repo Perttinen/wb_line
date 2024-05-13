@@ -1,9 +1,9 @@
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from '../../store'
 import { setLoggedUser } from '../../reducers/loggedUserReducer'
-import { LoginUser, UserType, UserWithTokenType } from '../../../../types'
+import { LoginUser, UserType } from '../../../../types'
 import { loginService } from 'services'
-import axios, { AxiosError } from 'axios'
+import { AxiosError } from 'axios'
 import { useNavigate } from 'react-router-dom'
 import {
 	TextField,
@@ -50,7 +50,7 @@ export const Login = () => {
 				} else {
 					console.log('notfirst');
 					dispatch(setLoggedUser(loggedUser))
-					navigate('/')
+					navigate('/home')
 				}
 			}
 		} catch (e) {
