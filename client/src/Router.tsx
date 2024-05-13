@@ -31,10 +31,15 @@ export const Router = () => {
             element: <ProtectedRoute><AppBar /></ProtectedRoute>,
             children: [
                 {
+                    path: '/',
+                    element: <Home />
+                },
+                {
                     path: '/usermanagement',
                     element: <UserManagement />,
                 },
                 {
+
                     path: '/home',
                     element: <Home />,
                 },

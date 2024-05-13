@@ -7,19 +7,6 @@ import { Fragment } from "react"
 
 
 export const TimetableById = () => {
-    // const location = useLocation()
-    // const publicMode: Boolean = location.pathname.startsWith('/public') ? true : false
-
-    // const dispatch: (...args: unknown[]) => Promise<string> =
-    //     useDispatch<AppDispatch>()
-
-    // const dispatch = useDispatch<AppDispatch>()
-
-    // useEffect(() => {
-    //     if (location.pathname.startsWith('/public')) {
-    //         dispatch(initializeDepartures())
-    //     }
-    // }, [dispatch])
 
     const departures = useSelector(
         (state: { departures: DepartureType[] }) => state.departures
@@ -57,8 +44,6 @@ export const TimetableById = () => {
 
     return (
         <>
-
-            {/* <Container disableGutters maxWidth={false}> */}
             <TableContainer  >
                 <Table sx={{ bgcolor: 'black', color: 'white' }}>
                     <TableBody>
@@ -96,7 +81,6 @@ export const TimetableById = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
-            {/* </Container> */}
         </>
     )
 }
