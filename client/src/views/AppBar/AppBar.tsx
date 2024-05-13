@@ -12,6 +12,7 @@ import { UserMenu } from './UserMenu'
 import { NavMenuXs } from './NavMenuXs'
 import { NavBarMd } from './NavBarMd'
 import { CompanyNameMd, CompanyNameXs } from './CompanyName'
+import { Outlet } from 'react-router-dom'
 
 export const AppBar = (
 ) => {
@@ -24,7 +25,7 @@ export const AppBar = (
 	return (
 		loggedUser.userLevel ?
 			<div>
-				<MuiAppBar position='static'>
+				<MuiAppBar position='sticky' sx={{ height: 65 }}>
 					<Container maxWidth='xl'>
 						<Toolbar disableGutters>
 							<CompanyNameMd />
@@ -35,6 +36,7 @@ export const AppBar = (
 						</Toolbar>
 					</Container>
 				</MuiAppBar>
+				<Outlet />
 				<UserCard userCard={userCard} setUserCard={setUserCard} />
 			</div>
 			: <>loading..</>

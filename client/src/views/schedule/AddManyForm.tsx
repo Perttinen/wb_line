@@ -1,4 +1,4 @@
-import { Alert, Box, Snackbar, Typography } from "@mui/material"
+import { Alert, Box, Button, Snackbar, Typography } from "@mui/material"
 import dayjs, { Dayjs } from "dayjs"
 import { Field, FieldArray, Form, Formik } from "formik"
 
@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux"
 import {
     createDeparture,
 } from '../../reducers/departureReducer'
-import { FormDatePicker, FormMainContainer, FormTimePicker, IconButton, FormGroupContainer, SaveAndCancelButtons } from "views/components/SmallOnes"
+import { FormDatePicker, FormMainContainer, FormTimePicker, FormGroupContainer, SaveAndCancelButtons } from "views/components/SmallOnes"
 import { useState } from "react"
 
 export const AddManyForm = ({
@@ -116,12 +116,9 @@ export const AddManyForm = ({
                                                                 <Box key={index} display={'flex'} flexDirection={'row'} justifyContent={'start'} alignItems={'start'} marginY={'10px'}>
                                                                     <Box display={'flex'} flexDirection={'column'} alignItems={"center"}>
                                                                         <FormTimePicker name={time} label={fieldLabel} setFieldValue={props.setFieldValue} />
-                                                                        <IconButton
-                                                                            whenClicked={() => push(dayjs())}
-                                                                            iconType='add' />
+                                                                        <Button onClick={() => push(dayjs())} variant="text">insert time</Button>
                                                                     </Box>
-
-                                                                    {index > 0 && <IconButton iconType='cancel' whenClicked={() => remove(index)} />}
+                                                                    {index > 0 && <Button onClick={() => remove(index)}>delete</Button>}
                                                                 </Box>
                                                             )
                                                         })}

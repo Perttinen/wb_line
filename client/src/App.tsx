@@ -15,10 +15,8 @@ const App = () => {
             <Provider store={store}>
                 <WebSocketProvider>
                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='fi'>
-
                         <CssBaseline />
                         <Router />
-
                     </LocalizationProvider>
                 </WebSocketProvider>
             </Provider>

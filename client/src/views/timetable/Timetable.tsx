@@ -1,6 +1,5 @@
 import {
 	Button,
-	CssBaseline,
 	Table,
 	TableBody,
 	TableCell,
@@ -47,7 +46,6 @@ export const Timetable = () => {
 
 	return (
 		<div>
-			<CssBaseline />
 			<Table>
 				<TableHead>
 					<TableRow>

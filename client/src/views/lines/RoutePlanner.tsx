@@ -1,6 +1,7 @@
 import {
 	Alert,
 	Box,
+	Button,
 	Snackbar
 } from '@mui/material'
 import { FieldArray, Form, Formik } from 'formik'
@@ -9,7 +10,7 @@ import { DockType, RouteFormValuesType } from 'types'
 import { useDispatch, useSelector } from 'react-redux'
 import { createRoute, initializeRoutes } from 'reducers/routeReducer'
 import { AppDispatch } from 'store'
-import { FormSelect, FormTextField, IconButton, FormGroupContainer, FormMainContainer, SaveAndCancelButtons } from 'views/components/SmallOnes'
+import { FormSelect, FormTextField, FormGroupContainer, FormMainContainer, SaveAndCancelButtons } from 'views/components/SmallOnes'
 import { useState } from 'react'
 
 type PropsType = {
@@ -64,7 +65,7 @@ export const RoutePlanner = ({ setShowRoutePlanner }: PropsType) => {
 	}
 
 	return (
-		<div>
+		<Box zIndex={1000} position={'sticky'} top={'65px'}>
 			<FormMainContainer caption='NEW ROUTE'>
 				<Formik
 					initialValues={initialValues}
@@ -90,20 +91,22 @@ export const RoutePlanner = ({ setShowRoutePlanner }: PropsType) => {
 													<FormGroupContainer key={index} caption={`Stop point ${index + 1}`}>
 														<>
 															<FormSelect options={docks} name={dock} label={fieldLabel} />
-															<Box display={'flex'} flexDirection={'row'}>
+															<Box display={'flex'} flexDirection={'row'} alignItems={'flex-end'} justifyContent={'space-between'}>
 																<FormTextField type='number' label='minutes from start' name={time} />
-																<Box display={'flex'} flexDirection={'row'} alignContent={'center'} >
-																	<IconButton iconType='trash' whenClicked={() => remove(index)} />
-																</Box>
+																{/* <Box display={'flex'} flexDirection={'row'} alignContent={'center'} > */}
+																<Button onClick={() => remove(index)} variant='text' sx={{ overflow: 'clip', marginBottom: '8px', alignSelf: 'center', whiteSpace: 'nowrap' }} >
+																	delete
+																</Button>
+																{/* </Box> */}
 															</Box>
 														</>
 													</FormGroupContainer>
 												)
 											})}
 										<Box display={'flex'} flexDirection={'row'} justifyContent={'center'}>
-											<IconButton
-												whenClicked={() => push({ dockId: docks[0].id, delayTimeMinutes: 1 })}
-												iconType='add' />
+											<Button onClick={() => push({ dockId: docks[0].id, delayTimeMinutes: 1 })} variant='text'>
+												insert stop point
+											</Button>
 										</Box>
 									</div>
 								)}
@@ -123,7 +126,7 @@ export const RoutePlanner = ({ setShowRoutePlanner }: PropsType) => {
 			>
 				<Alert severity='error'>{errorMsg}</Alert>
 			</Snackbar>
-		</div >
+		</Box >
 	)
 }
 

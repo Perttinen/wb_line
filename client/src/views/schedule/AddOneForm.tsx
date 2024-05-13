@@ -1,4 +1,3 @@
-import { Box, Button } from "@mui/material"
 import { DateTimePicker } from "@mui/x-date-pickers"
 import dayjs, { Dayjs } from "dayjs"
 import { Field, Form, Formik } from "formik"
@@ -9,6 +8,7 @@ import { useDispatch } from "react-redux"
 import {
     appendDeparture,
 } from '../../reducers/departureReducer'
+import { FormGroupContainer, FormMainContainer, SaveAndCancelButtons } from "views/components/SmallOnes"
 
 export const AddOneForm = ({
     setAddOneForm, routeId
@@ -41,7 +41,7 @@ export const AddOneForm = ({
     }
 
     return (
-        <Box sx={{ marginTop: '1rem' }}>
+        <FormMainContainer caption="ADD ONE" >
             <Formik
                 initialValues={initialValues}
                 onSubmit={async (values) => {
@@ -50,43 +50,28 @@ export const AddOneForm = ({
                 }}
             >
                 {({
-                    submitForm,
-                    isSubmitting,
+
                     setFieldValue,
                     values,
                 }) => (
                     <Form>
-                        <Field name='startTime'>
-                            {() => (
-                                <DateTimePicker
-                                    label='Departure Time'
-                                    value={values.startTime}
-                                    onChange=
-                                    {(newValue): void => {
-                                        setFieldValue('startTime', newValue)
-                                    }}
-                                />
-                            )}
-                        </Field>
-                        <Button
-                            sx={{ height: 55 }}
-                            variant='contained'
-                            color='primary'
-                            disabled={isSubmitting}
-                            onClick={submitForm}
-                        >
-                            Submit
-                        </Button>
-                        <Button
-                            sx={{ height: 55, bgcolor: '#B03A2E' }}
-                            variant='contained'
-                            disabled={isSubmitting}
-                            onClick={() => setAddOneForm(false)}
-                        >
-                            Cancel
-                        </Button>
+                        <FormGroupContainer >
+                            <Field name='startTime'>
+                                {() => (
+                                    <DateTimePicker
+                                        label='Departure Time'
+                                        value={values.startTime}
+                                        onChange=
+                                        {(newValue): void => {
+                                            setFieldValue('startTime', newValue)
+                                        }}
+                                    />
+                                )}
+                            </Field>
+                        </FormGroupContainer>
+                        <SaveAndCancelButtons onCancel={() => setAddOneForm(false)} />
                     </Form>
                 )}
             </Formik>
-        </Box>)
+        </FormMainContainer>)
 }

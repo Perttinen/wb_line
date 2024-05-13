@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import {
+	Box,
 	Button,
 	Dialog,
 	DialogActions,
@@ -75,28 +76,33 @@ export const RouteList = () => {
 					}} />
 				</DialogActions>
 			</Dialog>
-			<Table  >
-				<TableBody>
-					{routes.map((r) => {
-						const routeDocks = getRouteDocks(r)
-						return (
+			<Box >
+				<Table  >
+					<TableBody>
+						{routes.map((r) => {
+							const routeDocks = getRouteDocks(r)
+							return (
 
-							<TableRow key={r.id} sx={{ verticalAlign: 'top' }}>
-								<TableCell sx={{ paddingRight: '2px', paddingLeft: '4px' }}>
-									{routeDocks.map((r, i) => <Typography key={i}>{r.name}</Typography>)}
-								</TableCell>
-								<TableCell sx={{ paddingRight: '2px', paddingLeft: '4px' }}>
-									<TextButton label='schedule' actionType='schedule' whenClicked={() => navigate('/schedule', { state: { routeId: r.id, docks: routeDocks } })} />
-								</TableCell>
-								<TableCell sx={{ paddingRight: '2px', paddingLeft: '4px' }}>
-									<TextButton label='delete' actionType='trash' whenClicked={() => { setAlert(r.id) }} />
-
-								</TableCell>
-							</TableRow>
-						)
-					})}
-				</TableBody>
-			</Table>
+								<TableRow key={r.id} sx={{ verticalAlign: 'top' }}>
+									<TableCell sx={{ paddingRight: '2px', paddingLeft: '4px' }}>
+										{routeDocks.map((r, i) => <Typography key={i}>{r.name}</Typography>)}
+									</TableCell>
+									<TableCell sx={{ paddingRight: '2px', paddingLeft: '4px' }}>
+										<Button variant='text' onClick={() => navigate('/schedule', { state: { routeId: r.id, docks: routeDocks } })} >
+											schedule
+										</Button>
+									</TableCell>
+									<TableCell sx={{ paddingRight: '2px', paddingLeft: '4px' }}>
+										<Button variant='text' onClick={() => { setAlert(r.id) }} >
+											delete
+										</Button>
+									</TableCell>
+								</TableRow>
+							)
+						})}
+					</TableBody>
+				</Table>
+			</Box>
 		</>
 	)
 }
