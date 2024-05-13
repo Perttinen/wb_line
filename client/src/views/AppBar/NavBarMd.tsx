@@ -9,7 +9,7 @@ type PropsType = {
 export const NavBarMd = ({ loggedUser }: PropsType) => {
     const navigate = useNavigate()
     const pages = [
-        { label: 'HOME', admin: false, route: '/' },
+        { label: 'HOME', admin: false, route: '/home' },
         { label: 'USERS', admin: true, route: '/usermanagement' },
         { label: 'RESOURCES', admin: false, route: '/resources' },
         { label: 'ROUTES', admin: false, route: '/routes' },
