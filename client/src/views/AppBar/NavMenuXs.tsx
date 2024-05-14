@@ -69,7 +69,7 @@ export const NavMenuXs = ({ loggedUser }: PropsType) => {
                                 <Typography textAlign='center'>{p.label}</Typography>
                             </MenuItem>
                         )
-                    }
+                    } else { return null }
 
                 })}
             </Menu>

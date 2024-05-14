@@ -18,7 +18,6 @@ import {
 import { RouteDocksType, RouteType, RouteWithAllType } from 'types'
 import { AppDispatch } from 'store'
 import { removeRoute } from 'reducers/routeReducer'
-import { TextButton } from 'views/components/SmallOnes';
 import { useState } from 'react'
 
 export const RouteList = () => {
@@ -69,11 +68,11 @@ export const RouteList = () => {
 					</DialogContentText>
 				</DialogContent>
 				<DialogActions>
-					<TextButton actionType='cancel' label='cancel' whenClicked={() => setAlert(-1)} />
-					<TextButton actionType='trash' label='delete' whenClicked={() => {
+					<Button variant='text' onClick={() => setAlert(-1)}>cancel</Button>
+					<Button variant='text' onClick={() => {
 						handleDelete(alert)
 						setAlert(-1)
-					}} />
+					}}>delete</Button>
 				</DialogActions>
 			</Dialog>
 			<Box >

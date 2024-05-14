@@ -209,7 +209,7 @@ type FormTimeOrDatePickerProps = {
 }
 
 const FormTimePicker = (props: FormTimeOrDatePickerProps) => {
-    const [field, _meta] = useField(props)
+    const [field] = useField(props)
     return (
         <Field name={props.name}>
             {() => (
@@ -227,7 +227,7 @@ const FormTimePicker = (props: FormTimeOrDatePickerProps) => {
 }
 
 const FormDatePicker = (props: FormTimeOrDatePickerProps) => {
-    const [field, _meta] = useField(props)
+    const [field] = useField(props)
     return (
         <Field name={props.name}>
             {() => (
@@ -253,9 +253,7 @@ const SaveAndCancelButtons = (props: SaveAndCancelButtonsPropsType) => {
     return (
         <Box display={'flex'} flexDirection={'row'} justifyContent={'space-evenly'}>
             <Button variant='contained' type='submit'>save</Button>
-            <Button onClick={() => props.onCancel(false)} variant='contained' type='reset'>cancel</Button>
-            {/* <IconButton buttonType='submit' iconType={saveButton} />
-            <IconButton buttonType='reset' iconType='cancel' whenClicked={() => props.onCancel(false)} /> */}
+            <Button onClick={() => props.onCancel(false)} variant='contained' type='reset'>close</Button>
         </Box>
     )
 }

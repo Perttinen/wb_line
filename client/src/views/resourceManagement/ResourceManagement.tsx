@@ -1,6 +1,7 @@
 import { useSelector } from 'react-redux'
 import { UserWithTokenType } from '../../../../types'
 import {
+	Container,
 	CssBaseline,
 	IconButton,
 	Paper,
@@ -26,8 +27,8 @@ export const ResourceManagement = () => {
 	)
 
 	return loggedUser.userLevel ? (
-		<div>
-			<CssBaseline />
+		<Container>
+
 			<TableContainer component={Paper}>
 				<Table aria-label='collapsible table'>
 					<TableBody>
@@ -73,7 +74,7 @@ export const ResourceManagement = () => {
 					</TableBody>
 				</Table>
 			</TableContainer>
-		</div>
+		</Container>
 	) : (
 		null
 	)

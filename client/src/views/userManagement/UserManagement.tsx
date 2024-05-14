@@ -1,6 +1,6 @@
 import { UserList } from './UserList'
 import { useState } from 'react'
-import { Button, Box, CssBaseline } from '@mui/material'
+import { Button, Box, CssBaseline, Container } from '@mui/material'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 
 
@@ -18,13 +18,13 @@ export const UserManagement = () => {
 	return (
 		loggedUser.userLevel ?
 			(
-				<div>
-					<CssBaseline />
+				<Container>
 					<Box
 						sx={{
 							display: 'flex',
 							flexDirection: 'column',
 							alignItems: 'center',
+
 						}}
 					>
 						{!showAddUser && (
@@ -40,7 +40,7 @@ export const UserManagement = () => {
 						{showAddUser && <AddUser setShowAddUser={setShowAddUser} />}
 					</Box>
 					<UserList />
-				</div>
+				</Container>
 			) : null
 	)
 }
