@@ -1,4 +1,4 @@
-import { List, ListItem, Stack, Table, TableBody, TableCell, TableContainer, TableRow } from "@mui/material"
+import { Divider, List, ListItem, Stack, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material"
 import { useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
 import { DepartureType } from "../../../../types"
@@ -44,37 +44,51 @@ export const TimetableById = () => {
 
     return (
         <>
-            <TableContainer  >
-                <Table sx={{ bgcolor: 'black', color: 'white' }}>
-                    <TableBody>
+            <TableContainer sx={{ bgcolor: 'black' }}  >
+                <Table padding="none" >
+                    <colgroup>
+                        <col width="45%" />
+                        <col width="40%" />
+                        <col width="15%" />
+                    </colgroup>
+                    <TableBody sx={{ color: 'yellow' }} >
                         {tableDataFromToday.map((d, index, arr) =>
                             <Fragment key={d.id}>
 
                                 {((index > 0 &&
                                     arr[index - 1].startTime.isBefore(d.startTime, 'day')) || (index === 0 && d.startTime.isAfter(dayjs(Date.now()), 'day'))) &&
-                                    <TableRow >
-                                        <TableCell colSpan={2} align='left' sx={{ fontSize: '1.5rem', color: '#e91e63', paddingY: '3px' }}>
+                                    <TableRow  >
+                                        <TableCell colSpan={3} align="center" sx={{ color: 'magenta', lineHeight: 2.6 }} >
                                             {d.startTime.toDate().toDateString()}
                                         </TableCell>
                                     </TableRow>}
                                 {d.via.length !== 0 ?
                                     <>
-                                        <TableRow sx={{ border: 0 }}>
-                                            <TableCell sx={{ color: 'lightyellow', border: 0, fontSize: '1.5rem', paddingTop: '3px', paddingBottom: 0 }}>{d.endDock.toUpperCase()}</TableCell>
-                                            <TableCell width={'10%'} sx={{ border: 0, fontSize: '1.5rem', paddingTop: '3px', paddingBottom: 0, color: 'lightyellow' }}>{d.startTime?.format('HH:mm')}</TableCell>
-
+                                        <TableRow sx={{ borderBottom: 0 }}>
+                                            <TableCell sx={{ color: 'inherit', borderBottom: 'inherit', paddingLeft: '10px' }} >{d.endDock.toUpperCase()}</TableCell>
+                                            <TableCell rowSpan={2} sx={{ color: 'darkorange', borderBottom: 'inherit', bgcolor: 'black' }}>infocell</TableCell>
+                                            <TableCell rowSpan={2} sx={{ color: 'inherit', borderBottom: 'inherit' }} width={'15%'} >{d.startTime?.format('HH:mm')}</TableCell>
                                         </TableRow>
-                                        <TableRow sx={{ borderBottom: 1 }}>
-                                            <TableCell colSpan={2} sx={{ display: "flex", color: 'lightyellow', paddingY: '0', verticalAlign: 'top', borderBottom: 0 }}>
-                                                <List component={Stack} direction='row' sx={{ paddingY: 0, border: 0 }} ><ListItem sx={{ paddingY: 0, paddingLeft: 0 }}>via:</ListItem> {d.via.map((v, i) => <ListItem key={i} sx={{ paddingY: 0 }}>{v}</ListItem>)}</List>
+                                        <TableRow sx={{ lineHeight: 1.1, fontSize: '0.8rem' }} >
+                                            <TableCell sx={{ color: 'inherit', lineHeight: 'inherit', fontSize: 'inherit', paddingLeft: '10px' }} colSpan={3}  >
+                                                <Stack direction={'row'}>
+                                                    <Typography sx={{ lineHeight: 'inherit', fontSize: 'inherit' }} >via:</Typography>
+                                                    {d.via.map((v, i) => <Typography sx={{ lineHeight: 'inherit', fontSize: 'inherit' }} key={i} ml={'10px'} >{v}</Typography>)}
+                                                </Stack>
                                             </TableCell>
                                         </TableRow>
                                     </> : <>
-                                        <TableRow>
-                                            <TableCell sx={{ fontSize: '1.5rem', paddingY: '3px', color: 'lightyellow' }}>{d.endDock.toUpperCase()}</TableCell>
-                                            <TableCell width={'10%'} sx={{ fontSize: '1.5rem', paddingY: '3px', color: 'lightyellow' }}>{d.startTime?.format('HH:mm')}</TableCell>
+                                        <TableRow sx={{ lineHeight: 2.6 }}>
+                                            <TableCell sx={{ color: 'inherit', lineHeight: 'inherit', paddingLeft: '10px' }} >{d.endDock.toUpperCase()}</TableCell>
+                                            <TableCell sx={{ color: 'darkorange', bgcolor: 'black', lineHeight: 'inherit' }}>infocell</TableCell>
+                                            <TableCell sx={{ color: 'inherit', lineHeight: 'inherit' }}>{d.startTime?.format('HH:mm')}</TableCell>
 
                                         </TableRow>
+                                        {/* <TableRow sx={{ lineHeight: 1.1, fontSize: '0.8rem' }} >
+                                            <TableCell sx={{ color: 'inherit', lineHeight: 'inherit', fontSize: 'inherit' }} colSpan={3}  >
+                                                <Typography sx={{ lineHeight: 'inherit', fontSize: 'inherit' }} >{'f'}</Typography>
+                                            </TableCell>
+                                        </TableRow> */}
                                     </>}
                             </Fragment>
                         )}

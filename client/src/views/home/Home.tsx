@@ -1,12 +1,14 @@
-import { CssBaseline } from '@mui/material'
+import { Button } from "@mui/material"
+import 'App.css'
 
 export const Home = () => {
 
 	return (
 		<div>
-			<CssBaseline />
+			<h1 >testing</h1>
 			<h2>Home page</h2>
-			<p>Here will be something in future...</p>
+			<p color='red' >Here will be something in future...</p>
+			<Button className="Button">testi</Button>
 		</div>
 	)
 }

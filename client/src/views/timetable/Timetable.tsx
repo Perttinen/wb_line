@@ -1,5 +1,6 @@
 import {
 	Button,
+	Container,
 	Table,
 	TableBody,
 	TableCell,
@@ -45,7 +46,7 @@ export const Timetable = () => {
 	}
 
 	return (
-		<div>
+		<Container>
 			<Table>
 				<TableHead>
 					<TableRow>
@@ -68,6 +69,6 @@ export const Timetable = () => {
 					))}
 				</TableBody>
 			</Table>
-		</div>
+		</Container>
 	)
 }
