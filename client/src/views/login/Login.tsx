@@ -10,14 +10,13 @@ import {
 	Button,
 	Typography,
 	Box,
-	CssBaseline,
 	Avatar,
 	Alert,
 	Snackbar,
 } from '@mui/material'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import { useState } from 'react'
-import { useFormik } from 'formik'
+import { Form, Formik } from 'formik'
 import { ChangePassword } from '../components'
 
 
@@ -38,15 +37,12 @@ export const Login = () => {
 			const response = await loginService.login(values)
 			if (response instanceof AxiosError) {
 				setErrorMsg(response.response?.data)
-				formik.resetForm()
 				console.log('error in submit: ', response.response?.data);
 			} else {
 				const loggedUser = response
 				if (loggedUser.firstTime === true) {
 					setUser(loggedUser)
 					setFirstTime(true)
-					formik.resetForm()
-
 				} else {
 					console.log('notfirst');
 					dispatch(setLoggedUser(loggedUser))
@@ -59,18 +55,13 @@ export const Login = () => {
 
 	}
 
-	const formik = useFormik({
-		initialValues: {
-			username: '',
-			password: '',
-		},
-		onSubmit: handleSubmit,
-		enableReinitialize: true,
-	})
+	const initialValues = {
+		username: '',
+		password: '',
+	}
 
 	return (
 		<div>
-			<CssBaseline />
 			<Box
 				sx={{
 					marginTop: 8,
@@ -82,47 +73,56 @@ export const Login = () => {
 				<Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
 					<LockOutlinedIcon />
 				</Avatar>
-				<Typography component='h1' variant='h5'>
-					Sign in
-				</Typography>
-				<Box
-					component='form'
-					onSubmit={formik.handleSubmit}
-					noValidate
-					sx={{ mt: 1 }}
-				>
-					<TextField
-						margin='normal'
-						required
-						fullWidth
-						id='username'
-						label='username'
-						name='username'
-						autoComplete='text'
-						value={formik.values.username}
-						onChange={formik.handleChange}
-					/>
-					<TextField
-						margin='normal'
-						required
-						fullWidth
-						name='password'
-						label='Password'
-						type='password'
-						id='password'
-						autoComplete='current-password'
-						value={formik.values.password}
-						onChange={formik.handleChange}
-					/>
-					<Button
-						type='submit'
-						fullWidth
-						variant='contained'
-						sx={{ mt: 3, mb: 2 }}
-					>
-						log in
-					</Button>
-				</Box>
+
+				<Formik
+					initialValues={initialValues}
+					onSubmit={async (values) => {
+						handleSubmit(values)
+					}}
+					enableReinitialize={true}>
+					{props => (
+						<Form>
+							<Box
+								sx={{ mt: 1 }}
+							>
+								<TextField
+									margin='normal'
+									required
+									fullWidth
+									id='username'
+									label='username'
+									name='username'
+									autoComplete='text'
+									value={props.values.username}
+									onChange={props.handleChange}
+								/>
+								<TextField
+									margin='normal'
+									required
+									fullWidth
+									name='password'
+									label='Password'
+									type='password'
+									id='password'
+									autoComplete='current-password'
+									value={props.values.password}
+									onChange={props.handleChange}
+								/>
+								<Button
+									type='submit'
+									fullWidth
+									variant='contained'
+									sx={{ mt: 3, mb: 2 }}
+								>
+									log in
+								</Button>
+							</Box>
+						</Form>
+					)}
+
+				</Formik>
+
+
 				{firstTime && (
 					<ChangePassword
 						user={user}

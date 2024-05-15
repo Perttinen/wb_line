@@ -2,7 +2,6 @@ import { useSelector } from 'react-redux'
 import { UserWithTokenType } from '../../../../types'
 import {
 	Container,
-	CssBaseline,
 	IconButton,
 	Paper,
 	Table,
@@ -47,7 +46,7 @@ export const ResourceManagement = () => {
 								</IconButton>
 							</TableCell>
 							<TableCell>
-								<Typography variant='h6'>Ships</Typography>
+								<Typography fontSize={'1.2rem'} >Ships</Typography>
 							</TableCell>
 						</TableRow>
 						<Ships open={shipsOpen} />
@@ -67,7 +66,7 @@ export const ResourceManagement = () => {
 								</IconButton>
 							</TableCell>
 							<TableCell>
-								<Typography variant='h6'>Docks</Typography>
+								<Typography fontSize={'1.2rem'}>Docks</Typography>
 							</TableCell>
 						</TableRow>
 						<Docks open={docksOpen} />

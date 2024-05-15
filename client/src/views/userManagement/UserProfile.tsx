@@ -23,10 +23,8 @@ export const UserProfile = ({
 			<TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
 				<Collapse in={open} timeout='auto' unmountOnExit>
 					<UserDataTable user={user} />
-					<Box sx={{ margin: 1 }}>
+					<Box sx={{ margin: 1 }} display={'flex'} flexDirection={'row'} alignItems={'center'} justifyContent={'center'}>
 						<Button
-							fullWidth
-							sx={{ color: '#B03A2E', fontSize: '1.2rem' }}
 							onClick={() => handleDeleteUser(user.id)}
 						>
 							delete user

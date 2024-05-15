@@ -6,12 +6,13 @@ import {
 } from '@mui/material'
 import { FieldArray, Form, Formik } from 'formik'
 import * as Yup from 'yup'
-import { DockType, RouteFormValuesType } from 'types'
 import { useDispatch, useSelector } from 'react-redux'
+import { useState } from 'react'
+
+import { DockType, RouteFormValuesType } from 'types'
 import { createRoute, initializeRoutes } from 'reducers/routeReducer'
 import { AppDispatch } from 'store'
 import { FormSelect, FormTextField, FormGroupContainer, FormMainContainer, SaveAndCancelButtons } from 'views/components/SmallOnes'
-import { useState } from 'react'
 
 type PropsType = {
 	setShowRoutePlanner: (val: boolean) => void
@@ -65,8 +66,8 @@ export const RoutePlanner = ({ setShowRoutePlanner }: PropsType) => {
 	}
 
 	return (
-		<Box zIndex={1000} position={'sticky'} top={'65px'}>
-			<FormMainContainer caption='NEW ROUTE'>
+		<Box >
+			<FormMainContainer>
 				<Formik
 					initialValues={initialValues}
 					validationSchema={validationSchema}
@@ -76,7 +77,7 @@ export const RoutePlanner = ({ setShowRoutePlanner }: PropsType) => {
 					{props => (
 						<Form autoComplete='off'>
 							<FormGroupContainer caption='Start point'>
-								<FormSelect options={docks} name='startDockId' label='dock' />
+								<FormSelect options={docks} name='startDockId' label='dock' selectKey='name' selectValue='id' />
 							</FormGroupContainer>
 
 							<FieldArray name='stops'>
@@ -90,7 +91,8 @@ export const RoutePlanner = ({ setShowRoutePlanner }: PropsType) => {
 												return (
 													<FormGroupContainer key={index} caption={`Stop point ${index + 1}`}>
 														<>
-															<FormSelect options={docks} name={dock} label={fieldLabel} />
+															<FormSelect options={docks} name={dock} label={fieldLabel} selectKey='name' selectValue='id' />
+															{/* <FormSelect options={docks} name={dock} label={fieldLabel} /> */}
 															<Box display={'flex'} flexDirection={'row'} alignItems={'flex-end'} justifyContent={'space-between'}>
 																<FormTextField type='number' label='minutes from start' name={time} />
 																{/* <Box display={'flex'} flexDirection={'row'} alignContent={'center'} > */}
@@ -105,16 +107,16 @@ export const RoutePlanner = ({ setShowRoutePlanner }: PropsType) => {
 											})}
 										<Box display={'flex'} flexDirection={'row'} justifyContent={'center'}>
 											<Button onClick={() => push({ dockId: docks[0].id, delayTimeMinutes: 1 })} variant='text'>
-												insert stop point
+												add stop point
 											</Button>
 										</Box>
 									</div>
 								)}
 							</FieldArray>
 							<FormGroupContainer caption='End point'>
-								<FormSelect options={docks} name='endDockId' label='dock' />
+								<FormSelect options={docks} name='endDockId' label='dock' selectKey='name' selectValue='id' />
 							</FormGroupContainer>
-							<SaveAndCancelButtons onCancel={() => setShowRoutePlanner(false)} />
+							<SaveAndCancelButtons submitLabel='create' onCancel={() => setShowRoutePlanner(false)} />
 						</Form>
 					)}
 				</Formik>

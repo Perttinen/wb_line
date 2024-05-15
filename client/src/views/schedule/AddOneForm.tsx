@@ -1,13 +1,12 @@
 import { DateTimePicker } from "@mui/x-date-pickers"
 import dayjs, { Dayjs } from "dayjs"
 import { Field, Form, Formik } from "formik"
-import { departureService } from "services"
-import { AppDispatch } from '../../store'
-import { DepartureType, initDepartureType } from "../../../../types"
 import { useDispatch } from "react-redux"
-import {
-    appendDeparture,
-} from '../../reducers/departureReducer'
+
+import { departureService } from "services"
+import { AppDispatch } from 'store'
+import { DepartureType, initDepartureType } from "types"
+import { appendDeparture, } from 'reducers/departureReducer'
 import { FormGroupContainer, FormMainContainer, SaveAndCancelButtons } from "views/components/SmallOnes"
 
 export const AddOneForm = ({
@@ -15,7 +14,6 @@ export const AddOneForm = ({
 }: {
     setAddOneForm: (val: boolean) => void, routeId: number
 }) => {
-
 
     const scheduleDispatch: (
         ...args: unknown[]
@@ -35,20 +33,17 @@ export const AddOneForm = ({
         let valuesArr: initDepartureType[] = []
         valuesArr.push(values)
         const valuesToDisp = await departureService.create(valuesArr)
-        console.log(valuesToDisp);
-
         scheduleDispatch(appendDeparture(valuesToDisp))
     }
 
     return (
-        <FormMainContainer caption="ADD ONE" >
+        <FormMainContainer >
             <Formik
                 initialValues={initialValues}
                 onSubmit={async (values) => {
                     handleSubmit(values)
                     setAddOneForm(false)
-                }}
-            >
+                }}>
                 {({
 
                     setFieldValue,
@@ -64,12 +59,11 @@ export const AddOneForm = ({
                                         onChange=
                                         {(newValue): void => {
                                             setFieldValue('startTime', newValue)
-                                        }}
-                                    />
+                                        }} />
                                 )}
                             </Field>
                         </FormGroupContainer>
-                        <SaveAndCancelButtons onCancel={() => setAddOneForm(false)} />
+                        <SaveAndCancelButtons submitLabel="create" onCancel={() => setAddOneForm(false)} />
                     </Form>
                 )}
             </Formik>

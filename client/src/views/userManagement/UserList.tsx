@@ -1,24 +1,21 @@
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
-
 import TableContainer from '@mui/material/TableContainer'
-
-import Typography from '@mui/material/Typography'
 import Paper from '@mui/material/Paper'
 
 import { UserLine } from './UserLine'
 import { UserType } from '../../../../types'
 import { useSelector } from 'react-redux'
+import { Box } from '@mui/material'
 
 export const UserList = () => {
 	const users = useSelector((state: { users: UserType[] }) => state.users)
 
 
 	return (
-		<div>
-			<Typography variant='h5'>Users:</Typography>
-			<TableContainer component={Paper}>
-				<Table aria-label='collapsible table'>
+		<Box paddingX={'2px'}>
+			<TableContainer component={Paper} >
+				<Table aria-label='collapsible table' >
 					<TableBody>
 						{users.map((user) => (
 							<UserLine key={user.id} user={user} />
@@ -26,6 +23,6 @@ export const UserList = () => {
 					</TableBody>
 				</Table>
 			</TableContainer>
-		</div>
+		</Box>
 	)
 }

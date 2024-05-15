@@ -1,7 +1,9 @@
-import { Box, Button, Container } from '@mui/material'
+import { Box, Container } from '@mui/material'
 import { useState } from 'react'
+
 import { RoutePlanner } from 'views/lines/RoutePlanner'
 import { RouteList } from 'views/lines/RouteList'
+import { TopButtons } from 'views/components/SmallOnes'
 
 export const Lines = () => {
 	const [showRoutePlanner, setShowRoutePlanner] = useState(false)
@@ -13,11 +15,11 @@ export const Lines = () => {
 						<RoutePlanner setShowRoutePlanner={setShowRoutePlanner} />
 					)
 					: (
-						<Box borderBottom={1} zIndex={1000} bgcolor={'white'} display={'flex'} flexDirection={'row'} justifyContent={'center'} alignItems={'center'} height={'80px'} position={'sticky'} top={'65px'}>
-							<Button variant='contained' onClick={() => { setShowRoutePlanner(!showRoutePlanner) }}>
-								create route
-							</Button>
-						</Box>
+						<TopButtons
+							buttons={
+								[
+									{ onClick: () => setShowRoutePlanner(!showRoutePlanner), label: 'create route' }
+								]} />
 					)
 				}
 				<RouteList />

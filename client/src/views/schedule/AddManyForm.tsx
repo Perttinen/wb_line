@@ -1,15 +1,14 @@
 import { Alert, Box, Button, Snackbar, Typography } from "@mui/material"
 import dayjs, { Dayjs } from "dayjs"
 import { Field, FieldArray, Form, Formik } from "formik"
-
-import { AppDispatch } from '../../store'
-import { DepartureType } from "../../../../types"
 import { useDispatch } from "react-redux"
-import {
-    createDeparture,
-} from '../../reducers/departureReducer'
-import { FormDatePicker, FormMainContainer, FormTimePicker, FormGroupContainer, SaveAndCancelButtons } from "views/components/SmallOnes"
 import { useState } from "react"
+
+import { AppDispatch } from 'store'
+import { DepartureType } from "types"
+import { createDeparture } from 'reducers/departureReducer'
+import { FormDatePicker, FormMainContainer, FormTimePicker, FormGroupContainer, SaveAndCancelButtons } from "views/components/SmallOnes"
+
 
 export const AddManyForm = ({
     setAddManyForm, routeId
@@ -78,7 +77,7 @@ export const AddManyForm = ({
 
     return (
         <>
-            <FormMainContainer caption="ADD MANY" >
+            <FormMainContainer >
                 <Formik
                     initialValues={initialValues}
                     onSubmit={async (values) => {
@@ -111,40 +110,38 @@ export const AddManyForm = ({
                                                     {props.values.times.length > 0 &&
                                                         props.values.times.map((_p, index) => {
                                                             const time = `times[${index}]`
-                                                            const fieldLabel = `time ${index + 1}`
+                                                            const fieldLabel = `start ${index + 1}`
                                                             return (
                                                                 <Box key={index} display={'flex'} flexDirection={'row'} justifyContent={'start'} alignItems={'start'} marginY={'10px'}>
                                                                     <Box display={'flex'} flexDirection={'column'} alignItems={"center"}>
                                                                         <FormTimePicker name={time} label={fieldLabel} setFieldValue={props.setFieldValue} />
-                                                                        <Button onClick={() => push(dayjs())} variant="text">insert time</Button>
+                                                                        {index === props.values.times.length - 1 &&
+                                                                            <Button onClick={() => push(dayjs())} variant="text">add more starts</Button>
+                                                                        }
                                                                     </Box>
                                                                     {index > 0 && <Button onClick={() => remove(index)}>delete</Button>}
                                                                 </Box>
                                                             )
                                                         })}
                                                     <Box display={'flex'} flexDirection={'row'} justifyContent={'center'}>
-
-
                                                     </Box>
                                                 </Box>
                                             </div>
                                         )}
                                     </FieldArray>
                                 </FormGroupContainer>
-                                <SaveAndCancelButtons onCancel={() => setAddManyForm(false)} />
+                                <SaveAndCancelButtons submitLabel="create" onCancel={() => setAddManyForm(false)} />
                             </Box>
                         </Form>
                     )}
                 </Formik>
-
             </FormMainContainer>
             <Snackbar
                 open={successMsg !== ''}
                 autoHideDuration={4000}
                 onClose={() => {
                     setSuccessMsg('')
-                }}
-            >
+                }}>
                 <Alert severity='success'>{successMsg}</Alert>
             </Snackbar>
         </>

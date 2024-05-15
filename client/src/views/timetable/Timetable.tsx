@@ -48,15 +48,6 @@ export const Timetable = () => {
 	return (
 		<Container>
 			<Table>
-				<TableHead>
-					<TableRow>
-						<TableCell align='center'>
-							<Typography variant='h5' fontWeight={'bold'}>
-								timetables
-							</Typography>
-						</TableCell>
-					</TableRow>
-				</TableHead>
 				<TableBody>
 					{getDockList(departures).map((d) => (
 						<TableRow key={d.id}>
