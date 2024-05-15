@@ -65,18 +65,11 @@ router.delete('/:id', tokenExtractor, async (req, res) => {
 })
 
 router.put('/pw', tokenExtractor, async (req, res) => {
-	console.log('router');
-	// try {
 	const body: ChangePasswordType = req.body
 	const user = await User.findByPk(body.userId)
-	console.log(user?.dataValues);
-
 	const saltRounds = 10
 	if (user) {
-		// const passw = parseString(user.get('password'))
 		if (await bcrypt.compare(body.currentPassword, user.dataValues.password)) {
-			console.log('password ok');
-
 			user.set({
 				password: await bcrypt.hash(body.newPassword, saltRounds),
 				firstTime: false,
@@ -84,14 +77,10 @@ router.put('/pw', tokenExtractor, async (req, res) => {
 			await user.save()
 			res.json(user)
 		} else {
-			console.log('pw not ok');
 			res.status(401).send(new Error('invalid username or password').message)
 		}
 	}
-	// } catch (e) {
-	// 	console.log(e);
-	// 	res.status(500).json({ error: 'Wrong password!' })
-	// }
+
 }
 )
 

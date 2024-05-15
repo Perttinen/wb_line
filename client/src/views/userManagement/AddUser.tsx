@@ -1,12 +1,12 @@
-import { Box, Button, MenuItem, TextField } from '@mui/material'
-import { useFormik } from 'formik'
-import { UserLevelType, UserNoIdType } from '../../../../types'
+import { Box } from '@mui/material'
+import { Form, Formik } from 'formik'
 import { useContext } from 'react'
-import { WebSocketContext } from '../../WebSocket'
 import { useSelector } from 'react-redux'
 import * as Yup from 'yup'
-import HighlightOff from '@mui/icons-material/HighlightOff'
-import SaveAltIcon from '@mui/icons-material/SaveAlt'
+
+import { UserLevelType, UserNoIdType } from 'types'
+import { WebSocketContext } from 'WebSocket'
+import { FormGroupContainer, FormMainContainer, FormSelect, FormTextField, SaveAndCancelButtons } from 'views/components/SmallOnes'
 
 export const AddUser = ({
 	setShowAddUser,
@@ -19,10 +19,8 @@ export const AddUser = ({
 	)
 
 	const handleSubmit = async (values: UserNoIdType) => {
-
 		setShowAddUser(false)
 		ws?.sendAddUser(values)
-		formik.resetForm()
 	}
 
 	const userSchema = Yup.object().shape({
@@ -40,104 +38,42 @@ export const AddUser = ({
 			.required('Password is required!'),
 	})
 
-	const formik = useFormik({
-		initialValues: {
-			name: '',
-			username: '',
-			password: '',
-			user_level_id: 2,
-			firstTime: true,
-		},
-		validationSchema: userSchema,
-		onSubmit: handleSubmit,
-		enableReinitialize: true,
-	})
+	const initialValues = {
+		name: '',
+		username: '',
+		password: '',
+		user_level_id: 2,
+		firstTime: true,
+	}
 
 	return (
-		<>
-			<Box
-				component='form'
-				onSubmit={formik.handleSubmit}
-				noValidate
-				sx={{ mt: 1 }}
+		<FormMainContainer>
+			<Formik
+				initialValues={initialValues}
+				validationSchema={userSchema}
+				onSubmit={(values) => {
+					handleSubmit(values)
+				}
+				}
+				enableReinitialize={true}
 			>
-				<TextField
-					margin='normal'
-					required
-					fullWidth
-					name='name'
-					label='name'
-					id='name'
-					autoComplete='text'
-					value={formik.values.name}
-					onChange={formik.handleChange}
-					error={formik.touched.name && Boolean(formik.errors.name)}
-					helperText={formik.touched.name && formik.errors.name}
-				/>
-				<TextField
-					margin='normal'
-					required
-					fullWidth
-					id='username'
-					label='username'
-					name='username'
-					autoComplete='text'
-					value={formik.values.username}
-					onChange={formik.handleChange}
-					error={formik.touched.username && Boolean(formik.errors.username)}
-					helperText={formik.touched.username && formik.errors.username}
-				/>
-				<TextField
-					margin='normal'
-					required
-					fullWidth
-					name='password'
-					label='Initial Password'
-					id='password'
-					autoComplete='text'
-					value={formik.values.password}
-					onChange={formik.handleChange}
-					error={formik.touched.password && Boolean(formik.errors.password)}
-					helperText={formik.touched.password && formik.errors.password}
-				/>
-				<TextField
-					select
-					margin='normal'
-					required
-					fullWidth
-					name='user_level_id'
-					value={formik.values.user_level_id}
-					onChange={formik.handleChange}
-					onBlur={formik.handleBlur}
-					label='user level'
-				>
-					{levels.map((level) => (
-						<MenuItem key={level.id} value={level.id}>
-							{level.levelName}
-						</MenuItem>
-					))}
-				</TextField>
-				<Box display={'flex'} flexDirection={'row'}>
-					<Button
-						type='submit'
-						fullWidth
-						sx={{ mt: 3, mb: 2, color: '#1E8449', fontSize: '2rem' }}
-					>
-						<SaveAltIcon fontSize='inherit' />
-					</Button>
-					<Button
-						onClick={() => {
-							setShowAddUser(false)
-							formik.resetForm()
-						}}
-						type='button'
-						fullWidth
-						sx={{ mt: 3, mb: 2, color: '#B03A2E', fontSize: '2rem' }}
-					>
-						<HighlightOff fontSize='inherit' />
-					</Button>
-				</Box>
-			</Box>
-		</>
+				{({ resetForm }) => (
+					<Form>
+						<FormGroupContainer>
+							<Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+								<FormTextField name='name' label='name' />
+								<FormTextField name='username' label='username' />
+								<FormTextField name='password' label='initial password' />
+								<FormSelect options={levels} selectKey='levelName' selectValue='id' name='user_level_id' label='user level' />
+								<SaveAndCancelButtons submitLabel='create' onCancel={() => {
+									setShowAddUser(false)
+									resetForm()
+								}} />
+							</Box>
+						</FormGroupContainer>
+					</Form>
+				)}
+			</Formik>
+		</FormMainContainer>
 	)
 }

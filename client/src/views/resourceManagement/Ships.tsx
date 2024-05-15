@@ -13,8 +13,6 @@ import { useSelector } from 'react-redux'
 import { ShipType } from '../../../../types'
 import { useContext } from 'react'
 import { WebSocketContext } from '../../WebSocket'
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 
 export const Ships = ({ open }: { open: boolean }) => {
 	const [showAddShip, setShowAddShip] = useState(false)
@@ -32,23 +30,19 @@ export const Ships = ({ open }: { open: boolean }) => {
 						{showAddShip ? (
 							<AddShip setShowAddShip={setShowAddShip} />
 						) : (
-							<Button
-								fullWidth
-								sx={{ fontSize: '2rem' }}
-								onClick={() => setShowAddShip(true)}
-							>
-								<AddCircleOutlineIcon fontSize='inherit' />
-							</Button>
+							<Box display={'flex'} flexDirection={'row'} justifyContent={'center'} alignItems={'center'}>
+								<Button variant='contained' onClick={() => setShowAddShip(true)}>create ship</Button>
+							</Box>
 						)}
 					</Box>
 					<Table>
 						<TableBody>
 							{ships.map((s) => (
 								<TableRow key={s.id}>
-									<TableCell sx={{ fontSize: '1.5rem' }}>{s.name}</TableCell>
+									<TableCell sx={{ fontSize: '1rem' }}>{s.name}</TableCell>
 									<TableCell>
-										<Button sx={{ fontSize: '2rem' }} onClick={() => handleRemoveShip(s.id)}>
-											<DeleteOutlinedIcon fontSize='inherit' />
+										<Button onClick={() => handleRemoveShip(s.id)}>
+											delete
 										</Button>
 									</TableCell>
 								</TableRow>

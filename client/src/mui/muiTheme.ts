@@ -1,7 +1,7 @@
-import { PaletteColorOptions, Theme, ThemeOptions, createTheme } from "@mui/material/styles";
-import { red, green, blue, purple, grey } from '@mui/material/colors';
-import { Palette } from "@mui/icons-material";
-import { light } from "@mui/material/styles/createPalette";
+// import { PaletteColorOptions, Theme, ThemeOptions, createTheme } from "@mui/material/styles";
+// import { red, green, blue, purple, grey } from '@mui/material/colors';
+// import { Palette } from "@mui/icons-material";
+// import { light } from "@mui/material/styles/createPalette";
 
 // declare module '@mui/material/styles' {
 //     interface Theme {
@@ -22,16 +22,16 @@ import { light } from "@mui/material/styles/createPalette";
 //         createTheme())
 // };
 
-export const theme = createTheme(
-    {
-        palette: {
-            secondary: {
-                main: '#B6B8C5'
-            }
+// export const theme = createTheme(
+//     {
+//         palette: {
+//             secondary: {
+//                 main: '#B6B8C5'
+//             }
 
-        }
-    }
-)
+//         }
+//     }
+// )
 
 // export const theme = (prefersDarkMode: Boolean) => {
 

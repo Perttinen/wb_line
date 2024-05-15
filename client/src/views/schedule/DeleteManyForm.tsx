@@ -1,18 +1,14 @@
-import { Box, Button, Table, TableBody, TableCell, TableRow, Typography } from "@mui/material"
-import { DatePicker, TimePicker } from "@mui/x-date-pickers"
+import { Box, Typography } from "@mui/material"
+import { TimePicker } from "@mui/x-date-pickers"
 import dayjs, { Dayjs } from "dayjs"
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
-
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
-
 import { Field, Form, Formik } from "formik"
-
-import { AppDispatch } from '../../store'
-import { DepartureType } from "../../../../types"
 import { useDispatch } from "react-redux"
-import {
-    removeDeparture,
-} from '../../reducers/departureReducer'
+
+import { AppDispatch } from 'store'
+import { DepartureType } from 'types'
+import { removeDeparture } from 'reducers/departureReducer'
 import { FormDatePicker, FormGroupContainer, FormMainContainer, SaveAndCancelButtons } from "views/components/SmallOnes"
 
 dayjs.extend(isSameOrAfter)
@@ -23,7 +19,6 @@ export const DeleteManyForm = ({
 }: {
     setDelManyForm: (val: boolean) => void, routeId: number, filteredDepartures: DepartureType[]
 }) => {
-
 
     const scheduleDispatch: (
         ...args: unknown[]
@@ -66,11 +61,6 @@ export const DeleteManyForm = ({
     }
 
     const handleSubmit = async (values: FormValues) => {
-        console.log(filteredDepartures[0].startTime);
-
-        console.log(dayjs(filteredDepartures[0].startTime).subtract(1, 'day').day());
-
-
         const departureIdArray = filteredDepartures.filter(d =>
             dayjs(d.startTime).isSameOrAfter(values.fromDate, 'day') &&
             dayjs(d.startTime).isSameOrBefore(values.toDate, 'day') &&
@@ -78,20 +68,17 @@ export const DeleteManyForm = ({
             dayjs(d.startTime).hour() * 60 + dayjs(d.startTime).minute() >= values.fromTime.hour() * 60 + values.fromTime.minute() &&
             values.weekdays[dayjs(d.startTime).subtract(1, 'day').day()] === true
         )
-
         scheduleDispatch(removeDeparture(departureIdArray.map(d => d.id)))
     }
 
     return (
-        <FormMainContainer caption="DELETE MANY" >
+        <FormMainContainer >
             <Formik
                 initialValues={initialValues}
                 onSubmit={async (values) => {
                     handleSubmit(values)
                 }}>
                 {({
-                    submitForm,
-                    isSubmitting,
                     setFieldValue,
                     values
                 }) => (
@@ -122,8 +109,7 @@ export const DeleteManyForm = ({
                                             onChange=
                                             {(newValue): void => {
                                                 setFieldValue('fromTime', newValue)
-                                            }}
-                                        />
+                                            }} />
                                     )}
                                 </Field>
                                 <Field name='toTime'>
@@ -134,13 +120,12 @@ export const DeleteManyForm = ({
                                             onChange=
                                             {(newValue): void => {
                                                 setFieldValue('toTime', newValue)
-                                            }}
-                                        />
+                                            }} />
                                     )}
                                 </Field>
                             </Box>
                         </FormGroupContainer>
-                        <SaveAndCancelButtons onCancel={() => { setDelManyForm(false) }} saveIcon="trash" />
+                        <SaveAndCancelButtons onCancel={() => { setDelManyForm(false) }} submitLabel="delete" />
                     </Form>
                 )}
             </Formik>

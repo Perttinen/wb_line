@@ -5,7 +5,7 @@ import { Form, Formik } from 'formik'
 import { Alert, Box, Modal, Snackbar } from '@mui/material'
 import * as Yup from 'yup'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { changeCurrentPassword } from 'reducers/userReducer'
 import { userService } from 'services'
@@ -50,14 +50,17 @@ export const ChangePassword = ({
 			.oneOf([Yup.ref('newPassword')], 'Passwords must match'),
 	})
 
+	const location = useLocation()
+
 	const handleSubmit = async (values: ConfirmedPasswordsType) => {
 		console.log('submitting')
+
 		const userToChange: ChangePasswordType = { ...values, userId: user.id }
 		try {
 			const user = await userService.update(userToChange)
 			dispatch(changeCurrentPassword(user))
 			setSuccessMsg('Password updated')
-			user.firstTime && navigate('./')
+			location.pathname.startsWith('/login') && navigate('/home')
 		} catch (e) {
 			if (axios.isAxiosError(e)) {
 				setErrorMsg(e.response?.data)

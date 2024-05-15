@@ -3,11 +3,7 @@ import {
     DeleteOutlined, AddCircleOutline, HighlightOff, SaveAlt, DepartureBoardOutlined,
 } from '@mui/icons-material'
 import { Field, useField } from "formik"
-import { DockType } from "types"
 import { DatePicker, TimePicker } from "@mui/x-date-pickers"
-import { theme } from "mui/muiTheme"
-
-
 
 type TextButtonProps = {
     whenClicked?: () => void
@@ -28,17 +24,17 @@ const TextButton = (props: TextButtonProps) => {
 
     switch (props.actionType) {
         case 'add':
-            // sxValues.borderColor = theme.palette.secondary.dark
+
             break
         case 'cancel':
-            // sxValues.color = theme.palette.error.dark
+
             break
         case 'save':
 
-            // sxValues.color = theme.palette.success.dark
+
             break
         case 'trash':
-            sxValues.borderColor = theme.palette.error.light
+            sxValues.borderColor = 'error.light'
             break
         case 'schedule': break
     }
@@ -48,7 +44,7 @@ const TextButton = (props: TextButtonProps) => {
             variant='outlined'
             type={props.buttonType}
             onClick={getClicker}
-            sx={{ ...sxValues, color: theme.palette.primary.dark, paddingX: '4px', paddingY: '0px', fontSize: '1rem' }}>
+            sx={{ ...sxValues, color: 'primary.dark', paddingX: '4px', paddingY: '0px', fontSize: '1rem' }}>
             {props.label}
         </Button>
     )
@@ -56,51 +52,51 @@ const TextButton = (props: TextButtonProps) => {
 }
 
 
-type IconButtonProps = {
-    whenClicked?: () => void
-    buttonType?: "button" | "submit" | "reset" | undefined
-    iconType: "add" | "save" | "cancel" | "trash" | "schedule"
-}
+// type IconButtonProps = {
+//     whenClicked?: () => void
+//     buttonType?: "button" | "submit" | "reset" | undefined
+//     iconType: "add" | "save" | "cancel" | "trash" | "schedule"
+// }
 
-const IconButton = (props: IconButtonProps) => {
-    const getClicker = () => {
-        if (typeof props.whenClicked === 'function') {
-            return props.whenClicked()
-        }
-        return void (0)
-    }
+// const IconButton = (props: IconButtonProps) => {
+//     const getClicker = () => {
+//         if (typeof props.whenClicked === 'function') {
+//             return props.whenClicked()
+//         }
+//         return void (0)
+//     }
 
-    let icon = <></>
-    let sxValues = {
-        fontSize: '2rem', color: '',
-    }
+//     let icon = <></>
+//     let sxValues = {
+//         fontSize: '2rem', color: '',
+//     }
 
-    switch (props.iconType) {
-        case 'add': icon = <AddCircleOutline fontSize='inherit' />
-            sxValues.color = theme.palette.primary.dark
-            break
-        case 'cancel': icon = <HighlightOff fontSize='inherit' />
-            sxValues.color = theme.palette.error.dark
-            break
-        case 'save':
-            icon = <SaveAlt fontSize='inherit' />
-            sxValues.color = theme.palette.success.dark
-            break
-        case 'trash': icon = <DeleteOutlined fontSize='inherit' />
-            sxValues.color = theme.palette.primary.dark
-            break
-        case 'schedule': icon = <DepartureBoardOutlined fontSize='inherit' />
-    }
+//     switch (props.iconType) {
+//         case 'add': icon = <AddCircleOutline fontSize='inherit' />
+//             sxValues.color = theme.palette.primary.dark
+//             break
+//         case 'cancel': icon = <HighlightOff fontSize='inherit' />
+//             sxValues.color = theme.palette.error.dark
+//             break
+//         case 'save':
+//             icon = <SaveAlt fontSize='inherit' />
+//             sxValues.color = theme.palette.success.dark
+//             break
+//         case 'trash': icon = <DeleteOutlined fontSize='inherit' />
+//             sxValues.color = theme.palette.primary.dark
+//             break
+//         case 'schedule': icon = <DepartureBoardOutlined fontSize='inherit' />
+//     }
 
-    return (
-        <Button
-            type={props.buttonType}
-            onClick={getClicker}
-            sx={{ ...sxValues }}>
-            {icon}
-        </Button>
-    )
-}
+//     return (
+//         <Button
+//             type={props.buttonType}
+//             onClick={getClicker}
+//             sx={{ ...sxValues }}>
+//             {icon}
+//         </Button>
+//     )
+// }
 
 type FormMainContainerProps = {
     children: JSX.Element
@@ -109,7 +105,7 @@ type FormMainContainerProps = {
 
 const FormMainContainer = (props: FormMainContainerProps) => {
     return (
-        <Box sx={{ border: 1, marginBottom: '10px', padding: '5px', backgroundColor: theme.palette.secondary.light, }}>
+        <Box sx={{ border: 1, marginBottom: '10px', padding: '5px', borderRadius: '5px', backgroundColor: '#b0cbf5', }}>
             {props.caption &&
                 <Box display={'flex'} flexDirection={'row'} justifyContent={'center'} >
                     <Typography fontSize={'1.2rem'}>{props.caption}</Typography>
@@ -143,7 +139,7 @@ const FormGroupContainer = (props: FormGroupContainerProps) => {
 type FormTextFieldProps = {
     name: string
     label: string
-    type: string
+    type?: string
 }
 const FormTextField = (props: FormTextFieldProps) => {
     const [field, meta] = useField(props);
@@ -153,7 +149,6 @@ const FormTextField = (props: FormTextFieldProps) => {
             name={props.name}
             label={props.label}
             type={props.type}
-            // fullWidth
             required
             variant='outlined'
             value={field.value}
@@ -170,11 +165,14 @@ const FormTextField = (props: FormTextFieldProps) => {
 }
 
 type FormSelectProps = {
-    options: DockType[]
+    selectKey: string
+    selectValue: string
+    options: any[]
     name: string
     label: string
 }
 const FormSelect = (props: FormSelectProps) => {
+
     const [field, meta] = useField(props)
     console.log('dockid: ');
     return (
@@ -193,9 +191,9 @@ const FormSelect = (props: FormSelectProps) => {
             error={meta.touched && Boolean(meta.error)}
             helperText={meta.touched && meta.error}
         >
-            {props.options.map((dock: DockType) => (
-                <MenuItem key={dock.id} value={dock.id}>
-                    {dock.name}
+            {props.options.map((opt) => (
+                <MenuItem key={opt[props.selectKey]} value={opt[props.selectValue]}>
+                    {opt[props.selectKey]}
                 </MenuItem>
             ))}
         </TextField>
@@ -246,17 +244,33 @@ const FormDatePicker = (props: FormTimeOrDatePickerProps) => {
 
 type SaveAndCancelButtonsPropsType = {
     onCancel: (val: boolean) => void
+    submitLabel: string
 }
 
 const SaveAndCancelButtons = (props: SaveAndCancelButtonsPropsType) => {
 
     return (
         <Box display={'flex'} flexDirection={'row'} justifyContent={'space-evenly'}>
-            <Button variant='contained' type='submit'>save</Button>
+            <Button variant='contained' type='submit'>{props.submitLabel}</Button>
             <Button onClick={() => props.onCancel(false)} variant='contained' type='reset'>close</Button>
         </Box>
     )
 }
 
+type topButtonsPropsType = {
+    buttons: { onClick: () => void, label: string }[]
+}
 
-export { IconButton, FormGroupContainer, FormTextField, FormSelect, FormTimePicker, FormDatePicker, FormMainContainer, SaveAndCancelButtons, TextButton }
+const TopButtons = (props: topButtonsPropsType) => {
+    return (
+        <Box borderBottom={1} zIndex={1000} bgcolor={'white'} display={'flex'} flexDirection={'row'} justifyContent={'space-around'} alignItems={'center'} position={'sticky'} top={'65px'} sx={{ paddingY: '10px' }}>
+            {props.buttons.map((b, i) =>
+                <Button key={i} variant='contained' onClick={b.onClick}>
+                    {b.label}
+                </Button>
+            )}
+        </Box>
+    )
+}
+
+export { FormGroupContainer, FormTextField, FormSelect, FormTimePicker, FormDatePicker, FormMainContainer, SaveAndCancelButtons, TextButton, TopButtons }

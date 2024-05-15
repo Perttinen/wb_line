@@ -1,46 +1,35 @@
 import { UserList } from './UserList'
 import { useState } from 'react'
-import { Button, Box, CssBaseline, Container } from '@mui/material'
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
-
+import { Button, Box, Container } from '@mui/material'
 
 import { AddUser } from './AddUser'
-import { useSelector } from 'react-redux'
-import { UserWithTokenType } from '../../../../types'
+import { TopButtons } from 'views/components/SmallOnes'
+// import { useSelector } from 'react-redux'
+// import { UserWithTokenType } from '../../../../types'
 
 export const UserManagement = () => {
 	const [showAddUser, setShowAddUser] = useState(false)
 
-	const loggedUser = useSelector(
-		(state: { loggedUser: UserWithTokenType }) => state.loggedUser
-	)
-
+	// const loggedUser = useSelector(
+	// 	(state: { loggedUser: UserWithTokenType }) => state.loggedUser
+	// )
 	return (
-		loggedUser.userLevel ?
-			(
-				<Container>
-					<Box
-						sx={{
-							display: 'flex',
-							flexDirection: 'column',
-							alignItems: 'center',
-
-						}}
-					>
-						{!showAddUser && (
-							<Button
-
-								sx={{ fontSize: '2rem', marginTop: '2rem' }}
-								type='button'
-								onClick={() => setShowAddUser(true)}
-							>
-								<AddCircleOutlineIcon fontSize='inherit' />
-							</Button>
-						)}
-						{showAddUser && <AddUser setShowAddUser={setShowAddUser} />}
-					</Box>
-					<UserList />
-				</Container>
-			) : null
+		<Container>
+			<Box display={'flex'} flexDirection={'column'}>
+				{showAddUser
+					? (
+						<AddUser setShowAddUser={setShowAddUser} />
+					)
+					: (
+						<TopButtons
+							buttons={
+								[
+									{ onClick: () => setShowAddUser(!showAddUser), label: 'create user' }
+								]} />
+					)
+				}
+				<UserList />
+			</Box>
+		</Container>
 	)
 }

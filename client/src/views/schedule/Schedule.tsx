@@ -1,14 +1,16 @@
 import { useSelector } from 'react-redux'
-import { ListItem, List, Stack, Box, Button } from "@mui/material"
+import { Stack, Box, Typography } from "@mui/material"
 import { useLocation } from "react-router-dom"
-import { DepartureType } from '../../../../types'
-import { RouteDocksType } from '../../../../types'
 import { DepartureList } from './DepartureList'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
+
 import { AddOneForm } from './AddOneForm'
 import { AddManyForm } from './AddManyForm'
 import { DeleteManyForm } from './DeleteManyForm'
-import { theme } from 'mui/muiTheme'
+import { DepartureType } from 'types'
+import { RouteDocksType } from 'types'
+import { TopButtons } from 'views/components/SmallOnes'
 
 export const Schedule = () => {
 
@@ -22,38 +24,31 @@ export const Schedule = () => {
         (state: { departures: DepartureType[] }) => state.departures
     )
 
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    }, [addOneForm, addManyForm, delManyForm])
+
     const filteredDepartures = departures.filter(d => d.route.id === routeId)
+    const formOpen: Boolean = addOneForm || addManyForm || delManyForm
 
     return (
         <div>
             <Box zIndex={1000} position={'sticky'} top={'65px'} sx={{ backgroundColor: 'white' }}>
-                <Box bgcolor={theme.palette.secondary.light}>
-                    <List component={Stack} direction={'row'}>
-                        {docks.map(d => <ListItem sx={{ justifyContent: 'center' }} disablePadding key={d.id} > {d.name} </ListItem>)}
-                    </List>
+                <Box bgcolor={'white'}>
+                    <Stack direction={'row'} divider={<ArrowRightAltIcon />}>
+                        {docks.map(d => <Typography sx={{ justifyContent: 'center' }} key={d.id} > {d.name} </Typography>)}
+                    </Stack>
                 </Box>
-                {addOneForm ? <AddOneForm setAddOneForm={setAddOneForm} routeId={routeId} /> :
-                    addManyForm ? <AddManyForm setAddManyForm={setAddManyForm} routeId={routeId} /> :
-                        delManyForm ? <DeleteManyForm setDelManyForm={setDelManyForm} routeId={routeId} filteredDepartures={filteredDepartures} /> :
-                            <Box borderBottom={1} display={'flex'} flexDirection={'row'} justifyContent={'space-around'} sx={{ paddingY: '10px' }}>
-                                <Button
-                                    onClick={() => { setAddOneForm(true) }}
-                                    variant='contained'>
-                                    add one
-                                </Button>
-                                <Button
-                                    onClick={() => { setAddManyForm(true) }}
-                                    variant='contained'>
-                                    add many
-                                </Button>
-                                <Button onClick={() => { setDelManyForm(true) }}
-                                    variant='contained'>
-                                    delete many
-                                </Button>
-                            </Box>
-                }
+                {!formOpen &&
+                    <TopButtons buttons={[
+                        { label: 'create one', onClick: () => setAddOneForm(true) },
+                        { label: 'create many', onClick: () => setAddManyForm(true) },
+                        { label: 'delete many', onClick: () => setDelManyForm(true) }
+                    ]} />}
             </Box>
-
+            {addOneForm && <AddOneForm setAddOneForm={setAddOneForm} routeId={routeId} />}
+            {addManyForm && <AddManyForm setAddManyForm={setAddManyForm} routeId={routeId} />}
+            {delManyForm && <DeleteManyForm setDelManyForm={setDelManyForm} routeId={routeId} filteredDepartures={filteredDepartures} />}
             <DepartureList filteredDepartures={filteredDepartures} />
         </div>
     )
