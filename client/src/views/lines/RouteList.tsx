@@ -19,6 +19,7 @@ import { RouteDocksType, RouteType, RouteWithAllType } from 'types'
 import { AppDispatch } from 'store'
 import { removeRoute } from 'reducers/routeReducer'
 import { useState } from 'react'
+import { initializeDepartures } from 'reducers/departureReducer'
 
 export const RouteList = () => {
 
@@ -33,7 +34,8 @@ export const RouteList = () => {
 		useDispatch<AppDispatch>()
 
 	const handleDelete = async (id: number) => {
-		dispatch(removeRoute(id))
+		await dispatch(removeRoute(id))
+		dispatch(initializeDepartures())
 	}
 
 	const getRouteDocks = (route: RouteWithAllType) => {

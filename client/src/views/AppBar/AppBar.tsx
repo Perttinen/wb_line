@@ -36,8 +36,9 @@ export const AppBar = (
 						</Toolbar>
 					</Container>
 				</MuiAppBar>
-				<Outlet />
 				<UserCard userCard={userCard} setUserCard={setUserCard} />
+				<Outlet />
+
 			</div>
 
 			: <>loading..</>

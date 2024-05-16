@@ -7,8 +7,10 @@ import { appendDock, dropDock } from './reducers/dockReducer'
 import { appendShip, dropShip } from './reducers/shipReducer'
 import { setTime } from './reducers/timeReducer'
 import { AppDispatch } from './store'
-import { DockNoIdType, ShipNoIdType, User, UserNoIdType } from '../../types'
-import { userService, dockService, shipService } from 'services'
+import { DepartureType, DockNoIdType, ShipNoIdType, User, UserNoIdType, initDepartureType } from '../../types'
+import { userService, dockService, shipService, departureService } from 'services'
+import { initializeRoutes } from 'reducers/routeReducer'
+import { appendDeparture, dropDeparture, initializeDepartures } from 'reducers/departureReducer'
 
 const WS_BASE =
 	process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : '/'
@@ -22,6 +24,8 @@ interface IContext {
 	sendRemoveDock: (id: number) => void
 	sendAddShip: (user: ShipNoIdType) => void
 	sendRemoveShip: (id: number) => void
+	sendAddDepartures: (departure: initDepartureType[]) => void
+	sendRemoveDepartures: (departureIds: number[]) => void
 }
 
 const WebSocketContext = createContext<IContext | null>(null)
@@ -65,6 +69,8 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 	const sendRemoveDock = async (id: number) => {
 		await dockService.remove(id)
 		dispatch(dropDock(id))
+		dispatch(initializeRoutes())
+		dispatch(initializeDepartures())
 		socket?.emit('event://send-remove-dock', id)
 	}
 
@@ -78,6 +84,18 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 		await shipService.remove(id)
 		dispatch(dropShip(id))
 		socket?.emit('event://send-remove-ship', id)
+	}
+
+	const sendAddDepartures = async (departures: initDepartureType[]) => {
+		const newDepartures: DepartureType[] = await departureService.create(departures)
+		dispatch(appendDeparture(newDepartures))
+		socket?.emit('event://send-add-departures', newDepartures)
+	}
+
+	const sendRemoveDepartures = async (departureIds: number[]) => {
+		await departureService.remove(departureIds)
+		dispatch(dropDeparture(departureIds))
+		socket?.emit('event://send-remove-departures', departureIds)
 	}
 
 	useEffect(() => {
@@ -107,6 +125,8 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 
 		newSocket.on('event://get-remove-dock', (id: number) => {
 			dispatch(dropDock(id))
+			dispatch(initializeRoutes())
+			dispatch(initializeDepartures())
 		})
 
 		newSocket.on('event://get-add-ship', (ship: any) => {
@@ -115,6 +135,14 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 
 		newSocket.on('event://get-remove-ship', (id: number) => {
 			dispatch(dropShip(id))
+		})
+
+		newSocket.on('event://get-add-departures', (departures: DepartureType[]) => {
+			dispatch(appendDeparture(departures))
+		})
+
+		newSocket.on('event://get-remove-departures', (departureIds: number[]) => {
+			dispatch(dropDeparture(departureIds))
 		})
 
 		return () => {
@@ -137,6 +165,8 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 						sendRemoveDock,
 						sendAddShip,
 						sendRemoveShip,
+						sendAddDepartures,
+						sendRemoveDepartures
 					}
 					: null
 			}
