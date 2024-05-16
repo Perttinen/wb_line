@@ -10,7 +10,7 @@ import { AppDispatch } from './store'
 import { DepartureType, DockNoIdType, ShipNoIdType, User, UserNoIdType, initDepartureType } from '../../types'
 import { userService, dockService, shipService, departureService } from 'services'
 import { initializeRoutes } from 'reducers/routeReducer'
-import { appendDeparture, dropDeparture, initializeDepartures, removeDeparture } from 'reducers/departureReducer'
+import { appendDeparture, dropDeparture, initializeDepartures } from 'reducers/departureReducer'
 
 const WS_BASE =
 	process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : '/'

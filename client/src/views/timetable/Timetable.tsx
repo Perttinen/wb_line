@@ -4,9 +4,7 @@ import {
 	Table,
 	TableBody,
 	TableCell,
-	TableHead,
 	TableRow,
-	Typography,
 } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { DepartureType, DockType } from '../../../../types'

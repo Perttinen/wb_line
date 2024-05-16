@@ -20,10 +20,10 @@ export const DepartureList = ({ filteredDepartures }: { filteredDepartures: Depa
                 <Table>
                     <TableBody>
                         {filteredDepartures.map(d =>
-                            <TableRow key={d.id}>
-                                <TableCell sx={{ fontWeight: 'bold' }}>{new Date(d.startTime).toLocaleDateString('fi-FI')}</TableCell>
-                                <TableCell sx={{ fontWeight: 'bold' }}>{new Date(d.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })}</TableCell>
-                                <TableCell><Button variant='text' onClick={() => handleDelete(d.id)} >
+                            <TableRow key={d.id} sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', borderBottom: 1, borderColor: '#e0e0e0' }}>
+                                <TableCell sx={{ fontWeight: 'bold', borderBottom: 0 }}>{new Date(d.startTime).toLocaleDateString('fi-FI')}</TableCell>
+                                <TableCell sx={{ fontWeight: 'bold', borderBottom: 0 }}>{new Date(d.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })}</TableCell>
+                                <TableCell sx={{ borderBottom: 0 }}><Button variant='text' onClick={() => handleDelete(d.id)} >
                                     delete
                                 </Button></TableCell>
                             </TableRow>)}

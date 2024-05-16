@@ -1,16 +1,27 @@
 import { Stack, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material"
-import { useSelector } from "react-redux"
-import { useParams } from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux"
+import { useLocation, useParams } from "react-router-dom"
 import { DepartureType } from "../../../../types"
 import dayjs, { Dayjs } from 'dayjs'
 import { Fragment, useEffect } from "react"
+import { initializeDepartures } from "reducers/departureReducer"
+import { AppDispatch } from "store"
 
 
 export const TimetableById = () => {
 
+    const location = useLocation()
+    const publicRoute = location.pathname.startsWith('/public')
+
+    const dispatch: (...args: unknown[]) => Promise<string> =
+        useDispatch<AppDispatch>()
+
     useEffect(() => {
+        if (publicRoute) {
+            dispatch(initializeDepartures())
+        }
         window.scrollTo(0, 0)
-    }, [])
+    }, [publicRoute, dispatch])
 
     const departures = useSelector(
         (state: { departures: DepartureType[] }) => state.departures
