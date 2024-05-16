@@ -23,7 +23,7 @@ export const UserCard = ({
 	return (
 		<div>
 			{userCard && (
-				<Card sx={{ minWidth: 275 }}>
+				<Card sx={{ minWidth: 275, marginBottom: '20px' }}>
 					<CardContent>
 						<UserDataTable user={user} />
 					</CardContent>
