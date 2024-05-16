@@ -4,12 +4,11 @@ import dayjs, { Dayjs } from "dayjs"
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import { Field, Form, Formik } from "formik"
-import { useDispatch } from "react-redux"
 
-import { AppDispatch } from 'store'
 import { DepartureType } from 'types'
-import { removeDeparture } from 'reducers/departureReducer'
 import { FormDatePicker, FormGroupContainer, FormMainContainer, SaveAndCancelButtons } from "views/components/SmallOnes"
+import { WebSocketContext } from "WebSocket"
+import { useContext } from "react"
 
 dayjs.extend(isSameOrAfter)
 dayjs.extend(isSameOrBefore)
@@ -20,9 +19,7 @@ export const DeleteManyForm = ({
     setDelManyForm: (val: boolean) => void, routeId: number, filteredDepartures: DepartureType[]
 }) => {
 
-    const scheduleDispatch: (
-        ...args: unknown[]
-    ) => Promise<DepartureType>[] | number = useDispatch<AppDispatch>()
+    const ws = useContext(WebSocketContext)
 
     const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
 
@@ -68,7 +65,8 @@ export const DeleteManyForm = ({
             dayjs(d.startTime).hour() * 60 + dayjs(d.startTime).minute() >= values.fromTime.hour() * 60 + values.fromTime.minute() &&
             values.weekdays[dayjs(d.startTime).subtract(1, 'day').day()] === true
         )
-        scheduleDispatch(removeDeparture(departureIdArray.map(d => d.id)))
+        const departureIds: number[] = departureIdArray.map(d => d.id)
+        ws?.sendRemoveDepartures(departureIds)
     }
 
     return (

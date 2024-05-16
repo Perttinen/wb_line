@@ -1,13 +1,11 @@
 import { DateTimePicker } from "@mui/x-date-pickers"
 import dayjs, { Dayjs } from "dayjs"
 import { Field, Form, Formik } from "formik"
-import { useDispatch } from "react-redux"
 
-import { departureService } from "services"
-import { AppDispatch } from 'store'
-import { DepartureType, initDepartureType } from "types"
-import { appendDeparture, } from 'reducers/departureReducer'
+import { initDepartureType } from "types"
 import { FormGroupContainer, FormMainContainer, SaveAndCancelButtons } from "views/components/SmallOnes"
+import { useContext } from "react"
+import { WebSocketContext } from "WebSocket"
 
 export const AddOneForm = ({
     setAddOneForm, routeId
@@ -15,9 +13,7 @@ export const AddOneForm = ({
     setAddOneForm: (val: boolean) => void, routeId: number
 }) => {
 
-    const scheduleDispatch: (
-        ...args: unknown[]
-    ) => Promise<DepartureType> | number = useDispatch<AppDispatch>()
+    const ws = useContext(WebSocketContext)
 
     interface FormValues {
         startTime: Dayjs
@@ -32,8 +28,7 @@ export const AddOneForm = ({
     const handleSubmit = async (values: FormValues) => {
         let valuesArr: initDepartureType[] = []
         valuesArr.push(values)
-        const valuesToDisp = await departureService.create(valuesArr)
-        scheduleDispatch(appendDeparture(valuesToDisp))
+        ws?.sendAddDepartures(valuesArr)
     }
 
     return (

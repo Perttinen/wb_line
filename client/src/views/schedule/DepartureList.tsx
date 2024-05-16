@@ -1,20 +1,17 @@
 import { Button, Table, TableBody, TableCell, TableContainer, TableRow } from "@mui/material"
 import { DepartureType } from "../../../../types"
-import { useDispatch } from "react-redux"
-import { AppDispatch } from "../../store"
-import { removeDeparture } from "../../reducers/departureReducer"
+import { useContext } from "react"
+import { WebSocketContext } from "WebSocket"
 
 export const DepartureList = ({ filteredDepartures }: { filteredDepartures: DepartureType[] }) => {
 
-    const dispatch: (...args: unknown[]) => Promise<string> =
-        useDispatch<AppDispatch>()
+    const ws = useContext(WebSocketContext)
 
     filteredDepartures.sort((a, b) => new Date(a.startTime).valueOf() - new Date(b.startTime).valueOf())
 
     const handleDelete = async (id: number) => {
         const idArr: number[] = [id]
-        console.log(idArr);
-        dispatch(removeDeparture(idArr))
+        ws?.sendRemoveDepartures(idArr)
     }
 
     return (

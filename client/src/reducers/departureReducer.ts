@@ -16,8 +16,6 @@ const departureSlice = createSlice({
 			return action.payload
 		},
 		dropDeparture(state, action: PayloadAction<number[]>) {
-			console.log('drop');
-
 			return state.filter((u) => !action.payload.includes(u.id))
 		},
 	},
@@ -39,8 +37,7 @@ export const createDeparture = (departures: initDepartureType[]) => {
 
 export const removeDeparture = (id: number[]) => {
 	return async (dispatch: Dispatch) => {
-		console.log('inredu: ', id);
-		console.log(await departureService.remove(id));
+		await departureService.remove(id)
 		dispatch(dropDeparture(id))
 	}
 }

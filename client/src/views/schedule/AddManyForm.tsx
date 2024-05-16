@@ -1,14 +1,11 @@
 import { Alert, Box, Button, Snackbar, Typography } from "@mui/material"
 import dayjs, { Dayjs } from "dayjs"
 import { Field, FieldArray, Form, Formik } from "formik"
-import { useDispatch } from "react-redux"
-import { useState } from "react"
+import { useContext, useState } from "react"
 
-import { AppDispatch } from 'store'
-import { DepartureType } from "types"
-import { createDeparture } from 'reducers/departureReducer'
+import { initDepartureType } from "types"
 import { FormDatePicker, FormMainContainer, FormTimePicker, FormGroupContainer, SaveAndCancelButtons } from "views/components/SmallOnes"
-
+import { WebSocketContext } from "WebSocket"
 
 export const AddManyForm = ({
     setAddManyForm, routeId
@@ -16,11 +13,9 @@ export const AddManyForm = ({
     setAddManyForm: (val: boolean) => void, routeId: number
 }) => {
 
-    const [successMsg, setSuccessMsg] = useState('')
+    const ws = useContext(WebSocketContext)
 
-    const scheduleDispatch: (
-        ...args: unknown[]
-    ) => Promise<DepartureType>[] | number = useDispatch<AppDispatch>()
+    const [successMsg, setSuccessMsg] = useState('')
 
     const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
 
@@ -70,8 +65,8 @@ export const AddManyForm = ({
     }
 
     const handleSubmit = async (values: FormValues) => {
-        const starts = createStartList(values)
-        scheduleDispatch(createDeparture(starts))
+        const starts: initDepartureType[] = createStartList(values)
+        ws?.sendAddDepartures(starts)
         setSuccessMsg(`${starts.length} starts successfully added!`)
     }
 

@@ -42,6 +42,12 @@ const ioConnection = (server: http.Server) => {
 		socket.on('event://send-remove-ship', (payload) => {
 			socket.broadcast.emit('event://get-remove-ship', payload)
 		})
+		socket.on('event://send-add-departures', (payload) => {
+			socket.broadcast.emit('event://get-add-departures', payload)
+		})
+		socket.on('event://send-remove-departures', (payload) => {
+			socket.broadcast.emit('event://get-remove-departures', payload)
+		})
 	})
 }
 
