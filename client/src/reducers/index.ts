@@ -7,5 +7,6 @@ import stopReducer from "./stopReducer";
 import timeReducer from "./timeReducer";
 import userLevelReducer from "./userLevelReducer";
 import userReducer from "./userReducer";
+import shortlistReducer from "./shortlistReducer";
 
-export { departureReducer, dockReducer, loggedUserReducer, routeReducer, shipReducer, stopReducer, timeReducer, userLevelReducer, userReducer }
+export { departureReducer, dockReducer, loggedUserReducer, routeReducer, shipReducer, stopReducer, timeReducer, userLevelReducer, userReducer, shortlistReducer }

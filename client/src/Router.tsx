@@ -7,7 +7,7 @@ import {
     Lines,
     Schedule,
     TimetableById,
-    Login
+    Login, PublicTimetable, PublicTimetableById
 } from 'views'
 import { ProtectedRoute } from './views/components/ProtectedRoute'
 import { AppBar } from "views"
@@ -16,11 +16,11 @@ export const Router = () => {
     const router = createBrowserRouter([
         {
             path: '/public/timetablebyid/:dockId',
-            element: <TimetableById />,
+            element: <PublicTimetableById />,
         },
         {
             path: '/public/timetable',
-            element: <Timetable />,
+            element: <PublicTimetable />,
         },
         {
             path: '/login',

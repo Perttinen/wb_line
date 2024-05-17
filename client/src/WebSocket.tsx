@@ -11,6 +11,7 @@ import { DepartureType, DockNoIdType, ShipNoIdType, User, UserNoIdType, initDepa
 import { userService, dockService, shipService, departureService } from 'services'
 import { initializeRoutes } from 'reducers/routeReducer'
 import { appendDeparture, dropDeparture, initializeDepartures } from 'reducers/departureReducer'
+import { appendShortlist, dropShortlist } from 'reducers/shortlistReducer'
 
 const WS_BASE =
 	process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : '/'
@@ -88,6 +89,7 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 
 	const sendAddDepartures = async (departures: initDepartureType[]) => {
 		const newDepartures: DepartureType[] = await departureService.create(departures)
+		dispatch(appendShortlist(newDepartures))
 		dispatch(appendDeparture(newDepartures))
 		socket?.emit('event://send-add-departures', newDepartures)
 	}
@@ -95,6 +97,7 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 	const sendRemoveDepartures = async (departureIds: number[]) => {
 		await departureService.remove(departureIds)
 		dispatch(dropDeparture(departureIds))
+		dispatch(dropShortlist(departureIds))
 		socket?.emit('event://send-remove-departures', departureIds)
 	}
 
@@ -139,10 +142,12 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 
 		newSocket.on('event://get-add-departures', (departures: DepartureType[]) => {
 			dispatch(appendDeparture(departures))
+			dispatch(appendShortlist(departures))
 		})
 
 		newSocket.on('event://get-remove-departures', (departureIds: number[]) => {
 			dispatch(dropDeparture(departureIds))
+			dispatch(dropShortlist(departureIds))
 		})
 
 		return () => {

@@ -8,6 +8,8 @@ import { Lines } from 'views/lines/Lines'
 import { Schedule } from 'views/schedule/Schedule'
 import { TimetableById } from 'views/timetable/TimetableById'
 import { AppBar } from 'views/AppBar/AppBar'
+import { PublicTimetable } from './publicTimetable/PublicTimetable'
+import { PublicTimetableById } from './publicTimetable/PublicTimetableById'
 
 export {
 	Login,
@@ -20,5 +22,7 @@ export {
 	Schedule,
 	TimetableById,
 	AppBar,
+	PublicTimetable,
+	PublicTimetableById
 }
 //fdfd

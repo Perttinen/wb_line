@@ -9,6 +9,7 @@ import { initializeShips } from './reducers/shipReducer'
 import { initializeRoutes } from './reducers/routeReducer'
 import { initializeDepartures } from './reducers/departureReducer'
 import { initializeLoggedUser } from './reducers/loggedUserReducer'
+import { initializeShortlist } from 'reducers/shortlistReducer'
 
 type DispatchFunc = () => AppDispatch
 export const useAppDispatch: DispatchFunc = useDispatch
@@ -30,6 +31,7 @@ export const useInitializers = () => {
 			dispatch(initializeDocks())
 			dispatch(initializeShips())
 			dispatch(initializeUsers())
+			dispatch(initializeShortlist())
 		}
 	}, [dispatch])
 }
