@@ -13,11 +13,6 @@ Route.init(
 			primaryKey: true,
 			autoIncrement: true,
 		},
-		// name: {
-		// 	type: DataTypes.STRING,
-		// 	unique: true,
-		// 	allowNull: false,
-		// },
 		startDockId: {
 			type: DataTypes.INTEGER,
 			references: { model: 'docks', key: 'id' },

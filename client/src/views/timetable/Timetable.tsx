@@ -1,63 +1,12 @@
-import {
-	Button,
-	Container,
-	Table,
-	TableBody,
-	TableCell,
-	TableRow,
-} from '@mui/material'
-import { useDispatch, useSelector } from 'react-redux'
-import { DepartureType, DockType } from '../../../../types'
-import { useNavigate, useLocation } from 'react-router-dom'
-import { AppDispatch } from '../../store'
-import { useEffect } from 'react'
-import { initializeDepartures } from '../../reducers/departureReducer'
+import { useSelector } from 'react-redux'
+
+import { Docklist } from 'views/components'
 
 export const Timetable = () => {
-	const navigate = useNavigate()
-	const location = useLocation()
-
-	const dispatch: (...args: unknown[]) => Promise<string> =
-		useDispatch<AppDispatch>()
-
-	const publicRoute = location.pathname === '/public/timetable'
-
-	useEffect(() => {
-		if (publicRoute) {
-			dispatch(initializeDepartures())
-		}
-	}, [dispatch])
-
 	const departures = useSelector(
 		(state: { departures: any[] }) => state.departures
 	)
-
-	const getDockList = (departures: DepartureType[]) => {
-		const docks: DockType[] = []
-		for (let i in departures) {
-			!docks.find(d => d.id === departures[i].route.startDock.id) && docks.push(departures[i].route.startDock)
-			for (let c in departures[i].route.stops) {
-				!docks.find(d => d.id === departures[i].route.stops[c].dock.id) && docks.push(departures[i].route.stops[c].dock)
-			}
-		}
-		return docks
-	}
-
 	return (
-		<Container>
-			<Table>
-				<TableBody>
-					{getDockList(departures).map((d) => (
-						<TableRow key={d.id}>
-							<TableCell align='center'>
-								<Button onClick={() => !publicRoute ? navigate(`/timetablebyid/${d.id}`) : navigate(`/public/timetablebyid/${d.id}`)}>
-									{d.name}
-								</Button>
-							</TableCell>
-						</TableRow>
-					))}
-				</TableBody>
-			</Table>
-		</Container>
+		<Docklist departures={departures} publicView={false} />
 	)
 }
