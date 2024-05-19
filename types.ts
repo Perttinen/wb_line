@@ -182,3 +182,7 @@ export type RouteFormValuesType = {
 	stops: StoppiType[]
 	endDockId: number
 }
+
+export type ReturnValueType = {
+	id: number, startTime: Dayjs, via: string[], endDock: String
+}
