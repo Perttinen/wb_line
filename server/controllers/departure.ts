@@ -2,9 +2,7 @@ import express from 'express'
 import { tokenExtractor } from '../util/middleware'
 import { Departure, Dock, Route, Stop } from '../models'
 import { Op } from 'sequelize'
-// import sequelize from 'sequelize/types/sequelize'
-
-
+// import { DepartureType } from '../../types'
 
 const router = express.Router()
 

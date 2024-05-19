@@ -1,44 +1,18 @@
 import dayjs, { Dayjs } from 'dayjs'
 
-import { DepartureType } from "types"
 import { Stack, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material"
 import { Fragment } from "react"
+import { ReturnValueType } from 'types'
 
-type TimetablelistProps = {
-    departures: DepartureType[]
-    dockId: number
-}
 
-export const Timetablelist = ({ departures, dockId }: TimetablelistProps) => {
 
-    type ReturnValueType = {
-        id: number, startTime: Dayjs, via: string[], endDock: String
-    }
+export const Timetablelist = (startlist: ReturnValueType[]) => {
 
-    const departuresFromDock = departures.filter(d => d.route.startDock.id === dockId || d.route.stops.find(s => s.dock.id === dockId))
 
-    const tableData = departuresFromDock.map(d => {
-        const returnValue = {} as ReturnValueType
-        returnValue.endDock = d.route.endDock.name
-        returnValue.id = d.id
-        if (d.route.startDock.id === dockId) {
-            returnValue.startTime = dayjs(d.startTime)
-            returnValue.via = d.route.stops.map(s => s.dock.name)
-        } else {
-            const thisStop = d.route.stops.find(s => s.dock.id === dockId)
-            if (thisStop) {
-                const delayTime = thisStop.delayTimeMinutes
-                returnValue.startTime = dayjs(d.startTime).add(delayTime, 'minute')
-                const i = d.route.stops.indexOf(thisStop)
-                returnValue.via = d.route.stops.slice(i + 1).map(s => s.dock.name)
-            }
-        }
-        return returnValue
-    })
 
-    tableData.sort((a, b) => a.startTime.unix() - b.startTime.unix())
+    const tableDataFromToday = startlist
+    console.log(tableDataFromToday);
 
-    const tableDataFromToday = tableData.filter(d => d.startTime.isSameOrAfter(dayjs(Date.now())))
 
     return (
         <>
