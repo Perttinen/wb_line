@@ -41,7 +41,7 @@ router.get('/shortlist', async (_req, res) => {
 	console.log(fromDate, toDate);
 
 	const resDepartures = await Departure.findAll({
-		order: ['startTime'],
+
 		where: {
 			startTime: { [Op.between]: [fromDate, toDate] }
 		},

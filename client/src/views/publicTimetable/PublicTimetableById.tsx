@@ -42,6 +42,7 @@ const createStartList = (departures: DepartureType[], dockId: number) => {
 
 export const PublicTimetableById = () => {
 
+    window.scrollTo(0, 0)
 
     const dispatch: (...args: unknown[]) => Promise<string> =
         useDispatch<AppDispatch>()
@@ -59,21 +60,21 @@ export const PublicTimetableById = () => {
         dispatch(initializeShortlist())
     }, [])
 
-    useEffect(() => {
-        let timer: NodeJS.Timeout
-        if (startlist[0]) {
-            console.log(startlist[0]);
-            const delay = startlist[0].startTime.diff(Date.now())
-            console.log(delay);
-            timer = setTimeout(() => {
-                dispatch(initializeShortlist())
-            }, delay
-            )
-        }
-        return () => clearTimeout(timer)
-    }, [startlist])
+    // useEffect(() => {
+    //     let timer: NodeJS.Timeout
+    //     if (startlist[0]) {
+    //         console.log(startlist[0]);
+    //         const delay = startlist[0].startTime.diff(Date.now())
+    //         console.log(delay);
+    //         timer = setTimeout(() => {
+    //             dispatch(initializeShortlist())
+    //         }, delay
+    //         )
+    //     }
+    //     return () => clearTimeout(timer)
+    // }, [startlist])
 
-    window.scrollTo(0, 0)
+
 
     return (
         <>
