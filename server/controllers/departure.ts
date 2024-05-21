@@ -4,34 +4,34 @@ import { Op } from 'sequelize'
 
 const router = express.Router()
 
-router.get('/', async (_req, res, _next) => {
-	// try {
-	const departures: Departure[] = await Departure.findAll({
-		include: [
-			{
-				model: Route,
-				as: 'route',
-				include: [
-					{ model: Dock, as: 'startDock' },
-					{ model: Dock, as: 'endDock' },
-					{
-						model: Stop,
-						as: 'stops',
-						order: ['delayTimeMinutes'],
-						include: [{ model: Dock, as: 'dock' }],
-						attributes: { exclude: ['dockId', 'routeId'] },
-					},
-				],
-				attributes: { exclude: ['startDockId', 'endDockId'] },
-			},
-		],
-		attributes: { exclude: ['routeId'] },
-	})
-	res.json(departures)
-	// } 
-	// catch (error) {
-	// 	next(error)
-	// }
+router.get('/', async (_req, res) => {
+	try {
+		const departures: Departure[] = await Departure.findAll({
+			include: [
+				{
+					model: Route,
+					as: 'route',
+					include: [
+						{ model: Dock, as: 'startDock' },
+						{ model: Dock, as: 'endDock' },
+						{
+							model: Stop,
+							as: 'stops',
+							order: ['delayTimeMinutes'],
+							include: [{ model: Dock, as: 'dock' }],
+							attributes: { exclude: ['dockId', 'routeId'] },
+						},
+					],
+					attributes: { exclude: ['startDockId', 'endDockId'] },
+				},
+			],
+			attributes: { exclude: ['routeId'] },
+		})
+		res.json(departures)
+	}
+	catch (error) {
+		// next(error)
+	}
 })
 
 router.get('/shortlist', async (_req, res) => {

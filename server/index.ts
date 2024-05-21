@@ -13,7 +13,7 @@ import routeRouter from './controllers/route'
 import stopRouter from './controllers/stop'
 import departureRouter from './controllers/departure'
 import { tokenExtractor } from './util/middleware'
-import { errorHandler } from './util/errorHandler'
+// import { errorHandler } from './util/errorHandler'
 
 import ioConnection from './util/socket'
 
@@ -31,10 +31,13 @@ app.use(tokenExtractor)
 app.use('/api/userlevel', userLevelRouter)
 app.use('/api/user', userRouter)
 app.use('/api/dock', dockRouter)
-app.use('/api/ship', shipRouter)
 app.use('/api/route', routeRouter)
 app.use('/api/stop', stopRouter)
-app.use(errorHandler)
+
+app.use('/api/ship', shipRouter)
+
+
+// app.use(errorHandler)
 
 app.get('/*', function (_req, res) {
 	res.sendFile(
