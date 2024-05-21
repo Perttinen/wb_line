@@ -6,7 +6,6 @@ import {
 	Dock, Route,
 	Stop,
 } from '../models'
-import { tokenExtractor } from '../util/middleware'
 
 const router = express.Router()
 
@@ -19,7 +18,7 @@ router.get('/', async (_req, res) => {
 	}
 })
 
-router.post('/', tokenExtractor, async (req, res) => {
+router.post('/', async (req, res) => {
 	try {
 		const dock = await Dock.create(req.body)
 		return res.json(dock)
@@ -28,13 +27,10 @@ router.post('/', tokenExtractor, async (req, res) => {
 	}
 })
 
-router.delete('/:id', tokenExtractor, async (req, res) => {
+router.delete('/:id', async (req, res) => {
 	try {
 		const dock = await Dock.findByPk(req.params.id)
 		if (dock) {
-			console.log(dock.toJSON())
-			console.log(dock.dataValues.id);
-
 			const routeIds: number[] = []
 			const routeIdsToDestroy: Route[] = await Route.findAll({
 				where: {

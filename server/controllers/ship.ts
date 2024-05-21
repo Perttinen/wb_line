@@ -1,7 +1,7 @@
 import express from 'express'
 
 import { Ship } from '../models'
-import { tokenExtractor } from '../util/middleware'
+
 
 const router = express.Router()
 
@@ -15,7 +15,7 @@ router.get('/', async (_req, res) => {
 	}
 })
 
-router.post('/', tokenExtractor, async (req, res) => {
+router.post('/', async (req, res) => {
 	try {
 		const ship = await Ship.create(req.body)
 		return res.json(ship)
@@ -25,7 +25,7 @@ router.post('/', tokenExtractor, async (req, res) => {
 	}
 })
 
-router.delete('/:id', tokenExtractor, async (req, res) => {
+router.delete('/:id', async (req, res) => {
 	try {
 		const ship = await Ship.findByPk(req.params.id)
 		if (ship) await ship.destroy()

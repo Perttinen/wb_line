@@ -1,11 +1,10 @@
 import express from 'express'
 
 import { Departure, Dock, Route, Stop } from '../models'
-import { tokenExtractor } from '../util/middleware'
 
 const router = express.Router()
 
-router.get('/', async (_req, res) => {
+router.get('/', async (_req, res, next) => {
 	try {
 		const routes: Route[] = await Route.findAll({
 			attributes: { exclude: ['endDockId', 'startDockId'] },
@@ -21,61 +20,46 @@ router.get('/', async (_req, res) => {
 
 		res.json(routes)
 	} catch (e) {
-		console.log(e);
-		res.status(500).json(e)
+		next(e)
 	}
 })
 
-router.get('/:id', async (req, res) => {
-	const route = await Route.findByPk(req.params.id, {
-		attributes: { exclude: ['endDockId', 'startDockId'] },
-		include: [
-			{ model: Dock, as: 'startDock' },
-			{ model: Dock, as: 'endDock' },
-			{ model: Stop, as: 'stops', include: [{ model: Dock, as: 'dock' }], attributes: { exclude: ['dockId', 'routeId'] } },
-		],
-		order: [
-			[{ model: Stop, as: 'stops' }, 'delayTimeMinutes'],
-		],
-	})
-	return res.json(route)
+router.get('/:id', async (req, res, next) => {
+
+	const id = req.params.id
+	try {
+
+		const route = await Route.findByPk(id, {
+			attributes: { exclude: ['endDockId', 'startDockId'] },
+			include: [
+				{ model: Dock, as: 'startDock' },
+				{ model: Dock, as: 'endDock' },
+				{ model: Stop, as: 'stops', include: [{ model: Dock, as: 'dock' }], attributes: { exclude: ['dockId', 'routeId'] } },
+			],
+			order: [
+				[{ model: Stop, as: 'stops' }, 'delayTimeMinutes'],
+			],
+		})
+		res.json(route)
+	} catch (error) {
+		next(error)
+	}
 })
 
-router.post('/', async (req, res) => {
-
-	console.log('controller');
-
+router.post('/', async (req, res, next) => {
 	try {
 		const routeToSave = {
 			startDockId: req.body.startDockId,
 			endDockId: req.body.endDockId,
 		}
 		const route = await Route.create(routeToSave)
-		// if (req.body.stops.length > 0) {
-		// 	for (const stop of req.body.stops) {
-		// 		const toSave = {
-		// 			delayTimeMinutes: stop.time,
-		// 			dockId: stop.dock,
-		// 			routeId: route.dataValues.id,
-		// 		}
-		// 		await Stop.create(toSave)
-		// 	}
-		// }
-		// const resRoute = await Route.findByPk(route.dataValues.id, {
-		// 	include: [
-		// 		{ model: Dock, as: 'startDock' },
-		// 		{ model: Dock, as: 'endDock' },
-		// 		{ model: Stop, as: 'stops', include: [{ model: Dock, as: 'dock' }] },
-		// 	],
-		// })
-		return res.json(route)
+		res.json(route)
 	} catch (e) {
-		console.log(e)
-		return res.status(500).json(e)
+		next(e)
 	}
 })
 
-router.delete('/:id', tokenExtractor, async (req, res) => {
+router.delete('/:id', async (req, res, next) => {
 	try {
 		const route = await Route.findByPk(req.params.id)
 		if (route) {
@@ -85,8 +69,7 @@ router.delete('/:id', tokenExtractor, async (req, res) => {
 		}
 		res.json(route)
 	} catch (e) {
-		console.log(e)
-		res.status(500).json(e)
+		next(e)
 	}
 })
 

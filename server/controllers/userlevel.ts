@@ -2,8 +2,6 @@ import express from 'express'
 import { UserLevel } from '../models'
 import dotenv from 'dotenv'
 
-// import { tokenExtractor } from '../util/middleware'
-
 dotenv.config()
 
 const router = express.Router()

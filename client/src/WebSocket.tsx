@@ -5,7 +5,6 @@ import { useDispatch } from 'react-redux'
 import { appendUser, dropUser } from './reducers/userReducer'
 import { appendDock, dropDock } from './reducers/dockReducer'
 import { appendShip, dropShip } from './reducers/shipReducer'
-import { setTime } from './reducers/timeReducer'
 import { AppDispatch } from './store'
 import { DepartureType, DockNoIdType, ShipNoIdType, User, UserNoIdType, initDepartureType } from '../../types'
 import { userService, dockService, shipService, departureService } from 'services'
@@ -18,7 +17,6 @@ const WS_BASE =
 
 interface IContext {
 	socket: Socket
-	sendMessage: (message: string) => void
 	sendAddUser: (user: UserNoIdType) => void
 	sendRemoveUser: (id: number) => void
 	sendAddDock: (user: DockNoIdType) => void
@@ -41,13 +39,6 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 	const [socket, setSocket] = useState<Socket | null>(null)
 	const dispatch: (...args: unknown[]) => Promise<User> | number =
 		useDispatch<AppDispatch>()
-
-	const sendMessage = (message: string) => {
-		const payload = {
-			data: message,
-		}
-		socket?.emit('event://send-message', payload)
-	}
 
 	const sendAddUser = async (user: UserNoIdType) => {
 		const newUser = await userService.create(user)
@@ -105,14 +96,6 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 		const newSocket = io(WS_BASE)
 		setSocket(newSocket)
 
-		newSocket.on('time', (time) => {
-			dispatch(setTime(time))
-		})
-
-		newSocket.on('event://get-message', (_msg: any) => {
-
-		})
-
 		newSocket.on('event://get-add-user', (user: any) => {
 			dispatch(appendUser(user))
 		})
@@ -163,7 +146,6 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 				socket
 					? {
 						socket,
-						sendMessage,
 						sendAddUser,
 						sendRemoveUser,
 						sendAddDock,

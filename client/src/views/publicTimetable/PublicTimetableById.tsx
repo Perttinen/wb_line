@@ -1,7 +1,7 @@
 
 import { useDispatch, useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
-import { Fragment, useEffect, useState } from "react"
+import { Fragment, useEffect } from "react"
 
 import { DepartureType, ReturnValueType } from "../../../../types"
 import { initializeShortlist } from "reducers/shortlistReducer"
@@ -85,6 +85,13 @@ export const PublicTimetableById = () => {
                         <col width="30%" />
                         <col width="8%" />
                     </colgroup>
+                    {/* <TableHead sx={{ color: 'yellow', fontSize: '1.3rem' }}>
+                        <TableRow>
+                            <TableCell colSpan={3} align="center" sx={{ lineHeight: '50px', color: 'white', fontSize: 'inherit' }} >
+                                {dockName}
+                            </TableCell>
+                        </TableRow>
+                    </TableHead> */}
                     <TableBody sx={{ color: 'yellow', fontSize: '1.3rem' }} >
                         {startlist.map((d, index, arr) =>
                             <Fragment key={d.id}>

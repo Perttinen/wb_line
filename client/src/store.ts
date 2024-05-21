@@ -1,11 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit'
 
-import { shortlistReducer, departureReducer, stopReducer, shipReducer, routeReducer, dockReducer, userLevelReducer, loggedUserReducer, userReducer, timeReducer } from 'reducers'
+import { shortlistReducer, departureReducer, stopReducer, shipReducer, routeReducer, dockReducer, userLevelReducer, loggedUserReducer, userReducer } from 'reducers'
 
 export const store = configureStore({
 	reducer: {
 		users: userReducer,
-		time: timeReducer,
 		loggedUser: loggedUserReducer,
 		userlevels: userLevelReducer,
 		docks: dockReducer,

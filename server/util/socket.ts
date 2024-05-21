@@ -13,17 +13,10 @@ const ioConnection = (server: http.Server) => {
 
 	io.on('connection', (socket) => {
 		console.log(`User ${socket.id} connected`)
-		// const intti = setInterval(() => {
-		// 	socket.emit('time', new Date().valueOf())
-		// }, 10000)
-		// clearInterval(intti)
-		socket.on('event://send-message', (payload) => {
-			const user = socket.id
-			const mes = {
-				id: user,
-				msg: payload.data as string,
-			}
-			socket.broadcast.emit('event://get-message', mes)
+
+		socket.on('disconnect', () => {
+			console.log(`User ${socket.id} disconnected`);
+
 		})
 		socket.on('event://send-add-user', (payload) => {
 			socket.broadcast.emit('event://get-add-user', payload.data as object)
