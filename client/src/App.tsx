@@ -9,7 +9,6 @@ import { Router } from './Router'
 
 
 const App = () => {
-
     return (
         <Container disableGutters>
             <Provider store={store}>

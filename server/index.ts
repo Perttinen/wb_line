@@ -12,7 +12,8 @@ import shipRouter from './controllers/ship'
 import routeRouter from './controllers/route'
 import stopRouter from './controllers/stop'
 import departureRouter from './controllers/departure'
-import { tokenExtractor } from './util/middleware'
+import { tokenExtractor } from './util/middleware/tokenExtractor'
+import { errorHandler } from './util/middleware/errorHandler'
 
 import ioConnection from './util/socket'
 
@@ -47,7 +48,7 @@ app.get('/*', function (_req, res) {
 	)
 })
 
-
+app.use(errorHandler)
 
 const start = async () => {
 	try {

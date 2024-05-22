@@ -9,25 +9,25 @@ import {
 
 const router = express.Router()
 
-router.get('/', async (_req, res) => {
+router.get('/', async (_req, res, next) => {
 	try {
 		const docks: Dock[] = await Dock.findAll()
 		res.json(docks)
-	} catch (e) {
-		res.status(500).json(e)
+	} catch (error) {
+		next(error)
 	}
 })
 
-router.post('/', async (req, res) => {
+router.post('/', async (req, res, next) => {
 	try {
 		const dock = await Dock.create(req.body)
-		return res.json(dock)
-	} catch (e) {
-		return res.status(500).json(e)
+		res.json(dock)
+	} catch (error) {
+		next(error)
 	}
 })
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', async (req, res, next) => {
 	try {
 		const dock = await Dock.findByPk(req.params.id)
 		if (dock) {
@@ -68,9 +68,8 @@ router.delete('/:id', async (req, res) => {
 			await dock.destroy()
 			res.status(204).json(dock)
 		}
-	} catch (e) {
-		console.log(e);
-		res.status(500).json(e)
+	} catch (error) {
+		next(error)
 	}
 })
 

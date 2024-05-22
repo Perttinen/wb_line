@@ -1,11 +1,11 @@
 import express from 'express'
 import { Departure, Dock, Route, Stop } from '../models'
 import { Op } from 'sequelize'
-import { tokenExtractor } from '../util/middleware'
+import { tokenExtractor } from '../util/middleware/tokenExtractor'
 
 const router = express.Router()
 
-router.get('/', async (_req, res) => {
+router.get('/', async (_req, res, next) => {
 	try {
 		const departures: Departure[] = await Departure.findAll({
 			include: [
@@ -31,43 +31,46 @@ router.get('/', async (_req, res) => {
 		res.json(departures)
 	}
 	catch (error) {
-		// next(error)
+		next(error)
 	}
 })
 
-router.get('/shortlist', async (_req, res) => {
-	const fromDate = new Date()
-	const toDate = new Date().setDate(fromDate.getDate() + 2)
+router.get('/shortlist', async (_req, res, next) => {
+	try {
+		const fromDate = new Date()
+		const toDate = new Date().setDate(fromDate.getDate() + 2)
+		const resDepartures = await Departure.findAll({
 
-	const resDepartures = await Departure.findAll({
-
-		where: {
-			startTime: { [Op.between]: [fromDate, toDate] }
-		},
-		include: [
-			{
-				model: Route,
-				as: 'route',
-				include: [
-					{ model: Dock, as: 'startDock' },
-					{ model: Dock, as: 'endDock' },
-					{
-						model: Stop,
-						as: 'stops',
-						order: ['delayTimeMinutes'],
-						include: [{ model: Dock, as: 'dock' }],
-						attributes: { exclude: ['dockId', 'routeId'] },
-					},
-				],
-				attributes: { exclude: ['startDockId', 'endDockId'] },
+			where: {
+				startTime: { [Op.between]: [fromDate, toDate] }
 			},
-		],
-		attributes: { exclude: ['routeId'] },
-	})
-	res.json(resDepartures)
+			include: [
+				{
+					model: Route,
+					as: 'route',
+					include: [
+						{ model: Dock, as: 'startDock' },
+						{ model: Dock, as: 'endDock' },
+						{
+							model: Stop,
+							as: 'stops',
+							order: ['delayTimeMinutes'],
+							include: [{ model: Dock, as: 'dock' }],
+							attributes: { exclude: ['dockId', 'routeId'] },
+						},
+					],
+					attributes: { exclude: ['startDockId', 'endDockId'] },
+				},
+			],
+			attributes: { exclude: ['routeId'] },
+		})
+		res.json(resDepartures)
+	} catch (error) {
+		next(error)
+	}
 })
 
-router.post('/', tokenExtractor, async (req, res) => {
+router.post('/', tokenExtractor, async (req, res, next) => {
 	try {
 		const newBulkSchedule = await Departure.bulkCreate(req.body)
 		const idArr: number[] = []
@@ -97,7 +100,7 @@ router.post('/', tokenExtractor, async (req, res) => {
 		})
 		res.status(201).json(resDepartures)
 	} catch (error) {
-		res.status(500).json(error)
+		next(error)
 	}
 })
 
@@ -106,8 +109,8 @@ router.delete('/', tokenExtractor, async (req, res, next) => {
 	try {
 		await Departure.destroy({ where: { id: id } })
 		res.status(204).json(req.body)
-	} catch (e) {
-		next(e)
+	} catch (error) {
+		next(error)
 	}
 })
 

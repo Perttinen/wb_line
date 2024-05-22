@@ -4,34 +4,31 @@ import { Stop } from '../models'
 
 const router = express.Router()
 
-router.get('/', async (_req, res) => {
+router.get('/', async (_req, res, next) => {
 	try {
 		const stops: Stop[] = await Stop.findAll()
 		res.json(stops)
-	} catch (e) {
-		console.log(e);
-		res.status(500).json(e)
+	} catch (error) {
+		next(error)
 	}
 })
 
-router.post('/', async (req, res) => {
+router.post('/', async (req, res, next) => {
 	try {
 		const stops = await Stop.bulkCreate(req.body)
 		res.json(stops)
-	} catch (e) {
-		console.log(e);
-		res.status(500).json(e)
+	} catch (error) {
+		next(error)
 	}
 })
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', async (req, res, next) => {
 	try {
 		const stop = await Stop.findByPk(req.params.id)
 		if (stop) await stop.destroy()
 		res.json(stop)
-	} catch (e) {
-		console.log(e);
-		res.status(500).json(e)
+	} catch (error) {
+		next(error)
 	}
 })
 

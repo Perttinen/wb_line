@@ -11,6 +11,8 @@ import { userService, dockService, shipService, departureService } from 'service
 import { initializeRoutes } from 'reducers/routeReducer'
 import { appendDeparture, dropDeparture, initializeDepartures } from 'reducers/departureReducer'
 import { appendShortlist, dropShortlist } from 'reducers/shortlistReducer'
+import { Snackbar } from '@mui/material'
+import { AxiosError } from 'axios'
 
 const WS_BASE =
 	process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : '/'
@@ -25,6 +27,7 @@ interface IContext {
 	sendRemoveShip: (id: number) => void
 	sendAddDepartures: (departure: initDepartureType[]) => void
 	sendRemoveDepartures: (departureIds: number[]) => void
+	error: {} | null | unknown
 }
 
 const WebSocketContext = createContext<IContext | null>(null)
@@ -37,6 +40,7 @@ interface WebSocketProviderProps {
 
 const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 	const [socket, setSocket] = useState<Socket | null>(null)
+	const [error, setError] = useState<string | null>(null)
 	const dispatch: (...args: unknown[]) => Promise<User> | number =
 		useDispatch<AppDispatch>()
 
@@ -67,9 +71,16 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 	}
 
 	const sendAddShip = async (ship: ShipNoIdType) => {
-		const newShip = await shipService.create(ship)
-		dispatch(appendShip(newShip))
-		socket?.emit('event://send-add-ship', newShip)
+		try {
+			const newShip = await shipService.create(ship)
+			dispatch(appendShip(newShip))
+			socket?.emit('event://send-add-ship', newShip)
+		} catch (e) {
+			if (e instanceof AxiosError) {
+				setError(e.response?.data.errors[0].message)
+			}
+			console.log(e);
+		}
 	}
 
 	const sendRemoveShip = async (id: number) => {
@@ -106,7 +117,6 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 
 		newSocket.on('event://get-remove-user', (id: number) => {
 			dispatch(dropUser(id))
-
 		})
 
 		newSocket.on('event://get-remove-dock', (id: number) => {
@@ -153,11 +163,19 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 						sendAddShip,
 						sendRemoveShip,
 						sendAddDepartures,
-						sendRemoveDepartures
+						sendRemoveDepartures,
+						error
 					}
 					: null
 			}
 		>
+			<Snackbar
+				open={error !== null}
+				autoHideDuration={6000}
+				onClose={() => setError(null)}
+				message={error}
+			/>
+
 			{children}
 		</WebSocketContext.Provider>
 	)

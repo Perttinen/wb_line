@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken'
 
 const router = express.Router()
 
-router.post('/', async (req, res) => {
+router.post('/', async (req, res, next) => {
 	try {
 		const body = { ...req.body }
 		const user: User | null = await User.findOne({
@@ -28,8 +28,8 @@ router.post('/', async (req, res) => {
 			const token = jwt.sign(userForToken, process.env.JWT_SECRET!)
 			res.json({ ...jsonUser, token })
 		}
-	} catch (e) {
-		console.log('error', e);
+	} catch (error) {
+		next(error)
 	}
 })
 

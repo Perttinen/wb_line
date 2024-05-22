@@ -5,34 +5,32 @@ import { Ship } from '../models'
 
 const router = express.Router()
 
-router.get('/', async (_req, res) => {
+router.get('/', async (_req, res, next) => {
 	try {
 		const ships: Ship[] = await Ship.findAll()
 		res.json(ships)
-	} catch (e) {
-		console.log(e)
-		res.status(500).json(e)
+	} catch (error) {
+		next(error)
 	}
 })
 
-router.post('/', async (req, res) => {
+router.post('/', async (req, res, next) => {
+	const shipToAdd = req.body
 	try {
-		const ship = await Ship.create(req.body)
-		return res.json(ship)
-	} catch (e) {
-		console.log(e);
-		return res.status(500).json(e)
+		const ship = await Ship.create(shipToAdd)
+		res.json(ship)
+	} catch (error) {
+		next(error)
 	}
 })
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', async (req, res, next) => {
 	try {
 		const ship = await Ship.findByPk(req.params.id)
 		if (ship) await ship.destroy()
 		res.json(ship)
-	} catch (e) {
-		console.log(e);
-		res.status(500).json(e)
+	} catch (error) {
+		next(error)
 	}
 })
 

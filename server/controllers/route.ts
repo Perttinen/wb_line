@@ -19,8 +19,8 @@ router.get('/', async (_req, res, next) => {
 		})
 
 		res.json(routes)
-	} catch (e) {
-		next(e)
+	} catch (error) {
+		next(error)
 	}
 })
 
@@ -54,8 +54,8 @@ router.post('/', async (req, res, next) => {
 		}
 		const route = await Route.create(routeToSave)
 		res.json(route)
-	} catch (e) {
-		next(e)
+	} catch (error) {
+		next(error)
 	}
 })
 
@@ -68,8 +68,8 @@ router.delete('/:id', async (req, res, next) => {
 			await route.destroy();
 		}
 		res.json(route)
-	} catch (e) {
-		next(e)
+	} catch (error) {
+		next(error)
 	}
 })
 

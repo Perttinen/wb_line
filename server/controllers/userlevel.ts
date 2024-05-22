@@ -6,13 +6,12 @@ dotenv.config()
 
 const router = express.Router()
 
-router.get('/', async (_req, res) => {
+router.get('/', async (_req, res, next) => {
 	try {
 		const users: UserLevel[] = await UserLevel.findAll()
 		res.json(users)
-	} catch (e) {
-		console.log(e);
-		res.status(500).json(e)
+	} catch (error) {
+		next(error);
 	}
 })
 
