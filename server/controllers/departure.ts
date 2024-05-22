@@ -1,6 +1,7 @@
 import express from 'express'
 import { Departure, Dock, Route, Stop } from '../models'
 import { Op } from 'sequelize'
+import { tokenExtractor } from '../util/middleware'
 
 const router = express.Router()
 
@@ -66,7 +67,7 @@ router.get('/shortlist', async (_req, res) => {
 	res.json(resDepartures)
 })
 
-router.post('/', async (req, res) => {
+router.post('/', tokenExtractor, async (req, res) => {
 	try {
 		const newBulkSchedule = await Departure.bulkCreate(req.body)
 		const idArr: number[] = []
@@ -100,7 +101,7 @@ router.post('/', async (req, res) => {
 	}
 })
 
-router.delete('/', async (req, res, next) => {
+router.delete('/', tokenExtractor, async (req, res, next) => {
 	const id = req.body
 	try {
 		await Departure.destroy({ where: { id: id } })

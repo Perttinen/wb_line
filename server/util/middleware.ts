@@ -11,6 +11,8 @@ declare module 'express-serve-static-core' {
 }
 
 export const tokenExtractor = (req: Request, res: Response, next: NextFunction): void | Response => {
+  console.log(req);
+
   const authorization = req.get('authorization')
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
     try {

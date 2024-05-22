@@ -4,11 +4,10 @@ import bcrypt from 'bcrypt'
 
 import { User, UserLevel } from '../models'
 import { ChangePasswordType, UserNoIdType } from '../../types'
-import { tokenExtractor } from '../util/middleware'
 
 const router = express.Router()
 
-router.get('/', tokenExtractor, async (req, res) => {
+router.get('/', async (req, res) => {
 	try {
 		const user: User | null = await User.findByPk(req.decodedToken.id)
 		if (user && user.dataValues.user_level_id === 1) {
@@ -27,7 +26,7 @@ router.get('/', tokenExtractor, async (req, res) => {
 	}
 })
 
-router.get('/currentUser', tokenExtractor, async (req, res) => {
+router.get('/currentUser', async (req, res) => {
 	const user = await User.findByPk(req.decodedToken.id, { include: [{ model: UserLevel, as: 'userLevel' }] })
 	res.json(user)
 })
@@ -52,7 +51,7 @@ router.post('/', async (req, res) => {
 	}
 })
 
-router.delete('/:id', tokenExtractor, async (req, res) => {
+router.delete('/:id', async (req, res) => {
 	try {
 		const user = await User.findByPk(req.params.id)
 		if (user) await user.destroy()
@@ -63,7 +62,7 @@ router.delete('/:id', tokenExtractor, async (req, res) => {
 	}
 })
 
-router.put('/pw', tokenExtractor, async (req, res) => {
+router.put('/pw', async (req, res) => {
 	const body: ChangePasswordType = req.body
 	const user = await User.findByPk(body.userId)
 	const saltRounds = 10

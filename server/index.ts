@@ -28,14 +28,12 @@ app.use(express.static(DIST_PATH))
 
 app.use('/api/departure', departureRouter)
 app.use('/api/login', loginRouter)
-
-app.use('/api/userlevel', userLevelRouter)
-app.use('/api/user', userRouter)
-app.use('/api/dock', dockRouter)
-app.use('/api/route', routeRouter)
-app.use('/api/stop', stopRouter)
-app.use(tokenExtractor)
-app.use('/api/ship', shipRouter)
+app.use('/api/userlevel', tokenExtractor, userLevelRouter)
+app.use('/api/user', tokenExtractor, userRouter)
+app.use('/api/dock', tokenExtractor, dockRouter)
+app.use('/api/route', tokenExtractor, routeRouter)
+app.use('/api/stop', tokenExtractor, stopRouter)
+app.use('/api/ship', tokenExtractor, shipRouter)
 
 
 app.get('/*', function (_req, res) {
