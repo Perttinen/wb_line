@@ -6,14 +6,14 @@ import { ShipNoIdType } from 'types'
 import { WebSocketContext } from 'WebSocket'
 import { FormGroupContainer, FormMainContainer, FormTextField, SaveAndCancelButtons } from 'views/components/SmallOnes'
 
+
 export const AddShip = ({
 	setShowAddShip,
 }: {
 	setShowAddShip: (val: boolean) => void
 }) => {
 	const ws = useContext(WebSocketContext)
-
-	const handleSubmit = async (values: ShipNoIdType) => {
+	const handleSubmit = (values: ShipNoIdType) => {
 		setShowAddShip(false)
 		ws?.sendAddShip(values)
 		formik.resetForm()

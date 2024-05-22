@@ -12,8 +12,11 @@ import shipRouter from './controllers/ship'
 import routeRouter from './controllers/route'
 import stopRouter from './controllers/stop'
 import departureRouter from './controllers/departure'
+import { tokenExtractor } from './util/middleware/tokenExtractor'
+import { errorHandler } from './util/middleware/errorHandler'
 
 import ioConnection from './util/socket'
+
 
 const app = express()
 app.use(cors())
@@ -22,14 +25,16 @@ app.use(express.json())
 const DIST_PATH = path.resolve(__dirname, '../client/build')
 app.use(express.static(DIST_PATH))
 
+
+
 app.use('/api/departure', departureRouter)
 app.use('/api/login', loginRouter)
-app.use('/api/userlevel', userLevelRouter)
-app.use('/api/user', userRouter)
-app.use('/api/dock', dockRouter)
-app.use('/api/ship', shipRouter)
-app.use('/api/route', routeRouter)
-app.use('/api/stop', stopRouter)
+app.use('/api/userlevel', tokenExtractor, userLevelRouter)
+app.use('/api/user', tokenExtractor, userRouter)
+app.use('/api/dock', tokenExtractor, dockRouter)
+app.use('/api/route', tokenExtractor, routeRouter)
+app.use('/api/stop', tokenExtractor, stopRouter)
+app.use('/api/ship', tokenExtractor, shipRouter)
 
 
 app.get('/*', function (_req, res) {
@@ -42,6 +47,8 @@ app.get('/*', function (_req, res) {
 		}
 	)
 })
+
+app.use(errorHandler)
 
 const start = async () => {
 	try {

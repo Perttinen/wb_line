@@ -5,20 +5,20 @@ import { useDispatch } from 'react-redux'
 import { appendUser, dropUser } from './reducers/userReducer'
 import { appendDock, dropDock } from './reducers/dockReducer'
 import { appendShip, dropShip } from './reducers/shipReducer'
-import { setTime } from './reducers/timeReducer'
 import { AppDispatch } from './store'
 import { DepartureType, DockNoIdType, ShipNoIdType, User, UserNoIdType, initDepartureType } from '../../types'
 import { userService, dockService, shipService, departureService } from 'services'
 import { initializeRoutes } from 'reducers/routeReducer'
 import { appendDeparture, dropDeparture, initializeDepartures } from 'reducers/departureReducer'
 import { appendShortlist, dropShortlist } from 'reducers/shortlistReducer'
+import { Snackbar } from '@mui/material'
+import { AxiosError } from 'axios'
 
 const WS_BASE =
 	process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : '/'
 
 interface IContext {
 	socket: Socket
-	sendMessage: (message: string) => void
 	sendAddUser: (user: UserNoIdType) => void
 	sendRemoveUser: (id: number) => void
 	sendAddDock: (user: DockNoIdType) => void
@@ -27,6 +27,7 @@ interface IContext {
 	sendRemoveShip: (id: number) => void
 	sendAddDepartures: (departure: initDepartureType[]) => void
 	sendRemoveDepartures: (departureIds: number[]) => void
+	error: {} | null | unknown
 }
 
 const WebSocketContext = createContext<IContext | null>(null)
@@ -39,15 +40,9 @@ interface WebSocketProviderProps {
 
 const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 	const [socket, setSocket] = useState<Socket | null>(null)
+	const [error, setError] = useState<string | null>(null)
 	const dispatch: (...args: unknown[]) => Promise<User> | number =
 		useDispatch<AppDispatch>()
-
-	const sendMessage = (message: string) => {
-		const payload = {
-			data: message,
-		}
-		socket?.emit('event://send-message', payload)
-	}
 
 	const sendAddUser = async (user: UserNoIdType) => {
 		const newUser = await userService.create(user)
@@ -76,9 +71,16 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 	}
 
 	const sendAddShip = async (ship: ShipNoIdType) => {
-		const newShip = await shipService.create(ship)
-		dispatch(appendShip(newShip))
-		socket?.emit('event://send-add-ship', newShip)
+		try {
+			const newShip = await shipService.create(ship)
+			dispatch(appendShip(newShip))
+			socket?.emit('event://send-add-ship', newShip)
+		} catch (e) {
+			if (e instanceof AxiosError) {
+				setError(e.response?.data.errors[0].message)
+			}
+			console.log(e);
+		}
 	}
 
 	const sendRemoveShip = async (id: number) => {
@@ -105,14 +107,6 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 		const newSocket = io(WS_BASE)
 		setSocket(newSocket)
 
-		newSocket.on('time', (time) => {
-			dispatch(setTime(time))
-		})
-
-		newSocket.on('event://get-message', (_msg: any) => {
-
-		})
-
 		newSocket.on('event://get-add-user', (user: any) => {
 			dispatch(appendUser(user))
 		})
@@ -123,7 +117,6 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 
 		newSocket.on('event://get-remove-user', (id: number) => {
 			dispatch(dropUser(id))
-
 		})
 
 		newSocket.on('event://get-remove-dock', (id: number) => {
@@ -163,7 +156,6 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 				socket
 					? {
 						socket,
-						sendMessage,
 						sendAddUser,
 						sendRemoveUser,
 						sendAddDock,
@@ -171,11 +163,19 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 						sendAddShip,
 						sendRemoveShip,
 						sendAddDepartures,
-						sendRemoveDepartures
+						sendRemoveDepartures,
+						error
 					}
 					: null
 			}
 		>
+			<Snackbar
+				open={error !== null}
+				autoHideDuration={6000}
+				onClose={() => setError(null)}
+				message={error}
+			/>
+
 			{children}
 		</WebSocketContext.Provider>
 	)

@@ -2,6 +2,11 @@ import {
 	Box,
 	Button,
 	Collapse,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogContentText,
+	DialogTitle,
 	Table,
 	TableBody,
 	TableCell,
@@ -14,14 +19,55 @@ import { DockType } from '../../../../types'
 import { useContext } from 'react'
 import { WebSocketContext } from '../../WebSocket'
 
+
+type MyAlertProps = {
+	id: number
+}
+
+const DeleteButtonWithAlert = (props: MyAlertProps) => {
+	const ws = useContext(WebSocketContext)
+	const [alert, setAlert] = useState(false)
+
+	const handleDelete = async (id: number) => {
+		ws?.sendRemoveDock(id)
+	}
+
+	return (
+		<>
+			<Button variant='text'
+				onClick={() => { setAlert(true) }}
+			>
+				delete
+			</Button>
+			<Dialog
+				open={alert}
+			>
+				<DialogTitle id="alert-dialog-title">
+					{"Are you sure?"}
+				</DialogTitle>
+				<DialogContent>
+					<DialogContentText id="alert-dialog-description">
+						Deleting dock will also delete all related routes and timetables!
+					</DialogContentText>
+				</DialogContent>
+				<DialogActions>
+					<Button variant='text' onClick={() => {
+						console.log('this id: ', props.id)
+						setAlert(false)
+					}}>cancel</Button>
+					<Button variant='text' onClick={() => {
+						handleDelete(props.id)
+						setAlert(false)
+					}}>delete</Button>
+				</DialogActions>
+			</Dialog>
+		</>
+	)
+}
+
 export const Docks = ({ open }: { open: boolean }) => {
 	const [showAddDock, setShowAddDock] = useState(false)
 	const docks = useSelector((state: { docks: DockType[] }) => state.docks)
-	const ws = useContext(WebSocketContext)
-
-	const handleRemoveDock = (id: number) => {
-		ws?.sendRemoveDock(id)
-	}
 
 	return (
 		<>
@@ -44,9 +90,7 @@ export const Docks = ({ open }: { open: boolean }) => {
 									<TableRow key={d.id}>
 										<TableCell sx={{ fontSize: '1rem' }}>{d.name}</TableCell>
 										<TableCell>
-											<Button onClick={() => handleRemoveDock(d.id)}>
-												delete
-											</Button>
+											<DeleteButtonWithAlert id={d.id} />
 										</TableCell>
 									</TableRow>
 								))}
