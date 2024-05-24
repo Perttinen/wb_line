@@ -7,9 +7,12 @@ const getAll = async () => {
 }
 
 const create = async (ship: ShipNoIdType) => {
+
 	const res = await api.post('/ship', ship)
 	return res.data
+
 }
+
 
 const remove = async (id: number) => {
 	await api.delete(`/ship/${id}`)

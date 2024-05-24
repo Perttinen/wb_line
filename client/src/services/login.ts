@@ -7,7 +7,6 @@ const login = async (credentials: LoginUser) => {
 		localStorage.setItem('token', res.data.token)
 		return res.data
 	} catch (e) {
-		console.log('e in serv: ', e);
 		return e
 	}
 }

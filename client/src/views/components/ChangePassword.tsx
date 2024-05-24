@@ -51,8 +51,6 @@ export const ChangePassword = ({
 	const location = useLocation()
 
 	const handleSubmit = async (values: ConfirmedPasswordsType) => {
-		console.log('submitting')
-
 		const userToChange: ChangePasswordType = { ...values, userId: user.id }
 		try {
 			const user = await userService.update(userToChange)
@@ -81,7 +79,6 @@ export const ChangePassword = ({
 						initialValues={initialValues}
 						validationSchema={passwordSchema}
 						onSubmit={async (values) => {
-							console.log('formik submit');
 							handleSubmit(values)
 						}}
 					>

@@ -13,6 +13,7 @@ import { appendDeparture, dropDeparture, initializeDepartures } from 'reducers/d
 import { appendShortlist, dropShortlist } from 'reducers/shortlistReducer'
 import { Snackbar } from '@mui/material'
 import { AxiosError } from 'axios'
+import { api } from 'util/api'
 
 const WS_BASE =
 	process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : '/'
@@ -27,7 +28,6 @@ interface IContext {
 	sendRemoveShip: (id: number) => void
 	sendAddDepartures: (departure: initDepartureType[]) => void
 	sendRemoveDepartures: (departureIds: number[]) => void
-	error: {} | null | unknown
 }
 
 const WebSocketContext = createContext<IContext | null>(null)
@@ -40,7 +40,6 @@ interface WebSocketProviderProps {
 
 const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 	const [socket, setSocket] = useState<Socket | null>(null)
-	const [error, setError] = useState<string | null>(null)
 	const dispatch: (...args: unknown[]) => Promise<User> | number =
 		useDispatch<AppDispatch>()
 
@@ -77,9 +76,9 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 			socket?.emit('event://send-add-ship', newShip)
 		} catch (e) {
 			if (e instanceof AxiosError) {
-				setError(e.response?.data.errors[0].message)
+
 			}
-			console.log(e);
+
 		}
 	}
 
@@ -164,17 +163,17 @@ const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
 						sendRemoveShip,
 						sendAddDepartures,
 						sendRemoveDepartures,
-						error
+
 					}
 					: null
 			}
 		>
-			<Snackbar
+			{/* <Snackbar
 				open={error !== null}
 				autoHideDuration={6000}
 				onClose={() => setError(null)}
 				message={error}
-			/>
+			/> */}
 
 			{children}
 		</WebSocketContext.Provider>

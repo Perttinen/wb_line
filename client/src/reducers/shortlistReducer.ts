@@ -2,6 +2,7 @@ import { createSlice, PayloadAction, Dispatch } from '@reduxjs/toolkit'
 
 import { DepartureType, initDepartureType } from 'types'
 import { departureService } from 'services'
+import { AxiosError } from 'axios'
 
 type State = DepartureType[]
 
@@ -23,8 +24,11 @@ const shortlistSlice = createSlice({
 
 export const initializeShortlist = () => {
     return async (dispatch: Dispatch) => {
+
         const shortlist = await departureService.getShortlist()
         dispatch(setShortlist(shortlist))
+
+
     }
 }
 

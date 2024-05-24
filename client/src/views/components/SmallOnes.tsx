@@ -1,7 +1,4 @@
 import { Box, Button, MenuItem, TextField, Typography } from "@mui/material"
-import {
-    DeleteOutlined, AddCircleOutline, HighlightOff, SaveAlt, DepartureBoardOutlined,
-} from '@mui/icons-material'
 import { Field, useField } from "formik"
 import { DatePicker, TimePicker } from "@mui/x-date-pickers"
 
@@ -50,53 +47,6 @@ const TextButton = (props: TextButtonProps) => {
     )
 
 }
-
-
-// type IconButtonProps = {
-//     whenClicked?: () => void
-//     buttonType?: "button" | "submit" | "reset" | undefined
-//     iconType: "add" | "save" | "cancel" | "trash" | "schedule"
-// }
-
-// const IconButton = (props: IconButtonProps) => {
-//     const getClicker = () => {
-//         if (typeof props.whenClicked === 'function') {
-//             return props.whenClicked()
-//         }
-//         return void (0)
-//     }
-
-//     let icon = <></>
-//     let sxValues = {
-//         fontSize: '2rem', color: '',
-//     }
-
-//     switch (props.iconType) {
-//         case 'add': icon = <AddCircleOutline fontSize='inherit' />
-//             sxValues.color = theme.palette.primary.dark
-//             break
-//         case 'cancel': icon = <HighlightOff fontSize='inherit' />
-//             sxValues.color = theme.palette.error.dark
-//             break
-//         case 'save':
-//             icon = <SaveAlt fontSize='inherit' />
-//             sxValues.color = theme.palette.success.dark
-//             break
-//         case 'trash': icon = <DeleteOutlined fontSize='inherit' />
-//             sxValues.color = theme.palette.primary.dark
-//             break
-//         case 'schedule': icon = <DepartureBoardOutlined fontSize='inherit' />
-//     }
-
-//     return (
-//         <Button
-//             type={props.buttonType}
-//             onClick={getClicker}
-//             sx={{ ...sxValues }}>
-//             {icon}
-//         </Button>
-//     )
-// }
 
 type FormMainContainerProps = {
     children: JSX.Element
@@ -174,7 +124,6 @@ type FormSelectProps = {
 const FormSelect = (props: FormSelectProps) => {
 
     const [field, meta] = useField(props)
-    console.log('dockid: ');
     return (
         <TextField
             sx={{ borderColor: 'darkgrey' }}

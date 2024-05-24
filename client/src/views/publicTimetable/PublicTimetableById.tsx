@@ -1,13 +1,17 @@
 
 import { useDispatch, useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
-import { Fragment, useEffect } from "react"
+import { Fragment, useEffect, useState } from "react"
 
 import { DepartureType, ReturnValueType } from "../../../../types"
-import { initializeShortlist } from "reducers/shortlistReducer"
+import shortlistReducer, { initializeShortlist } from "reducers/shortlistReducer"
 import { AppDispatch } from "store"
 import dayjs from 'dayjs'
 import { Stack, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material"
+import { departureService } from "services"
+import { setShortlist } from "reducers/shortlistReducer"
+import { AxiosError } from "axios"
+import { departureReducer } from "reducers"
 
 const createStartList = (departures: DepartureType[], dockId: number) => {
 
@@ -42,6 +46,9 @@ const createStartList = (departures: DepartureType[], dockId: number) => {
 
 export const PublicTimetableById = () => {
 
+    const [e, setE] = useState(false)
+    const [tiktok, setTiktok] = useState(1)
+
     window.scrollTo(0, 0)
 
     const dispatch: (...args: unknown[]) => Promise<string> =
@@ -55,9 +62,21 @@ export const PublicTimetableById = () => {
 
     const startlist = createStartList(departures, dockId)
 
+    const createShortlist = async () => {
+        try {
+            const shortlist = await departureService.getShortlist()
+            dispatch(setShortlist(shortlist))
+            setE(false)
+        } catch (e) {
+            console.log(e);
+            setE(true)
+            setTiktok(tiktok * -1)
+            return
+        }
+    }
 
     useEffect(() => {
-        dispatch(initializeShortlist())
+        createShortlist()
     }, [])
 
     useEffect(() => {
@@ -67,69 +86,85 @@ export const PublicTimetableById = () => {
             const delay = startlist[0].startTime.diff(Date.now())
             console.log(delay);
             timer = setTimeout(() => {
-                dispatch(initializeShortlist())
+                createShortlist()
             }, delay
             )
         }
         return () => clearTimeout(timer)
     }, [startlist])
 
+    useEffect(() => {
+        let timer: NodeJS.Timeout
+        if (e) {
+            console.log(e);
+            timer = setTimeout(() => {
+                console.log('timeout');
+                createShortlist()
+            }, 5000)
+            return () => clearTimeout(timer)
+        } else {
+            return () => clearTimeout(timer)
+        }
+    }, [tiktok])
+
+    console.log('rend');
 
 
     return (
-        <>
-            <TableContainer sx={{ bgcolor: 'black', paddingX: '10px' }}  >
-                <Table padding="none" >
-                    <colgroup>
-                        <col width="62%" />
-                        <col width="30%" />
-                        <col width="8%" />
-                    </colgroup>
-                    {/* <TableHead sx={{ color: 'yellow', fontSize: '1.3rem' }}>
+        // e === '' ?
+        <TableContainer sx={{ bgcolor: 'black', paddingX: '10px' }}  >
+            <Table padding="none" >
+                <colgroup>
+                    <col width="62%" />
+                    <col width="30%" />
+                    <col width="8%" />
+                </colgroup>
+                {/* <TableHead sx={{ color: 'yellow', fontSize: '1.3rem' }}>
                         <TableRow>
                             <TableCell colSpan={3} align="center" sx={{ lineHeight: '50px', color: 'white', fontSize: 'inherit' }} >
                                 {dockName}
                             </TableCell>
                         </TableRow>
                     </TableHead> */}
-                    <TableBody sx={{ color: 'yellow', fontSize: '1.3rem' }} >
-                        {startlist.map((d, index, arr) =>
-                            <Fragment key={d.id}>
-                                {((index > 0 &&
-                                    arr[index - 1].startTime.isBefore(d.startTime, 'day')) || (index === 0 && d.startTime.isAfter(dayjs(Date.now()), 'day'))) &&
-                                    <TableRow  >
-                                        <TableCell colSpan={3} align="center" sx={{ lineHeight: '50px', color: 'magenta', fontSize: 'inherit' }} >
-                                            {d.startTime.toDate().toDateString()}
+                <TableBody sx={{ color: 'yellow', fontSize: '1.3rem' }} >
+                    {startlist.map((d, index, arr) =>
+                        <Fragment key={d.id}>
+                            {((index > 0 &&
+                                arr[index - 1].startTime.isBefore(d.startTime, 'day')) || (index === 0 && d.startTime.isAfter(dayjs(Date.now()), 'day'))) &&
+                                <TableRow  >
+                                    <TableCell colSpan={3} align="center" sx={{ lineHeight: '50px', color: 'magenta', fontSize: 'inherit' }} >
+                                        {d.startTime.toDate().toDateString()}
+                                    </TableCell>
+                                </TableRow>}
+                            {d.via.length !== 0 ?
+                                <>
+                                    <TableRow sx={{ borderBottom: 0, lineHeight: '30px' }}>
+                                        <TableCell sx={{ color: 'inherit', borderBottom: 'inherit', fontSize: 'inherit' }} >{d.endDock.toUpperCase()}</TableCell>
+                                        <TableCell rowSpan={2} sx={{ color: 'darkorange', borderBottom: 'inherit', bgcolor: 'black', fontSize: 'inherit' }}>infocell</TableCell>
+                                        <TableCell rowSpan={2} sx={{ color: 'inherit', borderBottom: 'inherit', fontSize: 'inherit' }} width={'15%'} >{d.startTime?.format('HH:mm')}</TableCell>
+                                    </TableRow>
+                                    <TableRow sx={{ fontSize: '1rem', lineHeight: '20px' }} >
+                                        <TableCell sx={{ color: 'inherit', lineHeight: 'inherit', fontSize: 'inherit' }} colSpan={3}  >
+                                            <Stack direction={'row'}>
+                                                <Typography sx={{ lineHeight: 'inherit', fontSize: 'inherit' }} >via:</Typography>
+                                                {d.via.map((v, i) => <Typography sx={{ lineHeight: 'inherit', fontSize: 'inherit' }} key={i} ml={'10px'} >{v}</Typography>)}
+                                            </Stack>
                                         </TableCell>
-                                    </TableRow>}
-                                {d.via.length !== 0 ?
-                                    <>
-                                        <TableRow sx={{ borderBottom: 0, lineHeight: '30px' }}>
-                                            <TableCell sx={{ color: 'inherit', borderBottom: 'inherit', fontSize: 'inherit' }} >{d.endDock.toUpperCase()}</TableCell>
-                                            <TableCell rowSpan={2} sx={{ color: 'darkorange', borderBottom: 'inherit', bgcolor: 'black', fontSize: 'inherit' }}>infocell</TableCell>
-                                            <TableCell rowSpan={2} sx={{ color: 'inherit', borderBottom: 'inherit', fontSize: 'inherit' }} width={'15%'} >{d.startTime?.format('HH:mm')}</TableCell>
-                                        </TableRow>
-                                        <TableRow sx={{ fontSize: '1rem', lineHeight: '20px' }} >
-                                            <TableCell sx={{ color: 'inherit', lineHeight: 'inherit', fontSize: 'inherit' }} colSpan={3}  >
-                                                <Stack direction={'row'}>
-                                                    <Typography sx={{ lineHeight: 'inherit', fontSize: 'inherit' }} >via:</Typography>
-                                                    {d.via.map((v, i) => <Typography sx={{ lineHeight: 'inherit', fontSize: 'inherit' }} key={i} ml={'10px'} >{v}</Typography>)}
-                                                </Stack>
-                                            </TableCell>
-                                        </TableRow>
-                                    </> : <>
-                                        <TableRow sx={{ lineHeight: '50px' }}>
-                                            <TableCell sx={{ color: 'inherit', lineHeight: 'inherit', fontSize: 'inherit' }} >{d.endDock.toUpperCase()}</TableCell>
-                                            <TableCell sx={{ color: 'darkorange', bgcolor: 'black', lineHeight: 'inherit', fontSize: 'inherit' }}>infocell</TableCell>
-                                            <TableCell sx={{ color: 'inherit', lineHeight: 'inherit', fontSize: 'inherit' }}>{d.startTime?.format('HH:mm')}</TableCell>
+                                    </TableRow>
+                                </> : <>
+                                    <TableRow sx={{ lineHeight: '50px' }}>
+                                        <TableCell sx={{ color: 'inherit', lineHeight: 'inherit', fontSize: 'inherit' }} >{d.endDock.toUpperCase()}</TableCell>
+                                        <TableCell sx={{ color: 'darkorange', bgcolor: 'black', lineHeight: 'inherit', fontSize: 'inherit' }}>infocell</TableCell>
+                                        <TableCell sx={{ color: 'inherit', lineHeight: 'inherit', fontSize: 'inherit' }}>{d.startTime?.format('HH:mm')}</TableCell>
 
-                                        </TableRow>
-                                    </>}
-                            </Fragment>
-                        )}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        </>
+                                    </TableRow>
+                                </>}
+                        </Fragment>
+                    )}
+                </TableBody>
+            </Table>
+        </TableContainer>
+        // : <div>{e}</div>
+
     )
 }

@@ -52,7 +52,7 @@ const DeleteButtonWithAlert = (props: MyAlertProps) => {
 				</DialogContent>
 				<DialogActions>
 					<Button variant='text' onClick={() => {
-						console.log('this id: ', props.id)
+
 						setAlert(false)
 					}}>cancel</Button>
 					<Button variant='text' onClick={() => {

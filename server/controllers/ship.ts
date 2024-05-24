@@ -16,6 +16,7 @@ router.get('/', async (_req, res, next) => {
 
 router.post('/', async (req, res, next) => {
 	const shipToAdd = req.body
+	// const shipToAdd = { ame: 'sdfsdf' }
 	try {
 		const ship = await Ship.create(shipToAdd)
 		res.json(ship)

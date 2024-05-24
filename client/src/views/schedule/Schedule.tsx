@@ -24,10 +24,13 @@ export const Schedule = () => {
         (state: { departures: DepartureType[] }) => state.departures
     )
 
+    // const d = { ...departures, dillw: "sdcdcdc" }
+
     useEffect(() => {
         window.scrollTo(0, 0)
     }, [addOneForm, addManyForm, delManyForm])
 
+    // const filteredDepartures = d.filter(d => d.route.id === routeId)
     const filteredDepartures = departures.filter(d => d.route.id === routeId)
     const formOpen: Boolean = addOneForm || addManyForm || delManyForm
 

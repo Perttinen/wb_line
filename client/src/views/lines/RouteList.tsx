@@ -26,7 +26,6 @@ type MyAlertProps = {
 }
 
 const MyAlert = (props: MyAlertProps) => {
-	console.log(props.id);
 	const [alert, setAlert] = useState(false)
 
 	const dispatch: (...args: unknown[]) => Promise<RouteType> | number =
@@ -57,7 +56,6 @@ const MyAlert = (props: MyAlertProps) => {
 				</DialogContent>
 				<DialogActions>
 					<Button variant='text' onClick={() => {
-						console.log('this id: ', props.id)
 						setAlert(false)
 					}}>cancel</Button>
 					<Button variant='text' onClick={() => {

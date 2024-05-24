@@ -8,7 +8,7 @@ import { FormGroupContainer, FormMainContainer, FormTextField, SaveAndCancelButt
 
 
 export const AddShip = ({
-	setShowAddShip,
+	setShowAddShip
 }: {
 	setShowAddShip: (val: boolean) => void
 }) => {
@@ -39,8 +39,12 @@ export const AddShip = ({
 		enableReinitialize: true,
 	})
 
+
+
 	return (
+
 		<FormMainContainer>
+
 			<Formik
 				initialValues={initialValues}
 				validationSchema={shipSchema}
@@ -50,11 +54,14 @@ export const AddShip = ({
 				enableReinitialize={true}>
 				<Form>
 					<FormGroupContainer >
+
 						<FormTextField label='name' name='name' />
 					</FormGroupContainer>
+
 					<SaveAndCancelButtons submitLabel='create' onCancel={() => setShowAddShip(false)} />
 				</Form>
 			</Formik>
 		</FormMainContainer>
+
 	)
 }

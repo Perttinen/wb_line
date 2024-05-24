@@ -6,20 +6,24 @@ import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import 'dayjs/locale/fi'
 import { Router } from './Router'
-
+// import { ApiError } from 'ApiError'
 
 const App = () => {
     return (
+
         <Container disableGutters>
             <Provider store={store}>
                 <WebSocketProvider>
                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='fi'>
                         <CssBaseline />
+                        {/* <ApiError> */}
                         <Router />
+                        {/* </ApiError> */}
                     </LocalizationProvider>
                 </WebSocketProvider>
             </Provider>
         </Container>
+
     )
 }
 

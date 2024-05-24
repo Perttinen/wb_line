@@ -14,8 +14,10 @@ import { ShipType } from '../../../../types'
 import { useContext } from 'react'
 import { WebSocketContext } from '../../WebSocket'
 
+
 export const Ships = ({ open }: { open: boolean }) => {
 	const [showAddShip, setShowAddShip] = useState(false)
+
 	const ships = useSelector((state: { ships: ShipType[] }) => state.ships)
 	const ws = useContext(WebSocketContext)
 
@@ -28,7 +30,9 @@ export const Ships = ({ open }: { open: boolean }) => {
 				<Collapse in={open} timeout='auto' unmountOnExit>
 					<Box sx={{ margin: 1 }}>
 						{showAddShip ? (
+
 							<AddShip setShowAddShip={setShowAddShip} />
+
 						) : (
 							<Box display={'flex'} flexDirection={'row'} justifyContent={'center'} alignItems={'center'}>
 								<Button variant='contained' onClick={() => setShowAddShip(true)}>create ship</Button>

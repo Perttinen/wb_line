@@ -1,8 +1,6 @@
 import { Button } from "@mui/material"
-import 'App.css'
 
 export const Home = () => {
-
 	return (
 		<div>
 			<h1 >testing</h1>

@@ -1,4 +1,4 @@
-import dayjs, { Dayjs } from 'dayjs'
+import dayjs from 'dayjs'
 
 import { Stack, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material"
 import { Fragment } from "react"
@@ -8,11 +8,7 @@ import { ReturnValueType } from 'types'
 
 export const Timetablelist = (startlist: ReturnValueType[]) => {
 
-
-
     const tableDataFromToday = startlist
-    console.log(tableDataFromToday);
-
 
     return (
         <>

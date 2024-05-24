@@ -25,8 +25,6 @@ type PropsType = {
 }
 
 export const DockSelect = (props: PropsType) => {
-    console.log(props.formikProps.values);
-
     return (
         <TextField
             fullWidth

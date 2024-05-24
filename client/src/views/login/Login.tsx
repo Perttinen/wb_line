@@ -37,14 +37,12 @@ export const Login = () => {
 			const response = await loginService.login(values)
 			if (response instanceof AxiosError) {
 				setErrorMsg(response.response?.data)
-				console.log('error in submit: ', response.response?.data);
 			} else {
 				const loggedUser = response
 				if (loggedUser.firstTime === true) {
 					setUser(loggedUser)
 					setFirstTime(true)
 				} else {
-					console.log('notfirst');
 					dispatch(setLoggedUser(loggedUser))
 					navigate('/home')
 				}

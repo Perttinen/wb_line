@@ -12,7 +12,7 @@ const create = async (values: RouteNoIdType) => {
 }
 
 const remove = async (id: number) => {
-	console.log(await api.delete(`/route/${id}`));
+	await api.delete(`/route/${id}`)
 }
 
 const getOne = async (id: number) => {

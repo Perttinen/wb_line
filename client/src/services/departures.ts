@@ -7,13 +7,23 @@ const getAll = async () => {
 }
 
 const getShortlist = async () => {
+	// try {
 	const res = await api.get('/departure/shortlist')
 	return res.data
+	// } catch (e) {
+	// 	console.log(e);
+	// }
+
 }
 
 const createShortlist = async (values: initDepartureType[]) => {
-	const res = await api.post('/departure/shortlist', values)
-	return res.data
+	try {
+		const res = await api.post('/departure/shortlist', values)
+		return res.data
+	} catch (e) {
+		console.log(e);
+
+	}
 }
 
 const removeShortlist = async (id: number[]) => {
